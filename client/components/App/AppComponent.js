@@ -13,7 +13,7 @@ import './Typography.scss';
 class App extends React.Component {
 
   render() { 
-	
+	console.log(8);
     return (
 		<div>
 		  <Grid fluid>

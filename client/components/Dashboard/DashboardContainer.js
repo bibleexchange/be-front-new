@@ -3,6 +3,17 @@ import Dashboard from './DashboardComponent';
 import Library from '../Library/LibraryContainer';
 
 export default Relay.createContainer(Dashboard, {
+	
+  initialVariables:
+  {
+    id: null,
+  },
+
+  prepareVariables( { id } )
+  {
+    return { id, };
+  },
+  
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
