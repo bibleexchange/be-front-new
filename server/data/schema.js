@@ -1,4 +1,15 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
+
+import {
+  connectionArgs,
+  connectionDefinitions,
+  connectionFromArray,
+  fromGlobalId,
+  globalIdField,
+  mutationWithClientMutationId,
+  nodeDefinitions
+} from 'graphql-relay';
+
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -12,127 +23,18 @@ import {
 } from 'graphql';
 
 import {
-  connectionArgs,
-  connectionDefinitions,
-  connectionFromArray,
-  fromGlobalId,
-  globalIdField,
-  mutationWithClientMutationId,
-  nodeDefinitions
-} from 'graphql-relay';
+  userType,
+  libraryType,
+  widgetType,
+  bibleNavType,
+  nodeInterface,
+  nodeField
+} from './types';
 
 import {
-  User,
-  Widget,
   getUser,
-  getWidget,
-  getWidgets,
-  getBibleNavs
+  getLibrary
 } from './database';
-
-
-/**
- * We get the node interface and field from the Relay library.
- *
- * The first method defines the way we resolve an ID to its object.
- * The second defines the way we resolve an object to its GraphQL type.
- */
-const { nodeInterface, nodeField } = nodeDefinitions(
-  (globalId) => {
-    const { type, id } = fromGlobalId(globalId);
-    if (type === 'User') {
-      return getUser(id);
-    } else if (type === 'Widget') {
-      return getWidget(id);
-    }
-    return null;
-  },
-  (obj) => {
-    if (obj instanceof User) {
-      return userType;
-    } else if (obj instanceof Widget) {
-      return widgetType;
-    }
-    return null;
-  }
-);
-
-/**
- * Define your own types here
- */
-
-const userType = new GraphQLObjectType({
-  name: 'User',
-  description: 'A person who uses our app',
-  fields: () => ({
-    id: globalIdField('User'),
-    widgets: {
-      type: widgetConnection,
-      description: 'Widgets that I have',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getWidgets(), args)
-    },
-	bibleNavs: {
-      type: bibleNavConnection,
-      description: 'Bible Navs that I have',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getBibleNavs(), args)
-    },
-    username: {
-      type: GraphQLString,
-      description: 'Users\'s username'
-    },
-    website: {
-      type: GraphQLString,
-      description: 'User\'s website'
-    }
-  }),
-  interfaces: [nodeInterface]
-});
-
-const widgetType = new GraphQLObjectType({
-  name: 'Widget',
-  description: 'Widget integrated in our starter kit',
-  fields: () => ({
-    id: globalIdField('Widget'),
-    name: {
-      type: GraphQLString,
-      description: 'Name of the widget'
-    },
-    description: {
-      type: GraphQLString,
-      description: 'Description of the widget'
-    },
-    url: {
-      type: GraphQLString,
-      description: 'Url of the widget'
-    }
-  }),
-  interfaces: [nodeInterface]
-});
-
-const bibleNavType = new GraphQLObjectType({
-  name: 'BibleNav',
-  description: 'Bible navigations',
-  fields: () => ({
-    id: globalIdField('BibleNav'),
-    body: {
-      type: GraphQLString,
-      description: 'body of the bible nav'
-    },
-    url: {
-      type: GraphQLString,
-      description: 'Url of the bible nav'
-    }
-  }),
-  interfaces: [nodeInterface]
-});
-
-/**
- * Define your own connection types here
- */
-const { connectionType: widgetConnection } = connectionDefinitions({ name: 'Widget', nodeType: widgetType });
-const { connectionType: bibleNavConnection } = connectionDefinitions({ name: 'BibleNav', nodeType: bibleNavType });
 
 /**
  * This is the type that will be the root of our query,
@@ -146,6 +48,10 @@ const queryType = new GraphQLObjectType({
     viewer: {
       type: userType,
       resolve: () => getUser('1')
+    },
+	library: {
+      type: libraryType,
+      resolve: () => getLibrary('favorites')
     }
   })
 });

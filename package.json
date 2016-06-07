@@ -49,7 +49,8 @@
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.2.4",
     "sass-loader": "^3.2.0",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+	"webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "autoprefixer": "^6.3.6",
@@ -84,8 +85,7 @@
     "react-router": "^2.4.0",
     "react-router-relay": "^0.13.2",
     "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.13.0",
-    "webpack-dev-server": "^1.14.1"
+    "url-loader": "^0.5.7"
+
   }
 }

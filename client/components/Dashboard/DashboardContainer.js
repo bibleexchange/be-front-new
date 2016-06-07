@@ -1,5 +1,6 @@
 import Relay from 'react-relay';
 import Dashboard from './DashboardComponent';
+import Library from '../Library/LibraryContainer';
 
 export default Relay.createContainer(Dashboard, {
   fragments: {
@@ -15,6 +16,10 @@ export default Relay.createContainer(Dashboard, {
             }
           }
         }
+      }`,
+    library: () => Relay.QL`
+      fragment on Library {
+        ${Library.getFragment('library')}
       }`
   }
 });

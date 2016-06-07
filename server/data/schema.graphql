@@ -18,8 +18,47 @@ type BibleNavEdge {
   cursor: String!
 }
 
+type Library implements Node {
+  id: ID!
+  notebooks(after: String, first: Int, before: String, last: Int): NotebookConnection
+  pages(after: String, first: Int, before: String, last: Int, page: Int, filter: String): PageConnection
+}
+
 interface Node {
   id: ID!
+}
+
+type Notebook implements Node {
+  id: ID!
+  url: String
+  title: String
+}
+
+type NotebookConnection {
+  pageInfo: PageInfo!
+  edges: [NotebookEdge]
+}
+
+type NotebookEdge {
+  node: Notebook
+  cursor: String!
+}
+
+type Page implements Node {
+  id: ID!
+  currentPage: String
+  numberOfPages: String
+  filter: String
+}
+
+type PageConnection {
+  pageInfo: PageInfo!
+  edges: [PageEdge]
+}
+
+type PageEdge {
+  node: Page
+  cursor: String!
 }
 
 type PageInfo {
@@ -32,6 +71,7 @@ type PageInfo {
 type Query {
   node(id: ID!): Node
   viewer: User
+  library: Library
 }
 
 type User implements Node {

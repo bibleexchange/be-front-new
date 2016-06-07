@@ -7,6 +7,7 @@ var precss = require('precss');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  title:"this is a test",
   entry: {
     app: [
       path.join(__dirname, 'client/index.js'),

@@ -4,6 +4,7 @@ import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Page from '../Page/PageComponent';
 import BibleMini from '../Bible/BibleMiniComponent';
+import Library from '../Library/LibraryContainer';
 
 import './Banner.scss';
 import './Dashboard.scss';
@@ -30,7 +31,7 @@ class WidgetViewer extends React.Component {
           { this.props.name }
         </Button>
         <Panel collapsible expanded={this.state.open}>
-			<Link to={this.props.url} >Go</Link> { this.props.description }
+			<Link to={this.props.url} >Go to</Link> { this.props.description }
 			
 			{this.getWidget(this.props.name)}
 			
@@ -46,12 +47,12 @@ class WidgetViewer extends React.Component {
 		  {id:'1',body:'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.',url:'/bible/genesis/1/1',chapterURL:'/bible/genesis/1',v:'1',reference:'Genesis 1:1'},
 		  {id:'2',body:'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.e',url:'/bible/genesis/1/2',chapterURL:'/bible/genesis/2',v:'2',reference:'Genesis 1:2'}
 		  
-		  ]
+		  ]		  
 	  };
-	  
+
 	  switch(name) {
 		case "Notebooks":
-			return "Notebooks";
+			return (<Library library={{id:1}} />);
 			break;
 		case "Bible":
 			return (<BibleMini viewer={viewer}/>);
@@ -67,6 +68,7 @@ class WidgetViewer extends React.Component {
 class Dashboard extends React.Component {
 
   render() {
+  
     return (
       <Page heading='Dashboard'>
         <Grid fluid>
