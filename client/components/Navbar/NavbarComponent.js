@@ -8,6 +8,7 @@ class UserLoggedIn extends React.Component {
   render() {  
 	let user = this.props.user;
 
+		/*Test*/
     return (
     <ul>
 		<li>
