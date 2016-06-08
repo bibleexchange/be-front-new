@@ -25,8 +25,7 @@ import {
 import {
   userType,
   libraryType,
-  widgetType,
-  bibleNavType,
+  notebookType,
   nodeInterface,
   nodeField
 } from './types';
@@ -51,7 +50,13 @@ const queryType = new GraphQLObjectType({
     },
 	library: {
       type: libraryType,
-      resolve: () => getLibrary('favorites')
+	  args: {
+	    ...connectionArgs,
+        id: {
+          type: GraphQLInt
+        }
+	  },
+      resolve: (_, args) => getLibrary()
     }
   })
 });

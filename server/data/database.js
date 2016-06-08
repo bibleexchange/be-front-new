@@ -32,34 +32,22 @@ class Notebook {
   }
 }
 
-class Page {
-  constructor(id, currentPage, numberOfPages, filter) {
-	this.id = id;
-	this.currentPage = currentPage;
-    this.numberOfPages = numberOfPages;
-    this.filter = filter;
-  }
-}
-
 class Library {
-  constructor(id, pageInfo, notebooks) {
+  constructor(id, notebooks) {
     this.id = id;
-	this.pages = pageInfo;
     this.notebooks = notebooks;
   }
 }
 
-var page = new Page(1,1,1,'VIEWED');
+const notebooks = [
+		new Notebook(1,'/notebooks/1_first-notebook','First Notebook'),
+		new Notebook(2,'/notebooks/2_second-notebook','Second Notebook'),
+		new Notebook(3,'/notebooks/3_third-notebook','Third Notebook'),
+		new Notebook(4,'/notebooks/4_fourth-notebook','Fourth Notebook'),
+		new Notebook(5,'/notebooks/5_fifth-notebook','Fifth Notebook')
+	  ];
 
-var notebooks = [
-			new Notebook(1,'/notebooks/1_first-notebook','First Notebook'),
-			new Notebook(2,'/notebooks/2_second-notebook','Second Notebook'),
-			new Notebook(3,'/notebooks/3_third-notebook','Third Notebook'),
-			new Notebook(4,'/notebooks/4_fourth-notebook','Fourth Notebook'),
-			new Notebook(5,'/notebooks/5_fifth-notebook','Fifth Notebook')
-		  ];
-		  
-const libraryStore = new Library("favorites", page,notebooks);
+const libraryStore = new Library(1,notebooks);
 
 const bibleNavs = [
 		new BibleNav("01001001", "In the beginning God created the heaven and the earth", "/bible/genesis/1/1"),
@@ -89,27 +77,21 @@ function getBibleNavs() {
   return bibleNavs;
 }
 
-function getNotebooks() {
-  return libraryStore.notebooks;
+function getNotebook(id) {
+  return  notebooks[id];
 }
 
-function getLibraryPages() {
-  return libraryStore.pages;
-}
-
-function getLibrary(id) {
-  console.log(id);
+function getLibrary() {
   return libraryStore;
 }
 
 export {
   User,
+  Notebook,
   Widget,
   getUser,
   getWidget,
   getWidgets,
   getBibleNavs,
-  getNotebooks,
-  getLibraryPages,
   getLibrary
 };

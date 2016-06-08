@@ -4,7 +4,7 @@ import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Page from '../Page/PageComponent';
 import BibleMini from '../Bible/BibleMiniComponent';
-import Library from '../Library/LibraryContainer';
+import Library from '../Library/LibraryComponent';
 
 import './Banner.scss';
 import './Dashboard.scss';
@@ -52,7 +52,7 @@ class WidgetViewer extends React.Component {
 
 	  switch(name) {
 		case "Notebooks":
-			return (<Library library={{id:1}} />);
+			return (<Library library={this.props.library} />);
 			break;
 		case "Bible":
 			return (<BibleMini viewer={viewer}/>);
@@ -68,7 +68,7 @@ class WidgetViewer extends React.Component {
 class Dashboard extends React.Component {
 
   render() {
-  
+  console.log(this.props);
     return (
       <Page heading='Dashboard'>
         <Grid fluid>
@@ -129,7 +129,8 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-    viewer: React.PropTypes.object.isRequired
+    viewer: React.PropTypes.object.isRequired,
+	library: React.PropTypes.object.isRequired
   };
   
 export default Dashboard;
