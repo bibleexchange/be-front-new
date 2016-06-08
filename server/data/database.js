@@ -7,12 +7,40 @@ class User {
   }
 }
 
-class Widget {
-  constructor(id, name, description, url) {
+class Course {
+  constructor(id, name, description, modules) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.url = url;
+    this.modules = modules;
+  }
+}
+
+class Module {
+  constructor(id, name, description, chapters, course_id) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.chapters = chapters;
+	this.course_id = course_id;
+  }
+}
+
+class Chapter {
+  constructor(id, name, description, steps, module_id) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.steps = steps;
+	this.module_id = module_id;
+  }
+}
+
+class Step {
+  constructor(id, body, chapter_id) {
+    this.id = id;
+    this.body = body;
+	this.chapter_id = chapter_id;
   }
 }
 
@@ -54,23 +82,69 @@ const bibleNavs = [
 		new BibleNav("01001002", "And the earth waas without form and void and darkness was upon the face of the deep.", "/bible/genesis/1/2")
 	];
 
-const widgets = [
-  new Widget('1', 'Bible', 'King James Version of the Bible', '/bible'),
-  new Widget('2', 'Notebooks', 'Collection of Bible Notes.', '/notebooks')
+const steps = [
+  new Step(1, 'Bible'),
+  new Step(2, 'Book of Romans'),
+  new Step(3, 'Through the Bible'),
+  new Step(4, 'Personal Evangelism')
 ];
-	
+
+const chapters = [
+  new Chapter(1, 'Bible', 'King James Version of the Bible', steps, 1),
+  new Chapter(2, 'Book of Romans', 'A Study on Romans', steps,2),
+  new Chapter(3, 'Through the Bible', 'through the bible', steps,3),
+  new Chapter(4, 'Personal Evangelism', 'witnessing demystified', steps,4)
+];
+
+const modules = [
+  new Module(1, 'Bible', 'King James Version of the Bible', chapters, 1),
+  new Module(2, 'Book of Romans', 'A Study on Romans', chapters,2),
+  new Module(3, 'Through the Bible', 'through the bible', chapters,3),
+  new Module(4, 'Personal Evangelism', 'witnessing demystified', chapters,4)
+];
+
+const verses = [
+  new Step(1, 'In the beginning God created the heaven and the earth.', 1),
+  new Step(2, 'And the earth was without form and void.',2),
+  new Step(3, 'And God said let there be light.',3),
+  new Step(4, 'And God separated the waters from the waters.',4),
+  new Step(5, 'cant remember.',5)
+];
+
+const bibleChapters = [
+  new Chapter(1, 'Chapter One', 'creation of the world', verses,1),
+  new Chapter(2, 'Chapter Two', 'creation of the world repeated', verses,1),
+  new Chapter(3, 'Chapter Three', 'fall in the garden', verses,1),
+  new Chapter(4, 'Chapter Four', 'cain and abel', verses,1),
+  new Chapter(5, 'Chapter One', 'creation of the world', verses,2),
+  new Chapter(6, 'Chapter Two', 'creation of the world repeated', verses,2),
+  new Chapter(7, 'Chapter One', 'creation of the world', verses,3),
+  new Chapter(8, 'Chapter Two', 'creation of the world repeated', verses,3),
+  new Chapter(9, 'Chapter One', 'creation of the world', verses,4),
+  new Chapter(10, 'Chapter Two', 'creation of the world repeated', verses,4),
+  new Chapter(11, 'Chapter One', 'creation of the world', verses,5),
+  new Chapter(12, 'Chapter Two', 'creation of the world repeated', verses,5),
+];
+
+const bibleModules = [
+  new Module(1, 'Genesis', 'beginnings', bibleChapters),
+  new Module(2, 'Exodus', 'going out', bibleChapters),
+  new Module(3, 'Leviticus', 'priesthood', bibleChapters),
+  new Module(4, 'Numbers', 'wanderings', bibleChapters),
+  new Module(5, 'Deuteronomy', 'remember', bibleChapters)
+];
+
+const courses = [
+  new Course(1, 'Bible', 'King James Version of the Bible', bibleModules),
+  new Course(2, 'Book of Romans', 'A Study on Romans', modules),
+  new Course(3, 'Through the Bible', 'through the bible', modules),
+  new Course(4, 'Personal Evangelism', 'witnessing demystified', modules)
+];
+
 const lvarayut = new User('1', 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
 
 function getUser(id) {
   return id === lvarayut.id ? lvarayut : null;
-}
-
-function getWidget(id) {
-  return widgets.find(w => w.id === id);
-}
-
-function getWidgets() {
-  return widgets;
 }
 
 function getBibleNavs() {
@@ -85,13 +159,75 @@ function getLibrary() {
   return libraryStore;
 }
 
+
+function getCourse(id) {
+  return courses.find(c => c.id === id);
+}
+
+function getCourses() {
+  return courses;
+}
+
+
+function getChapter(id) {
+  return chapters.find(ch => ch.id === id);
+}
+
+function getChapters() {
+  return chapters;
+}
+
+
+function getModule(id) {
+  return modules.find(m => m.id === id);
+}
+
+function getModules() {
+  return modules;
+}
+
+function getModulesByCourse(courseId) {
+	var course = courses.find(c => c.id === courseId);
+	return course.modules;
+}
+
+function getStep(id) {
+  return steps.find(s => s.id === id);
+}
+
+function getSteps() {
+  return steps;
+}
+
+function getChaptersByModule(moduleId) {
+	var module = modules.find(c => c.id === moduleId);
+	return module.chapters;
+}
+
+function getStepsByChapter(chapterId) {
+	var chapter = chapters.find(c => c.id === chapterId);
+	return chapter.steps;
+}
+
 export {
+  Course,
+  Module,
+  Chapter,
+  Step,
   User,
   Notebook,
-  Widget,
   getUser,
-  getWidget,
-  getWidgets,
+  getCourse,
+  getCourses,
+  getModule,
+  getModules,
+  getModulesByCourse,
+  getChaptersByModule,
+  getStepsByChapter,
+  getChapter,
+  getChapters,
+  getSteps,
+  getStep,
   getBibleNavs,
   getLibrary
 };

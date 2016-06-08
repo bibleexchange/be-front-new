@@ -2,45 +2,62 @@ schema {
   query: Query
 }
 
-type BibleNav implements Node {
+type Chapter implements Node {
   id: ID!
-  body: String
-  url: String
+  name: String
+  description: String
+  module_id: Int
+  steps(after: String, first: Int, before: String, last: Int): StepConnection
 }
 
-type BibleNavConnection {
+type ChapterConnection {
   pageInfo: PageInfo!
-  edges: [BibleNavEdge]
+  edges: [ChapterEdge]
 }
 
-type BibleNavEdge {
-  node: BibleNav
+type ChapterEdge {
+  node: Chapter
   cursor: String!
 }
 
-type Library implements Node {
+type Course implements Node {
   id: ID!
-  notebooks(after: String, first: Int, before: String, last: Int): NotebookConnection
+  name: String
+  url: String
+  description: String
+  modules(after: String, first: Int, before: String, last: Int): ModuleConnection
+}
+
+type CourseConnection {
+  pageInfo: PageInfo!
+  edges: [CourseEdge]
+}
+
+type CourseEdge {
+  node: Course
+  cursor: String!
+}
+
+type Module implements Node {
+  id: ID!
+  name: String
+  description: String
+  course_id: Int
+  chapters(after: String, first: Int, before: String, last: Int): ChapterConnection
+}
+
+type ModuleConnection {
+  pageInfo: PageInfo!
+  edges: [ModuleEdge]
+}
+
+type ModuleEdge {
+  node: Module
+  cursor: String!
 }
 
 interface Node {
   id: ID!
-}
-
-type Notebook implements Node {
-  id: ID!
-  url: String
-  title: String
-}
-
-type NotebookConnection {
-  pageInfo: PageInfo!
-  edges: [NotebookEdge]
-}
-
-type NotebookEdge {
-  node: Notebook
-  cursor: String!
 }
 
 type PageInfo {
@@ -53,30 +70,26 @@ type PageInfo {
 type Query {
   node(id: ID!): Node
   viewer: User
-  library(after: String, first: Int, before: String, last: Int, id: Int): Library
+}
+
+type Step implements Node {
+  id: ID!
+  body: String
+  chapter_id: Int
+}
+
+type StepConnection {
+  pageInfo: PageInfo!
+  edges: [StepEdge]
+}
+
+type StepEdge {
+  node: Step
+  cursor: String!
 }
 
 type User implements Node {
   id: ID!
-  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
-  bibleNavs(after: String, first: Int, before: String, last: Int): BibleNavConnection
-  username: String
-  website: String
-}
-
-type Widget implements Node {
-  id: ID!
-  name: String
-  description: String
-  url: String
-}
-
-type WidgetConnection {
-  pageInfo: PageInfo!
-  edges: [WidgetEdge]
-}
-
-type WidgetEdge {
-  node: Widget
-  cursor: String!
+  courses(after: String, first: Int, before: String, last: Int): CourseConnection
+  course(id: Int): Course
 }
