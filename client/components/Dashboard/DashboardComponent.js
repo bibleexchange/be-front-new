@@ -76,14 +76,16 @@ class Dashboard extends React.Component {
 				<h1>Your place for Bible study and conversation.</h1>
 			</Row>
 			<Row>
-          {this.props.viewer.widgets.edges.map(edge => {
+			
+			<BibleMini viewer={viewer}/>
+          {/*this.props.viewer.widgets.edges.map(edge => {
 
             return (
               <Col md={6} key={edge.node.id}>
 				<WidgetViewer {...edge.node} />
               </Col>
             );
-          })}
+          })*/}
 		  </Row>
 		  
 		  	<Row>
@@ -129,8 +131,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-    viewer: React.PropTypes.object.isRequired,
-	library: React.PropTypes.object.isRequired
+    viewer: React.PropTypes.object.isRequired
   };
   
 export default Dashboard;

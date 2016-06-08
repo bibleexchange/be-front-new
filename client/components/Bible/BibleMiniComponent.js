@@ -13,7 +13,7 @@ class BibleMiniComponent extends React.Component {
 
     return (
       <div>
-			<BibleNavigation />
+			<BibleNavigation data={this.props.viewer}/>
 			
 			{this.props.viewer.bibleNavs.map(function(nav,index){
 				return (<BibleVerseFocus key={index} data={nav} />);

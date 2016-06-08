@@ -6,18 +6,40 @@ export default Relay.createContainer(Dashboard, {
 	
   fragments: {
     viewer: () => Relay.QL`
-       fragment on User {
-        username
-        website
-		widgets
-      }`,
-   library: () => Relay.QL`
-      fragment on Library {
-		notebooks {
+    fragment on User {
+		id
+		course(id: 1) {
+		  id
+		  name
+		  url
+		  description
+		  modules (first:10){
 			edges {
+			  node {
 				id
+				name
+				description
+				chapters (first:10) {
+				  edges {
+					node {
+					  id
+					  name
+					  description
+					  steps (first:10){
+						edges {
+						  node {
+							id
+							body
+						  }
+						}
+					  }
+					}
+				  }
 				}
+			  }
+			}
+		  }
 		}
-	   }`
-  }
+  }`
+ }
 });

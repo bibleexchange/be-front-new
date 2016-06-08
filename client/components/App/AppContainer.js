@@ -11,10 +11,6 @@ export default Relay.createContainer(App, {
         ${Dashboard.getFragment('viewer')},
         ${Footer.getFragment('viewer')},
 		${Navbar.getFragment('viewer')}
-      }`,
-	library: () => Relay.QL`
-     fragment on Library {
-        ${Dashboard.getFragment('library')}
       }`
   }
 });

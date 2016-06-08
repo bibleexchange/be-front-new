@@ -90,6 +90,9 @@ type StepEdge {
 
 type User implements Node {
   id: ID!
+  name: String
+  username: String
+  website: String
   courses(after: String, first: Int, before: String, last: Int): CourseConnection
   course(id: Int): Course
 }
