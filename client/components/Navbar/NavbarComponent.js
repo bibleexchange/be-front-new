@@ -55,6 +55,7 @@ class Navbar extends React.Component {
 	}
 	
     return (
+<<<<<<< HEAD
 		  <header id="MainNavbar">
 				<nav id="BrandNav">
 					<Link to="/">
@@ -65,6 +66,16 @@ class Navbar extends React.Component {
 					{inOrOut}
 				</nav>
 		 	</header>
+=======
+      	  <nav>
+			<Link to="/">
+			  <BeLogo/>
+		    </Link>
+
+			{inOrOut}
+
+		  </nav>
+>>>>>>> origin/master
     );
   }
 	
@@ -78,11 +89,22 @@ class Navbar extends React.Component {
 		console.log('I would like a book mark feature sometime soon! ',this.viewer.__dataID__, this.props.location.pathname);
   }
   
+  handleBookMark(e) {
+	e.preventDefault();
+	console.log('I would like a book mark feature sometime soon! ',this.viewer.__dataID__, this.props.location.pathname);
+  }
+  
 }
 
 Navbar.propTypes = {
+<<<<<<< HEAD
   viewer: React.PropTypes.object.isRequired,
 	location: React.PropTypes.object.isRequired,
 };
+=======
+    viewer: React.PropTypes.object.isRequired,
+	location: React.PropTypes.object.isRequired,
+  };
+>>>>>>> origin/master
 
 export default Navbar;

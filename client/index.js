@@ -13,7 +13,6 @@ import useRelay from 'react-router-relay';
 const mountNode = document.createElement('div');
 document.body.appendChild(mountNode);
 
-
 ReactDOM.render(
     <Router 
 	history={browserHistory} 
