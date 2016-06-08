@@ -1,87 +1,93 @@
+/* eslint-disable global-require */
 import React from 'react';
+import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
-import './Navbar.scss';
-import BeLogo from '../Svg/BeLogo';
+import Page from '../Page/PageComponent';
+import BibleMini from '../Bible/BibleMiniComponent';
+import Library from '../Library/LibraryComponent';
 
-class UserLoggedIn extends React.Component {
-  
-  render() {  
-	let user = this.props.user;
+import './Banner.scss';
+import './Dashboard.scss';
+import './Landing.scss';
 
+import ThemeSquares from './ThemeSquares';
+
+var twitterLogo = require('../../assets/svg/twitter-logo.svg');
+var facebookLogo = require('../../assets/svg/facebook-logo.svg');
+
+class WidgetViewer extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      open: true
+    };
+  }
+
+  render() {
+	  
     return (
-    <ul>
-		<li>
-		  <button onClick={this.props.handleLogout}>
-			{user.username}	(Logout)
-		  </button>
-		</li>
-		<li>
-		  <button onClick={this.props.handleBookMark}>
-			<span className="glyphicon glyphicon-bookmark"></span>
-		  </button>
-		</li>
-	 </ul>
+      <div>
+        <Button onClick={ ()=> this.setState({ open: !this.state.open })}>
+          { this.props.name }
+        </Button>
+        <Panel collapsible expanded={this.state.open}>
+			<Link to={this.props.url} >Go to</Link> { this.props.description }
+			
+			{this.getWidget(this.props.name)}
+			
+        </Panel>
+      </div>
     );
   }
   
-}
+  getWidget(name){
+	  
+	  const viewer = {
+		  bibleNavs: [
+		  {id:'1',body:'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.',url:'/bible/genesis/1/1',chapterURL:'/bible/genesis/1',v:'1',reference:'Genesis 1:1'},
+		  {id:'2',body:'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.e',url:'/bible/genesis/1/2',chapterURL:'/bible/genesis/2',v:'2',reference:'Genesis 1:2'}
+		  
+		  ]		  
+	  };
 
-class UserLoggedOut extends React.Component {
-  render() {
-    return (
-		<ul>
-			<li><Link to="/login">Login</Link></li>
-			<li><Link to="/signup">Signup</Link></li>
-		</ul>
-    );
+	  switch(name) {
+		case "Notebooks":
+			return (<Library library={this.props.library} />);
+			break;
+		case "Bible":
+			return (<BibleMini viewer={viewer}/>);
+			break;
+		default:
+			return null;
+	}
+	  
   }
   
 } 
 
+class Dashboard extends React.Component {
 
-class Navbar extends React.Component {
   render() {
-	
-	let viewer = this.props.viewer;
-	let url = this.props.location.pathname;
-	let inOrOut = 'loading...';
-	console.log('deciding session stuff based on: ', viewer);
-		
-	if(viewer) {
-		inOrOut = <UserLoggedIn url={url} user={viewer} handleLogout={this.handleLogout.bind(this)} handleBookMark={this.handleBookMark.bind(this)}/>;
-	}else {
-	   inOrOut = <UserLoggedOut />;
-	}
-	
+  console.log(this.props);
     return (
-		  <header id="MainNavbar">
-				<nav id="BrandNav">
-					<Link to="/">
-						<BeLogo/>
-					</Link>
-				</nav>
-				<nav id="UserNav">
-					{inOrOut}
-				</nav>
-		 	</header>
+      <Page heading='Dashboard'>
+				<div className="WidgetContainer">
+					<BibleMini className="Widget" viewer={viewer}/>
+	      	{/*this.props.viewer.widgets.edges.map(edge => {
+	            return (
+	              <Col md={6} key={edge.node.id}>
+					<WidgetViewer {...edge.node} />
+	              </Col>
+	            );
+	          })*/}
+	      </div>
+      </Page>
     );
   }
-	
-  handleLogout(e) {
-		e.preventDefault();
-		console.log('You should really build a way to log me out!');
-  }
-  
-  handleBookMark(e) {
-		e.preventDefault();
-		console.log('I would like a book mark feature sometime soon! ',this.viewer.__dataID__, this.props.location.pathname);
-  }
-  
 }
 
-Navbar.propTypes = {
-  viewer: React.PropTypes.object.isRequired,
-	location: React.PropTypes.object.isRequired,
-};
-
-export default Navbar;
+Dashboard.propTypes = {
+    viewer: React.PropTypes.object.isRequired
+  };
+  
+export default Dashboard;

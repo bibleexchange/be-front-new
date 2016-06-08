@@ -23,6 +23,7 @@ import {
 
 import {
   User,
+  Notebook,
   Widget,
   Library,
   getUser,
@@ -30,7 +31,6 @@ import {
   getWidgets,
   getBibleNavs,
   getNotebooks,
-  getLibraryPages,
   getLibrary
 } from './database';
 
@@ -48,6 +48,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Widget') {
       return getWidget(id);
     }else if (type === 'Library') {
+		console.log('library type used');
       return getLibrary(id);
     }
     return null;
@@ -97,35 +98,6 @@ const userType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 });
 
-const libraryType = new GraphQLObjectType({
-  name: 'Library',
-  description: 'A Library is a collection of Notebooks',
-  fields: () => ({
-	id: globalIdField('Library'),
-    notebooks: {
-      type: notebookConnection,
-      description: 'Notebooks in this library',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getNotebooks(), args)
-    },
-	pages: {
-      type: libraryPageConnection,
-      description: 'Page information for this library',
-      args: {
-		...connectionArgs,
-        page: {
-          type: GraphQLInt
-		},
-		filter: {
-          type: GraphQLString
-		}
-	  },
-      resolve: (_, args) => connectionFromArray(getLibraryPages(), args)
-    }
-  }),
-  interfaces: [nodeInterface]
-});
-
 const widgetType = new GraphQLObjectType({
   name: 'Widget',
   description: 'Widget integrated in our starter kit',
@@ -147,23 +119,18 @@ const widgetType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 });
 
-const pageType = new GraphQLObjectType({
-  name: 'Page',
-  description: 'a Page',
-  fields: () => ({
-    id: globalIdField('Page'),
-    currentPage: {
-      type: GraphQLString,
-      description: 'current page'
+const libraryType = new GraphQLObjectType({
+  name: 'Library',
+  description: 'A Library is a collection of Notebooks',
+   fields: () => ({
+    id: globalIdField('Library'),
+    notebooks: {
+      type: notebookConnection,
+      description: 'Notebooks in this library',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromArray(getLibrary(), args),
     },
-    numberOfPages: {
-      type: GraphQLString,
-      description: 'Number of pages'
-    },
-    filter: {
-      type: GraphQLString,
-      description: 'filter'
-    }
+	
   }),
   interfaces: [nodeInterface]
 });
@@ -206,21 +173,14 @@ const bibleNavType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: widgetConnection } = connectionDefinitions({ name: 'Widget', nodeType: widgetType });
-
-const {
-  connectionType: notebookConnection,
-  edgeType: NotebookEdge,
-} = connectionDefinitions({name: 'Notebook', nodeType: notebookType});
-
 const { connectionType: bibleNavConnection } = connectionDefinitions({ name: 'BibleNav', nodeType: bibleNavType });
-const { connectionType: libraryPageConnection } = connectionDefinitions({ name: 'Page', nodeType: pageType });
+const {connectionType: notebookConnection} = connectionDefinitions({name: 'Notebook', nodeType: notebookType});
 
 export {
   userType,
   libraryType,
   widgetType,
   bibleNavType,
-  pageType,
   notebookType,
   nodeInterface,
   nodeField

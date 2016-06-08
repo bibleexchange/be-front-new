@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { Nav, NavItem } from 'react-bootstrap';
 import './Navbar.scss';
 import BeLogo from '../Svg/BeLogo';
 
@@ -8,7 +9,6 @@ class UserLoggedIn extends React.Component {
   render() {  
 	let user = this.props.user;
 
-		/*Test*/
     return (
     <ul>
 		<li>
@@ -55,8 +55,7 @@ class Navbar extends React.Component {
 	}
 	
     return (
-<<<<<<< HEAD
-		  <header id="MainNavbar">
+    	<header id="MainNavbar">
 				<nav id="BrandNav">
 					<Link to="/">
 						<BeLogo/>
@@ -66,27 +65,12 @@ class Navbar extends React.Component {
 					{inOrOut}
 				</nav>
 		 	</header>
-=======
-      	  <nav>
-			<Link to="/">
-			  <BeLogo/>
-		    </Link>
-
-			{inOrOut}
-
-		  </nav>
->>>>>>> origin/master
     );
   }
 	
   handleLogout(e) {
-		e.preventDefault();
-		console.log('You should really build a way to log me out!');
-  }
-  
-  handleBookMark(e) {
-		e.preventDefault();
-		console.log('I would like a book mark feature sometime soon! ',this.viewer.__dataID__, this.props.location.pathname);
+	e.preventDefault();
+	console.log('You should really build a way to log me out!');
   }
   
   handleBookMark(e) {
@@ -97,14 +81,8 @@ class Navbar extends React.Component {
 }
 
 Navbar.propTypes = {
-<<<<<<< HEAD
-  viewer: React.PropTypes.object.isRequired,
-	location: React.PropTypes.object.isRequired,
-};
-=======
     viewer: React.PropTypes.object.isRequired,
 	location: React.PropTypes.object.isRequired,
   };
->>>>>>> origin/master
 
 export default Navbar;
