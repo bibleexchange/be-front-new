@@ -1,233 +1,250 @@
-class User {
-  constructor(id, name, username, website) {
-    this.id = id;
-    this.name = name;
-    this.username = username;
-    this.website = website;
+"use strict";
+
+import Sequelize from 'sequelize';
+import path from 'path';
+
+const db_config = {
+	name: "dev_exchange",
+	user: "root",
+	password: "",
+	host:"127.0.0.1",
+	dialect: "mysql"
+};
+
+const Conn = new Sequelize(db_config.name, db_config.user, db_config.password, {
+  host: db_config.host,
+  dialect: db_config.dialect,
+
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  },
+});
+
+
+const User = Conn.define('user', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+	primaryKey: true
+  },
+  firstName: {
+    type: Sequelize.STRING,
+    field: 'firstname'
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    field: 'lastname'
+  },
+  username: {
+    type: Sequelize.STRING,
+    field: 'username'
+  },
+  createdAt: {
+    type: Sequelize.STRING,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.STRING,
+    field: 'updated_at'
+  },
+  middleName: {
+    type: Sequelize.STRING,
+    field: 'middlename'
+  },
+  suffix: {
+    type: Sequelize.STRING,
+    field: 'suffix'
+  },
+  twitter: {
+    type: Sequelize.STRING,
+    field: 'twitter'
+  },
+  profileImage: {
+    type: Sequelize.STRING,
+    field: 'profile_image'
+  },
+  gender: {
+    type: Sequelize.STRING,
+    field: 'gender'
+  },
+  email: {
+    type: Sequelize.STRING,
+    field: 'email'
+  },
+  password: {
+    type: Sequelize.STRING,
+    field: 'password'
+  },
+  confirmationCode: {
+    type: Sequelize.STRING,
+    field: 'confirmation_code'
+  },
+  confirmed: {
+    type: Sequelize.STRING,
+    field: 'confirmed'
+  },
+  active: {
+    type: Sequelize.STRING,
+    field: 'active'
   }
-}
+}, {
+  tableName: "users"
+});
 
-class Course {
-  constructor(id, name, description, modules) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.modules = modules;
+User.authUser = User.findById(1);
+User.bibleNavs = [];
+
+//id , bible_verse_id, title, description, image_id, user_id, year, public, created_at, updated_at
+
+const Course = Conn.define('course', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+	primaryKey: true
+  },
+  bibleVerseId: {
+    type: Sequelize.INTEGER,
+    field: 'bible_verse_id'
+  },
+  title: {
+    type: Sequelize.STRING,
+    field: 'title'
+  },
+  description: {
+    type: Sequelize.STRING,
+    field: 'description'
+  },
+  imageId: {
+    type: Sequelize.INTEGER,
+    field: 'image_id'
+  },
+  userId: {
+    type: Sequelize.INTEGER,
+    field: 'user_id'
+  },
+  year: {
+    type: Sequelize.STRING,
+    field: 'user_id'
+  },
+  public: {
+    type: Sequelize.INTEGER,
+    field: 'public'
+  },
+  createdAt: {
+    type: Sequelize.STRING,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.STRING,
+    field: 'updated_at'
   }
-}
+}, {
+  tableName: "courses"
+});
 
-class Module {
-  constructor(id, name, description, chapters, course_id) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.chapters = chapters;
-	this.course_id = course_id;
+const Module = Conn.define('module', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+	primaryKey: true
+  },
+  courseId: {
+    type: Sequelize.INTEGER,
+    field: 'course_id'
+  },
+  title: {
+    type: Sequelize.STRING,
+    field: 'title'
+  },
+  orderBy: {
+    type: Sequelize.INTEGER,
+    field: 'order_by'
+  },
+  createdAt: {
+    type: Sequelize.STRING,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.STRING,
+    field: 'updated_at'
   }
-}
+}, {
+  tableName: "modules"
+});
 
-class Chapter {
-  constructor(id, name, description, steps, module_id) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.steps = steps;
-	this.module_id = module_id;
+const Chapter = Conn.define('chapter', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+	primaryKey: true
+  },
+  title: {
+    type: Sequelize.STRING,
+    field: 'title'
+  },
+  orderBy: {
+    type: Sequelize.INTEGER,
+    field: 'order_by'
+  },
+  createdAt: {
+    type: Sequelize.STRING,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.STRING,
+    field: 'updated_at'
+  },
+  moduleId: {
+    type: Sequelize.STRING,
+    field: 'module_id'
   }
-}
+}, {
+  tableName: "chapters"
+});
 
-class Step {
-  constructor(id, body, chapter_id) {
-    this.id = id;
-    this.body = body;
-	this.chapter_id = chapter_id;
+const Step = Conn.define('step', {
+  id: {
+    type: Sequelize.INTEGER,
+    field: 'id',
+	primaryKey: true
+  },
+  body: {
+    type: Sequelize.JSON,
+    field: 'body'
+  },
+  orderBy: {
+    type: Sequelize.INTEGER,
+    field: 'order_by'
+  },
+  type: {
+    type: Sequelize.STRING,
+    field: 'type'
+  },
+  chapterId: {
+    type: Sequelize.INTEGER,
+    field: 'chapter_id'
+  },
+  createdAt: {
+    type: Sequelize.STRING,
+    field: 'created_at'
+  },
+  updatedAt: {
+    type: Sequelize.STRING,
+    field: 'updated_at'
   }
-}
+}, {
+  tableName: "steps"
+});
 
-class BibleNav {
-  constructor(id, body, url) {
-    this.id = id;
-    this.body = body;
-    this.url = url;
-  }
-}
+Course.hasMany(Module);
+Module.belongsTo(Course, {foreignKey: 'course_id'});
+Module.hasMany(Chapter);
+Chapter.belongsTo(Module, {foreignKey: 'module_id'});
+Chapter.hasMany(Step);
+Step.belongsTo(Chapter, {foreignKey: 'chapter_id'});
 
-class Notebook {
-  constructor(id, url, title) {
-    this.id = id;
-    this.url = url;
-    this.title = title;
-  }
-}
-
-class Library {
-  constructor(id, notebooks) {
-    this.id = id;
-    this.notebooks = notebooks;
-  }
-}
-
-const notebooks = [
-		new Notebook(1,'/notebooks/1_first-notebook','First Notebook'),
-		new Notebook(2,'/notebooks/2_second-notebook','Second Notebook'),
-		new Notebook(3,'/notebooks/3_third-notebook','Third Notebook'),
-		new Notebook(4,'/notebooks/4_fourth-notebook','Fourth Notebook'),
-		new Notebook(5,'/notebooks/5_fifth-notebook','Fifth Notebook')
-	  ];
-
-const libraryStore = new Library(1,notebooks);
-
-const bibleNavs = [
-		new BibleNav("01001001", "In the beginning God created the heaven and the earth", "/bible/genesis/1/1"),
-		new BibleNav("01001002", "And the earth waas without form and void and darkness was upon the face of the deep.", "/bible/genesis/1/2")
-	];
-
-const steps = [
-  new Step(1, 'Bible'),
-  new Step(2, 'Book of Romans'),
-  new Step(3, 'Through the Bible'),
-  new Step(4, 'Personal Evangelism')
-];
-
-const chapters = [
-  new Chapter(1, 'Bible', 'King James Version of the Bible', steps, 1),
-  new Chapter(2, 'Book of Romans', 'A Study on Romans', steps,2),
-  new Chapter(3, 'Through the Bible', 'through the bible', steps,3),
-  new Chapter(4, 'Personal Evangelism', 'witnessing demystified', steps,4)
-];
-
-const modules = [
-  new Module(1, 'Bible', 'King James Version of the Bible', chapters, 1),
-  new Module(2, 'Book of Romans', 'A Study on Romans', chapters,2),
-  new Module(3, 'Through the Bible', 'through the bible', chapters,3),
-  new Module(4, 'Personal Evangelism', 'witnessing demystified', chapters,4)
-];
-
-const verses = [
-  new Step(1, 'In the beginning God created the heaven and the earth.', 1),
-  new Step(2, 'And the earth was without form and void.',2),
-  new Step(3, 'And God said let there be light.',3),
-  new Step(4, 'And God separated the waters from the waters.',4),
-  new Step(5, 'cant remember.',5)
-];
-
-const bibleChapters = [
-  new Chapter(1, 'Chapter One', 'creation of the world', verses,1),
-  new Chapter(2, 'Chapter Two', 'creation of the world repeated', verses,1),
-  new Chapter(3, 'Chapter Three', 'fall in the garden', verses,1),
-  new Chapter(4, 'Chapter Four', 'cain and abel', verses,1),
-  new Chapter(5, 'Chapter One', 'creation of the world', verses,2),
-  new Chapter(6, 'Chapter Two', 'creation of the world repeated', verses,2),
-  new Chapter(7, 'Chapter One', 'creation of the world', verses,3),
-  new Chapter(8, 'Chapter Two', 'creation of the world repeated', verses,3),
-  new Chapter(9, 'Chapter One', 'creation of the world', verses,4),
-  new Chapter(10, 'Chapter Two', 'creation of the world repeated', verses,4),
-  new Chapter(11, 'Chapter One', 'creation of the world', verses,5),
-  new Chapter(12, 'Chapter Two', 'creation of the world repeated', verses,5),
-];
-
-const bibleModules = [
-  new Module(1, 'Genesis', 'beginnings', bibleChapters),
-  new Module(2, 'Exodus', 'going out', bibleChapters),
-  new Module(3, 'Leviticus', 'priesthood', bibleChapters),
-  new Module(4, 'Numbers', 'wanderings', bibleChapters),
-  new Module(5, 'Deuteronomy', 'remember', bibleChapters)
-];
-
-const courses = [
-  new Course(1, 'Bible', 'King James Version of the Bible', bibleModules),
-  new Course(2, 'Book of Romans', 'A Study on Romans', modules),
-  new Course(3, 'Through the Bible', 'through the bible', modules),
-  new Course(4, 'Personal Evangelism', 'witnessing demystified', modules)
-];
-
-const lvarayut = new User('1', 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
-
-function getUser(id) {
-  return id === lvarayut.id ? lvarayut : null;
-}
-
-function getBibleNavs() {
-  return bibleNavs;
-}
-
-function getNotebook(id) {
-  return  notebooks[id];
-}
-
-function getLibrary() {
-  return libraryStore;
-}
-
-
-function getCourse(id) {
-  return courses.find(c => c.id === id);
-}
-
-function getCourses() {
-  return courses;
-}
-
-
-function getChapter(id) {
-  return chapters.find(ch => ch.id === id);
-}
-
-function getChapters() {
-  return chapters;
-}
-
-
-function getModule(id) {
-  return modules.find(m => m.id === id);
-}
-
-function getModules() {
-  return modules;
-}
-
-function getModulesByCourse(courseId) {
-	var course = courses.find(c => c.id === courseId);
-	return course.modules;
-}
-
-function getStep(id) {
-  return steps.find(s => s.id === id);
-}
-
-function getSteps() {
-  return steps;
-}
-
-function getChaptersByModule(moduleId) {
-	var module = modules.find(c => c.id === moduleId);
-	return module.chapters;
-}
-
-function getStepsByChapter(chapterId) {
-	var chapter = chapters.find(c => c.id === chapterId);
-	return chapter.steps;
-}
-
-export {
-  Course,
-  Module,
-  Chapter,
-  Step,
-  User,
-  Notebook,
-  getUser,
-  getCourse,
-  getCourses,
-  getModule,
-  getModules,
-  getModulesByCourse,
-  getChaptersByModule,
-  getStepsByChapter,
-  getChapter,
-  getChapters,
-  getSteps,
-  getStep,
-  getBibleNavs,
-  getLibrary
+module.exports = {
+   Conn, User,  Course, Module, Chapter, Step
 };

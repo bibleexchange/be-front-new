@@ -6,7 +6,7 @@ export default Relay.createContainer(Navbar, {
     viewer: () => Relay.QL`
       fragment on User {
         username
-        website
+        email
       }`
   }
 });

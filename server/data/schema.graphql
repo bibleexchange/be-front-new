@@ -4,10 +4,11 @@ schema {
 
 type Chapter implements Node {
   id: ID!
-  name: String
+  title: String
   description: String
-  module_id: Int
+  moduleId: Int
   steps(after: String, first: Int, before: String, last: Int): StepConnection
+  orderBy: Int
 }
 
 type ChapterConnection {
@@ -22,7 +23,7 @@ type ChapterEdge {
 
 type Course implements Node {
   id: ID!
-  name: String
+  title: String
   url: String
   description: String
   modules(after: String, first: Int, before: String, last: Int): ModuleConnection
@@ -40,10 +41,11 @@ type CourseEdge {
 
 type Module implements Node {
   id: ID!
-  name: String
+  title: String
   description: String
-  course_id: Int
+  courseId: Int
   chapters(after: String, first: Int, before: String, last: Int): ChapterConnection
+  orderBy: Int
 }
 
 type ModuleConnection {
@@ -70,12 +72,16 @@ type PageInfo {
 type Query {
   node(id: ID!): Node
   viewer: User
+  courses(after: String, first: Int, before: String, last: Int): CourseConnection
+  store: Store
 }
 
 type Step implements Node {
   id: ID!
   body: String
-  chapter_id: Int
+  chapterId: Int
+  orderBy: Int
+  type: String
 }
 
 type StepConnection {
@@ -88,11 +94,39 @@ type StepEdge {
   cursor: String!
 }
 
+type Store implements Node {
+  id: ID!
+  people(after: String, first: Int, before: String, last: Int): UserConnection
+  course(after: String, first: Int, before: String, last: Int, id: Int): Course
+  courses(after: String, first: Int, before: String, last: Int, filter: String): CourseConnection
+}
+
 type User implements Node {
   id: ID!
-  name: String
+  firstName: String
+  lastName: String
   username: String
-  website: String
-  courses(after: String, first: Int, before: String, last: Int): CourseConnection
-  course(id: Int): Course
+  createdAt: String
+  updatedAt: String
+  middleName: String
+  suffix: String
+  twitter: String
+  profileImage: String
+  gender: String
+  email: String
+  password: String
+  confirmationCode: String
+  confirmed: String
+  active: String
+  bibleNavs: String
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]
+}
+
+type UserEdge {
+  node: User
+  cursor: String!
 }

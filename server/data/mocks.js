@@ -1,5 +1,5 @@
 const mocks = {
-	String: () => 'provides several kinds of types to build hierarch',
+	String: () => 'string string string string string string string string string string string string ',
 	Integer: () => 7,
 };
 

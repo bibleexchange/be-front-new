@@ -1,12 +1,11 @@
 import Relay from 'react-relay';
-import Footer from './FooterComponent';
+import Bible from './BibleComponent';
 
-export default Relay.createContainer(Footer, {
+export default Relay.createContainer(Bible, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        username
-        email
+        bibleNavs
       }`
   }
 });

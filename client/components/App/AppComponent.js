@@ -10,13 +10,19 @@ import './Images.scss';
 import './Print.scss';
 import './Typography.scss';
 
+const fakeStore = require('../../../server/data/fakeStore.js');
+const fakeViewer = require('../../../server/data/fakeViewer.js');
+
 class App extends React.Component {
 
   render() { 
-
+	
+	let viewer = this.props.viewer;//fakeViewer; /// vs. this.props.viewer
+	let store = fakeStore;
+	
     return (
 		  <div>
-				<MainNavigation location={this.props.location} route={this.props.route}  viewer={this.props.viewer} />
+				<MainNavigation location={this.props.location} route={this.props.route}  viewer={viewer} />
 
 			  {this.props.children}
 			  

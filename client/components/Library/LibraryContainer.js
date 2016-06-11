@@ -3,11 +3,9 @@ import Library from './LibraryComponent';
 
 export default Relay.createContainer(Library, {
   fragments: {
-    library: () => Relay.QL`
-      fragment on Library {
-		id
+    store: () => Relay.QL`
+      fragment on Store {
+		courses {id,title}
 	   }`
   }
 });
-
-//  notebooks(first:2){edges{node{id}}}

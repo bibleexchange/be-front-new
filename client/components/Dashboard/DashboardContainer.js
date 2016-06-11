@@ -1,45 +1,82 @@
 import Relay from 'react-relay';
 import Dashboard from './DashboardComponent';
-import Library from '../Library/LibraryContainer';
 
 export default Relay.createContainer(Dashboard, {
-	
+  initialVariables: {
+    chapterPageSize: 100,
+    chapterCursor: null,
+	stepPageSize: 100,
+	storePageSize:5,
+	modulePageSize:100,
+	moduleCursor:null,
+	courseId:1,
+	libraryFilter:''
+  }, 
   fragments: {
+	//id, firstName, lastName, username, createdAt, updatedAt, middleName, suffix, twitter, profileImage, gender, email, password, confirmationCode, confirmed, active
     viewer: () => Relay.QL`
     fragment on User {
 		id
-		course(id: 1) {
+		firstName
+		username
+		email
+  }`,
+  store: () => Relay.QL`
+    fragment on Store {
+		courses(first:$storePageSize, filter:$libraryFilter) {
+		  edges {
+			node {
+			  id
+			  title
+			}
+		  }
+		  pageInfo{
+			  hasPreviousPage, hasNextPage
+		  }
+		}
+		course(id:$courseId){
 		  id
-		  name
+		  title
 		  url
 		  description
-		  modules (first:10){
+		  modules(first:$modulePageSize, after:$moduleCursor){
 			edges {
+			  cursor
 			  node {
 				id
-				name
-				description
-				chapters (first:10) {
+				title
+				orderBy
+				chapters (first:$chapterPageSize, after:$chapterCursor){
 				  edges {
+					cursor
 					node {
 					  id
-					  name
-					  description
-					  steps (first:10){
+					  title
+					  orderBy
+					  steps(first:$stepPageSize){
 						edges {
 						  node {
 							id
 							body
+                            type
 						  }
 						}
+						pageInfo {
+							hasNextPage
+							hasPreviousPage
+						  }
 					  }
 					}
+				  }
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
 				  }
 				}
 			  }
 			}
 		  }
 		}
-  }`
- }
+	}`
+  }
 });

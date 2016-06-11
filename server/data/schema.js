@@ -22,7 +22,7 @@ import {
 import {
   connectionArgs,
   connectionDefinitions,
-  connectionFromArray,
+  connectionFromPromisedArray,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
@@ -30,7 +30,17 @@ import {
 } from 'graphql-relay';
 
 // Import methods that your schema can use to interact with your database
-import * as db from './database';
+import {
+	User,  Course, Module, Chapter, Step
+} from './database';
+
+import {
+  // getModelsByClass,
+  resolveArrayData,
+  // getArrayData,
+  // resolveArrayByClass,
+  resolveModelsByClass
+} from 'sequelize-relay';
 
 /**
  * We get the node interface and field from the Relay library.
@@ -41,19 +51,26 @@ import * as db from './database';
 var {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
     var {type, id} = fromGlobalId(globalId);
-    if (type === 'User') {
-      return db.getUser(id);
-    } else if (type === 'Course') {
-      return db.getCourse(id);
-    } else {
-      return null;
+
+    switch (type) {
+      case 'User':
+        return User.findByPrimary(id);
+      case 'Course':
+        return Course.findByPrimary(id);
+      case 'Store':
+        return store;
+      default:
+        return null;
     }
+
   },
   (obj) => {
-    if (obj instanceof db.User) {
-      return userType;
-    } else if (obj instanceof db.Course)  {
-      return courseType;
+    if (obj instanceof User.Instance) {
+      return UserType;
+    } else if (obj instanceof Course.Instance)  {
+      return CourseType;
+   } else if (obj instanceof Store)  {
+      return StoreType;
     } else {
       return null;
     }
@@ -62,51 +79,96 @@ var {nodeInterface, nodeField} = nodeDefinitions(
 
 /**
  * Define your own types here
+ * FIELDS:
+ * 
+ * id, firstName, lastName, username, createdAt, updatedAt, middleName, suffix, twitter, profileImage, gender, email, password, confirmationCode, confirmed, active
  */
-
-var userType = new GraphQLObjectType({
+ 
+var UserType = new GraphQLObjectType({
   name: 'User',
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
-	name: {
+	firstName: {
       type: GraphQLString,
-      description: 'username',
+      description: 'first name',
+    },
+	lastName: {
+      type: GraphQLString,
+      description: 'last anme',
     },
 	username: {
       type: GraphQLString,
       description: 'username',
     },
-	website: {
+	
+	createdAt: {
       type: GraphQLString,
-      description: 'username',
+      description: 'created at',
     },
-    courses: {
-      type: courseConnection,
-      description: 'A person\'s collection of courses',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(db.getCourses(), args),
+	updatedAt: {
+      type: GraphQLString,
+      description: 'udpated at',
     },
-	course: {
-      type: courseType,
-      description: 'an individual course',
-      args: {
-		  id: { type: GraphQLInt }
-	  },
-      resolve: (_, args) => db.getCourse(args.id),
+	middleName: {
+      type: GraphQLString,
+      description: 'middle name',
+    },
+	suffix: {
+      type: GraphQLString,
+      description: 'suffix',
+    },
+	twitter: {
+      type: GraphQLString,
+      description: 'twitter',
+    },
+	profileImage: {
+      type: GraphQLString,
+      description: 'url of profile image',
+    },
+	gender: {
+      type: GraphQLString,
+      description: 'gender',
+    },
+	email: {
+      type: GraphQLString,
+      description: 'email',
+    },
+	
+	password: {
+      type: GraphQLString,
+      description: 'account password',
+    },
+	
+	confirmationCode: {
+      type: GraphQLString,
+      description: 'confirmation code for account',
+    },
+	
+	confirmed: {
+      type: GraphQLString,
+      description: 'confirmed',
+    },
+	active: {
+      type: GraphQLString,
+      description: 'active account',
+    },
+	bibleNavs: {
+      type: GraphQLString,
+      description: 'bible navs',
     },
   }),
   interfaces: [nodeInterface],
 });
 
-var courseType = new GraphQLObjectType({
+const CourseType = new GraphQLObjectType({
   name: 'Course',
   description: 'A course is a collection of sections',
   fields: () => ({
     id: globalIdField('Course'),
-    name: {
+    title: {
       type: GraphQLString,
-      description: 'The name of the course',
+      description: 'The title of the course',
     },
 	 url: {
       type: GraphQLString,
@@ -120,53 +182,65 @@ var courseType = new GraphQLObjectType({
       type: moduleConnection,
       description: 'Modules belonging to this course',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(db.getModulesByCourse(1), args),
+	  resolve: (course, args) => {
+          return connectionFromPromisedArray(
+            resolveArrayData(course.getModules(), true), args
+          )
+        }
     },
   }),
   interfaces: [nodeInterface],
 });
 
-var moduleType = new GraphQLObjectType({
+const ModuleType = new GraphQLObjectType({
   name: 'Module',
   description: 'A module is a collection of chapters',
   fields: () => ({
     id: globalIdField('Module'),
-    name: {
+    title: {
       type: GraphQLString,
-      description: 'The name of the module',
+      description: 'The title for the module',
     },
 	 description: {
       type: GraphQLString,
       description: 'The description of the module',
     },
-    course_id: {
+    courseId: {
       type: GraphQLInt,
       description: 'The id of the course this belongs to',
     },
 	chapters: {
       type: chapterConnection,
       description: 'Chapters belonging to this module',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(db.getChaptersByModule(1), args),
+	  args: connectionArgs,
+	  resolve: (module, args) => {
+          return connectionFromPromisedArray(
+            resolveArrayData(module.getChapters(), true), args
+          )
+        }
+    },
+    orderBy: {
+      type: GraphQLInt,
+      description: 'the order this should appear',
     },
   }),
   interfaces: [nodeInterface],
 });
 
-var chapterType = new GraphQLObjectType({
+const ChapterType = new GraphQLObjectType({
   name: 'Chapter',
   description: 'A chapter is a collection of steps',
   fields: () => ({
     id: globalIdField('Chapter'),
-    name: {
+    title: {
       type: GraphQLString,
-      description: 'The name of the chapter',
+      description: 'The title for the chapter',
     },
 	 description: {
       type: GraphQLString,
       description: 'The description of the chapter',
     },
-	module_id: {
+	moduleId: {
       type: GraphQLInt,
       description: 'The id of the module this belongs to',
     },
@@ -174,13 +248,21 @@ var chapterType = new GraphQLObjectType({
       type: stepConnection,
       description: 'Steps belonging to this chapter',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(db.getStepsByChapter(1), args),
+      resolve: (chapter, args) => {
+          return connectionFromPromisedArray(
+            resolveArrayData(chapter.getSteps(), true), args
+          )
+        }
     },
+    orderBy: {
+      type: GraphQLInt,
+      description: 'the order this should appear',
+    }
   }),
   interfaces: [nodeInterface],
 });
 
-var stepType = new GraphQLObjectType({
+const StepType = new GraphQLObjectType({
   name: 'Step',
   description: 'The lowest level child of a course.',
   fields: () => ({
@@ -189,10 +271,18 @@ var stepType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The body of the step',
     },
-	chapter_id: {
+	chapterId: {
       type: GraphQLInt,
       description: 'The id of the chapter this belongs to',
     },
+    orderBy: {
+      type: GraphQLInt,
+      description: 'the order this should appear',
+    },
+    type: {
+      type: GraphQLString,
+      description: 'the type of step',
+    }
   }),
   interfaces: [nodeInterface],
 });
@@ -200,10 +290,65 @@ var stepType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-var {connectionType: courseConnection} = connectionDefinitions({name: 'Course', nodeType: courseType});
-var {connectionType: moduleConnection} = connectionDefinitions({name: 'Module', nodeType: moduleType});
-var {connectionType: chapterConnection} = connectionDefinitions({name: 'Chapter', nodeType: chapterType});
-var {connectionType: stepConnection} = connectionDefinitions({name: 'Step', nodeType: stepType});
+var {connectionType: userConnection, edgeType: userEdge} = connectionDefinitions({name: 'User', nodeType: UserType});
+var {connectionType: courseConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Course', nodeType: CourseType});
+var {connectionType: moduleConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Module', nodeType: ModuleType});
+var {connectionType: chapterConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Chapter', nodeType: ChapterType});
+var {connectionType: stepConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Step', nodeType: StepType});
+
+
+const StoreType = new GraphQLObjectType({
+  name: 'Store',
+  interfaces: [nodeInterface],
+  fields: () => ({
+    id: globalIdField("Store"),
+    people: {
+      type: userConnection,
+      args: connectionArgs,
+      resolve: (root, args) => {
+        return connectionFromPromisedArray(
+          resolveArrayData(User.findAll(), true), args
+        )
+      }
+    },
+	course: {
+      type: CourseType,
+      description: 'an individual course',
+      args: {
+		  ...connectionArgs,
+		  id: { type: GraphQLInt }
+	  },
+     resolve: (root, args) => {
+        return Course.findById(args.id);
+	  }
+    },
+    courses: {
+      type: courseConnection,
+      args: {
+		...connectionArgs,
+		filter: { type: GraphQLString } 
+	  },
+      resolve: (_, args) => {
+        return connectionFromPromisedArray(
+          resolveArrayData(
+		  
+		  Course.findAll({
+			  where: {
+				title: {
+				   $like: '%'+args.filter+'%'
+				}
+			  }
+			})
+		  , true), args
+        )
+      }
+    }
+  }),
+});
+
+class Store {}
+// Mock data
+let store = new Store();
 
 /**
  * This is the type that will be the root of our query,
@@ -215,9 +360,23 @@ var queryType = new GraphQLObjectType({
     node: nodeField,
     // Add your own root fields here
     viewer: {
-      type: userType,
-      resolve: () => db.getUser('1'),
+      type: UserType,
+      resolve: (root, args) => User.authUser
     },
+    courses: {
+      type: courseConnection,
+      description: 'A person\'s collection of courses',
+      args: connectionArgs,
+      resolve: (root, args) => {
+        return connectionFromPromisedArray(
+          resolveArrayData(Course.findAll(), true), args
+        )
+	  }
+    },
+	store: {
+        type: StoreType,
+        resolve: () => store,
+      },
   }),
 });
 

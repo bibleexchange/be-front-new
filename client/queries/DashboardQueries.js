@@ -7,5 +7,12 @@ export default {
         ${Component.getFragment('viewer')}
       }
     }
+  `,
+   store: (Component) => Relay.QL`
+    query {
+      store {
+        ${Component.getFragment('store')}
+      }
+    }
   `
 };

@@ -9,7 +9,7 @@ class Footer extends React.Component {
 	   <Grid fluid className="redBG">
 			<Row>
 			  <Col xs={6} xsOffset={5}> 
-				<span>Using Bible exchange as <a href={this.props.viewer.website}> @{this.props.viewer.username}</a></span>
+				<span>Using Bible exchange as <a href={this.props.viewer.email}> @{this.props.viewer.username}</a></span>
 			  </Col>
 			</Row>
 		</Grid>

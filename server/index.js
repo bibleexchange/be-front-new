@@ -25,15 +25,16 @@ import Mocks from './data/mocks';
 	  schema: Schema,
 	  mocks: Mocks,
 	}));
+	
 	graphQLServer.listen(config.graphql.port, () => console.log(chalk.green(
-	  `GraphQL Server is now running on http://localhost:${config.graphql.port}/graphql`)
+	  `GraphQL Server is now running on http://127.0.0.1:${config.graphql.port}/graphql`)
 	));
   
   // Launch Relay by using webpack.config.js
   const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',
     proxy: {
-      '/graphql': `http://localhost:${config.graphql.port}`
+      '/graphql': `http://127.0.0.1:${config.graphql.port}`
     },
     stats: {
       colors: true
