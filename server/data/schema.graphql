@@ -71,7 +71,7 @@ type PageInfo {
 
 type Query {
   node(id: ID!): Node
-  viewer: User
+  viewer: Viewer
   courses(after: String, first: Int, before: String, last: Int): CourseConnection
   store: Store
 }
@@ -129,4 +129,11 @@ type UserConnection {
 type UserEdge {
   node: User
   cursor: String!
+}
+
+type Viewer implements Node {
+  id: ID!
+  auth(token: Int): User
+  course(after: String, first: Int, before: String, last: Int, id: Int): Course
+  courses(after: String, first: Int, before: String, last: Int, filter: String): CourseConnection
 }

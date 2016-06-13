@@ -1,5 +1,5 @@
 import Relay from 'react-relay';
-import Bible from './BibleComponent';
+import Course from './CourseComponent';
 
 export default Relay.createContainer(Bible, {
   fragments: {

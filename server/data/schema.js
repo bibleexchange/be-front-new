@@ -296,6 +296,54 @@ var {connectionType: moduleConnection, edgeType: courseEdge} = connectionDefinit
 var {connectionType: chapterConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Chapter', nodeType: ChapterType});
 var {connectionType: stepConnection, edgeType: courseEdge} = connectionDefinitions({name: 'Step', nodeType: StepType});
 
+const ViewerType = new GraphQLObjectType({
+  name: 'Viewer',
+  interfaces: [nodeInterface],
+  fields: () => ({
+    id: globalIdField("Viewer"),
+    auth: {
+      type: UserType,
+      args: {
+		  token: { type: GraphQLInt }
+	  },
+      resolve: (root, args) => {
+        return new User(args.token);
+      }
+    }, 
+	course: {
+      type: CourseType,
+      description: 'an individual course',
+      args: {
+		  ...connectionArgs,
+		  id: { type: GraphQLInt }
+	  },
+     resolve: (root, args) => {
+        return Course.findById(args.id);
+	  }
+    },
+    courses: {
+      type: courseConnection,
+      args: {
+		...connectionArgs,
+		filter: { type: GraphQLString } 
+	  },
+      resolve: (_, args) => {
+        return connectionFromPromisedArray(
+          resolveArrayData(
+		  
+		  Course.findAll({
+			  where: {
+				title: {
+				   $like: '%'+args.filter+'%'
+				}
+			  }
+			})
+		  , true), args
+        )
+      }
+    }
+  }),
+});
 
 const StoreType = new GraphQLObjectType({
   name: 'Store',
@@ -347,8 +395,7 @@ const StoreType = new GraphQLObjectType({
 });
 
 class Store {}
-// Mock data
-let store = new Store();
+class Viewer {}
 
 /**
  * This is the type that will be the root of our query,
@@ -360,8 +407,8 @@ var queryType = new GraphQLObjectType({
     node: nodeField,
     // Add your own root fields here
     viewer: {
-      type: UserType,
-      resolve: (root, args) => User.authUser
+      type: ViewerType,
+      resolve: () => new Viewer()
     },
     courses: {
       type: courseConnection,
@@ -375,7 +422,7 @@ var queryType = new GraphQLObjectType({
     },
 	store: {
         type: StoreType,
-        resolve: () => store,
+        resolve: () => new Store(),
       },
   }),
 });

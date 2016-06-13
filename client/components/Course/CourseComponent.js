@@ -4,7 +4,7 @@ import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Page from '../Page/PageComponent';
 
-import './Bible.scss';
+import './Course.scss';
 
 class Bible extends React.Component {
 

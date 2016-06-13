@@ -23,7 +23,7 @@ import Mocks from './data/mocks';
 	  }),
 	  pretty: true,
 	  schema: Schema,
-	  mocks: Mocks,
+	 // mocks: Mocks,
 	}));
 	
 	graphQLServer.listen(config.graphql.port, () => console.log(chalk.green(

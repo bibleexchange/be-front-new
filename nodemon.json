@@ -1,0 +1,3 @@
+{   
+    "ignore": ["server/data/schema.graphql", "server/data/schema.json"] 
+}

@@ -22,8 +22,7 @@ const Conn = new Sequelize(db_config.name, db_config.user, db_config.password, {
   },
 });
 
-
-const User = Conn.define('user', {
+const UserSeq = Conn.define('user', {
   id: {
     type: Sequelize.INTEGER,
     field: 'id',
@@ -93,8 +92,30 @@ const User = Conn.define('user', {
   tableName: "users"
 });
 
-User.authUser = User.findById(1);
-User.bibleNavs = [];
+class User {
+	
+	constructor(token){
+		this.token = false;
+		this.props = false;
+		this.authorize(token);
+	}
+	
+	authorize(token){
+		
+		const tokenIsGood = false;
+		
+		if(token) {
+			tokenIsGood = true;
+		}
+		
+		if(tokenIsGood){
+			return UserSeq.findById(1);
+		}else{
+			return false;
+		}
+	}
+	
+}
 
 //id , bible_verse_id, title, description, image_id, user_id, year, public, created_at, updated_at
 
