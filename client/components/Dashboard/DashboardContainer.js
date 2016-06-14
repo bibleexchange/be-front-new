@@ -2,28 +2,29 @@ import Relay from 'react-relay';
 import Dashboard from './DashboardComponent';
 
 export default Relay.createContainer(Dashboard, {
-  initialVariables: {
-    chapterPageSize: 100,
-    chapterCursor: null,
-	stepPageSize: 100,
-	storePageSize:5,
-	modulePageSize:100,
-	moduleCursor:null,
-	courseId:1,
-	libraryFilter:''
-  }, 
-  fragments: {
-	//id, firstName, lastName, username, createdAt, updatedAt, middleName, suffix, twitter, profileImage, gender, email, password, confirmationCode, confirmed, active
+	
+	initialVariables: {
+		chapterPageSize: 100,
+		chapterCursor: null,
+		stepPageSize: 100,
+		storePageSize:5,
+		modulePageSize:100,
+		moduleCursor:null,
+		courseId:1,
+		libraryFilter:''
+	  }, 
+	
+   fragments: {
     viewer: () => Relay.QL`
-    fragment on User {
+    fragment on Viewer {
 		id
-		firstName
-		username
-		email
-  }`,
-  store: () => Relay.QL`
-    fragment on Store {
-		courses(first:$storePageSize, filter:$libraryFilter) {
+		auth {
+		  firstname
+		  username
+		  email
+		}
+		
+		courses(first:$storePageSize) {
 		  edges {
 			node {
 			  id
@@ -31,13 +32,14 @@ export default Relay.createContainer(Dashboard, {
 			}
 		  }
 		  pageInfo{
-			  hasPreviousPage, hasNextPage
+			  hasPreviousPage
+			  hasNextPage
 		  }
 		}
-		course(id:$courseId){
+		
+		course{
 		  id
 		  title
-		  url
 		  description
 		  modules(first:$modulePageSize, after:$moduleCursor){
 			edges {
@@ -45,14 +47,14 @@ export default Relay.createContainer(Dashboard, {
 			  node {
 				id
 				title
-				orderBy
+				order_by
 				chapters (first:$chapterPageSize, after:$chapterCursor){
 				  edges {
 					cursor
 					node {
 					  id
 					  title
-					  orderBy
+					  order_by
 					  steps(first:$stepPageSize){
 						edges {
 						  node {
@@ -77,6 +79,6 @@ export default Relay.createContainer(Dashboard, {
 			}
 		  }
 		}
-	}`
+  }`,
   }
 });

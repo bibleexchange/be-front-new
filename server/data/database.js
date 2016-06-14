@@ -102,7 +102,7 @@ class User {
 	
 	authorize(token){
 		
-		const tokenIsGood = false;
+		let tokenIsGood = false;
 		
 		if(token) {
 			tokenIsGood = true;

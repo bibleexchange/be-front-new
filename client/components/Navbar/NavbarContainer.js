@@ -2,11 +2,15 @@ import Relay from 'react-relay';
 import Navbar from './NavbarComponent';
 
 export default Relay.createContainer(Navbar, {
-  fragments: {
+   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
-        username
-        email
-      }`
+    fragment on Viewer {
+		id
+		auth {
+		  firstname
+		  username
+		  email
+		}
+  }`,
   }
 });

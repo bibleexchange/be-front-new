@@ -2,11 +2,14 @@ import Relay from 'react-relay';
 import Footer from './FooterComponent';
 
 export default Relay.createContainer(Footer, {
-  fragments: {
+   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
-        username
-        email
-      }`
+    fragment on Viewer {
+		id
+		auth {
+		  username
+		  email
+		}
+  }`,
   }
 });

@@ -28,7 +28,7 @@ class Library extends React.Component {
 		getMoreButton = null;
 	  }
 
-	  if (this.props.store.courses.pageInfo.hasNextPage && !this.state.loading){
+	  if (this.props.viewer.courses.pageInfo.hasNextPage && !this.state.loading){
 		getMoreButton = <button onClick={this.loadMore.bind(this)}>Load More</button>;
 	  }
 		
@@ -38,7 +38,7 @@ class Library extends React.Component {
 			<hr />
 			<div>		
 			<input type="text" onChange={this.handleLibraryFilter.bind(this)}></input>
-			{this.props.store.courses.edges.map((c)=>{
+			{this.props.viewer.courses.edges.map((c)=>{
 				return <Course key={c.node.id} {...c.node} />;
 			})}
 			
@@ -78,7 +78,7 @@ class Library extends React.Component {
 }
 
 Library.propTypes = {
-    store: React.PropTypes.object.isRequired
+    viewer: React.PropTypes.object.isRequired
   };
   
 export default Library;

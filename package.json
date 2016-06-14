@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Bible exchange app",
   "scripts": {
-    "start": "nodemon --debug --watch 'server/data/**/*.js' --exec npm run update",
+    "start": "nodemon --debug --watch 'server/data/**/*.j*' --exec npm run update-s",
     "update": "babel-node server/utils/updateSchema.js && babel-node server/index.js",
+	"update-s": "babel-node server/index.js",
     "deploy": "NODE_ENV=production webpack --config webpack.production.config.js && npm run update && NODE_ENV=production babel-node server/index.js",
     "lint": "eslint --ignore-path .gitignore client server"
   },

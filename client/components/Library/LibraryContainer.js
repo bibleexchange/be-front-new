@@ -3,9 +3,20 @@ import Library from './LibraryComponent';
 
 export default Relay.createContainer(Library, {
   fragments: {
-    store: () => Relay.QL`
-      fragment on Store {
-		courses {id,title}
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+		courses(first:5) {
+		  edges {
+			node {
+			  id
+			  title
+			}
+		  }
+		  pageInfo{
+			  hasPreviousPage
+			  hasNextPage
+		  }
+		}
 	   }`
   }
 });

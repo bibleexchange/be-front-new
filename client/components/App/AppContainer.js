@@ -7,9 +7,9 @@ import Navbar from '../Navbar/NavbarContainer';
 export default Relay.createContainer(App, {
   fragments: {
     viewer: () => Relay.QL`
-     fragment on User {
-        ${Dashboard.getFragment('viewer')},
-        ${Footer.getFragment('viewer')},
+     fragment on Viewer {
+        ${Dashboard.getFragment('viewer')}
+        ${Footer.getFragment('viewer')}
 		${Navbar.getFragment('viewer')}
       }`
   }

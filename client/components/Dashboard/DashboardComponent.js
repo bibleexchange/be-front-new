@@ -28,10 +28,10 @@ class Dashboard extends React.Component {
 	let store = this.props.store;
 	
     return (
-      <Page heading={viewer.firstName+'\'s Dashboard'}>
+      <Page heading={viewer.firstname+'\'s Dashboard'}>
 		<div className="WidgetContainer">
-			<Library store={this.props.store} relay={this.props.relay} viewer={viewer} />
-			<CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>
+		<Library relay={this.props.relay} viewer={viewer} />
+		{/*<CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>*/}
 	    </div>
       </Page>
     );
@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-	store: React.PropTypes.object.isRequired
+	viewer: React.PropTypes.object.isRequired
   };
   
 export default Dashboard;

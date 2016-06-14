@@ -2,8 +2,6 @@ import React from 'react';
 import { IndexRoute, Route, Redirect } from 'react-router';
 
 //queries
-import CourseQueries from './queries/CourseQueries';
-import DashboardQueries from './queries/DashboardQueries';
 import ViewerQueries from './queries/ViewerQueries';
 
 //relay containers/components
@@ -16,11 +14,11 @@ import Signup from './components/Signup/SignupComponent';
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries}>
-    <IndexRoute component={Dashboard} queries={DashboardQueries} />
+    <IndexRoute component={Dashboard} />
     <Route path='/signup' component={Signup} />
     <Route path='/login' component={Login} />
 	<Route path='/course'>
-		<Route path='{:courseId}_{:courseTitle}' component={Course} queries={CourseQueries}/>
+		<Route path='{:courseId}_{:courseTitle}' component={Course} />
 		<Redirect from='*' to='/course/1_kjv-bible' />
 	</Route>
     <Redirect from='*' to='/' />
