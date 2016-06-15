@@ -4,8 +4,10 @@ import Course from './CourseComponent';
 export default Relay.createContainer(Course, {
   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
-        bibleNavs
+      fragment on Viewer {
+        course{
+			title
+		}
       }`
   }
 });

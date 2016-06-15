@@ -7,78 +7,84 @@ export default Relay.createContainer(Dashboard, {
 		chapterPageSize: 100,
 		chapterCursor: null,
 		stepPageSize: 100,
-		storePageSize:5,
+		coursePageSize:5,
+		courseCursor: "",
 		modulePageSize:100,
 		moduleCursor:null,
-		courseId:1,
 		libraryFilter:''
 	  }, 
 	
    fragments: {
     viewer: () => Relay.QL`
-    fragment on Viewer {
-		id
-		auth {
-		  firstname
-		  username
-		  email
-		}
-		
-		courses(first:$storePageSize) {
-		  edges {
-			node {
-			  id
-			  title
-			}
-		  }
-		  pageInfo{
-			  hasPreviousPage
-			  hasNextPage
-		  }
-		}
-		
-		course{
-		  id
-		  title
-		  description
-		  modules(first:$modulePageSize, after:$moduleCursor){
-			edges {
-			  cursor
-			  node {
-				id
-				title
-				order_by
-				chapters (first:$chapterPageSize, after:$chapterCursor){
-				  edges {
-					cursor
-					node {
-					  id
-					  title
-					  order_by
-					  steps(first:$stepPageSize){
-						edges {
-						  node {
-							id
-							body
-                            type
-						  }
-						}
-						pageInfo {
-							hasNextPage
-							hasPreviousPage
-						  }
-					  }
-					}
-				  }
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-				  }
-				}
-			  }
-			}
-		  }
-		}
+    fragment on Viewer  @relay(pattern: true){
+    id
+    auth {
+      firstname
+      username
+      email
+    }
+    courses(first: 2, after:$courseCursor) {
+      edges {
+        cursor
+        node {
+          id
+          title
+        }
+      }
+      pageInfo{
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }	
+  }`,
+  course: () => Relay.QL`
+   fragment on Course{
+      id
+      title
+      description
+      modules(first: 2) {
+        edges {
+          cursor
+          node {
+            id
+            title
+            order_by
+            chapters(first: 1) {
+              edges {
+                cursor
+                node {
+                  id
+                  title
+                  order_by
+                  steps(first: 1) {
+                    edges {
+                      node {
+                        id
+                        body
+                        type
+                      }
+                    }
+                    pageInfo{
+                        hasNextPage
+						hasPreviousPage
+						startCursor
+						endCursor
+                    }
+                  }
+                }
+              }
+              pageInfo{
+                hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+              }
+            }
+          }
+        }
+      }
   }`,
   }
 });

@@ -24,16 +24,16 @@ class Dashboard extends React.Component {
 //localStorage.setItem('store',JSON.stringify(this.props.store));
 //localStorage.setItem('viewer',JSON.stringify(this.props.viewer));
 
-	let viewer = this.props.viewer;//fakeViewer;
-	let store = this.props.store;
+	//let viewer = this.props.viewer;//fakeViewer;
+	//let store = this.props.store;
 	
     return (
-      <Page heading={viewer.firstname+'\'s Dashboard'}>
+     // <Page heading={viewer.firstname+'\'s Dashboard'}>
 		<div className="WidgetContainer">
-		<Library relay={this.props.relay} viewer={viewer} />
-		{/*<CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>*/}
+		{/*<<Library relay={this.props.relay} viewer={viewer} />
+		CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>*/}
 	    </div>
-      </Page>
+      //</Page>
     );
   }
   
