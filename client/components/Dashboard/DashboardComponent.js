@@ -29,10 +29,10 @@ class Dashboard extends React.Component {
 	
     return (
       <Page heading={viewer.firstName+'\'s Dashboard'}>
-		<div className="WidgetContainer">
-			<Library store={this.props.store} relay={this.props.relay} viewer={viewer} />
-			<CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>
-	    </div>
+				<div className="WidgetContainer">
+					<Library store={this.props.store} relay={this.props.relay} viewer={viewer} />
+					<CourseWidget className="Widget" course={store.course} viewer={viewer} relay={this.props.relay}/>
+	    	</div>
       </Page>
     );
   }

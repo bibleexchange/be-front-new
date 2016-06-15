@@ -13,7 +13,7 @@ class Step extends React.Component {
 	let step = this.props.node;
     return (
       <div>
-		 <p>{step.body} (<em>STEP TYPE: {step.type}</em>)</p>
+		 		<p>{step.body} (<em>STEP TYPE: {step.type}</em>)</p>
       </div>
     );
   }
@@ -64,19 +64,13 @@ class Module extends React.Component {
 class WidgetComponent extends React.Component {
 
   render() {
-	
     return (
       <div>
-	  	<h2>Hey matt this is a Course Widget</h2>
-		<hr />
-		<CourseNavigation course={this.props.course} viewer={this.props.viewer} nextChapterUrl='/' searchTerm="Introduction" previousChapterUrl='/'/>
-		
-		{this.props.course.modules.edges.map(function(mod,index,nextStep) {
-			return <Module {...mod} key={index} />
-		})}
-		
-		
-		
+	  		<h2>Hey matt this is a Course Widget</h2>
+				<CourseNavigation course={this.props.course} viewer={this.props.viewer} nextChapterUrl='/' searchTerm="Introduction" previousChapterUrl='/'/>
+				{this.props.course.modules.edges.map(function(mod,index,nextStep) {
+					return <Module {...mod} key={index} />
+				})}
       </div>
     );
   }
