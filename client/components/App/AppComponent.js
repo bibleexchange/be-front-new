@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router';
-import MainNavigation from '../Navbar/NavbarContainer';
-import Footer from '../Footer/FooterContainer';
+import MainNavigation from '../Navbar/NavbarComponent';
+import Footer from '../Footer/FooterComponent';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import '../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss';
@@ -10,19 +10,15 @@ import './Images.scss';
 import './Print.scss';
 import './Typography.scss';
 
-const fakeStore = require('../../../server/data/fakeStore.js');
-const fakeViewer = require('../../../server/data/fakeViewer.js');
-
 class App extends React.Component {
 
   render() { 
 	
-	let viewer = this.props.viewer;//fakeViewer; /// vs. this.props.viewer
-	let store = fakeStore;
-	
+	let viewer = this.props.viewer;
+	console.log("App Component props", this.props);
     return (
 		  <div>
-				<MainNavigation location={this.props.location} route={this.props.route}  viewer={viewer} />
+				<MainNavigation location={this.props.location} route={this.props.route} viewer={this.props.viewer}/>
 
 			  {this.props.children}
 			  

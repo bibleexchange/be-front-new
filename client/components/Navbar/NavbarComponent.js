@@ -48,7 +48,7 @@ class Navbar extends React.Component {
 	let inOrOut = 'loading...';
 	console.log('deciding session stuff based on: ', viewer);
 		
-	if(viewer) {
+	if(viewer.authenticated) {
 		inOrOut = <UserLoggedIn url={url} user={viewer} handleLogout={this.handleLogout.bind(this)} handleBookMark={this.handleBookMark.bind(this)}/>;
 	}else {
 	   inOrOut = <UserLoggedOut />;

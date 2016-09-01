@@ -22,24 +22,15 @@ const Conn = new Sequelize(db_config.name, db_config.user, db_config.password, {
   },
 });
 
-
 const User = Conn.define('user', {
   id: {
     type: Sequelize.INTEGER,
     field: 'id',
 	primaryKey: true
   },
-  firstName: {
+  name: {
     type: Sequelize.STRING,
-    field: 'firstname'
-  },
-  lastName: {
-    type: Sequelize.STRING,
-    field: 'lastname'
-  },
-  username: {
-    type: Sequelize.STRING,
-    field: 'username'
+    field: 'name'
   },
   createdAt: {
     type: Sequelize.STRING,
@@ -49,25 +40,13 @@ const User = Conn.define('user', {
     type: Sequelize.STRING,
     field: 'updated_at'
   },
-  middleName: {
+  verified: {
     type: Sequelize.STRING,
-    field: 'middlename'
+    field: 'verified'
   },
-  suffix: {
+  role: {
     type: Sequelize.STRING,
-    field: 'suffix'
-  },
-  twitter: {
-    type: Sequelize.STRING,
-    field: 'twitter'
-  },
-  profileImage: {
-    type: Sequelize.STRING,
-    field: 'profile_image'
-  },
-  gender: {
-    type: Sequelize.STRING,
-    field: 'gender'
+    field: 'role'
   },
   email: {
     type: Sequelize.STRING,
@@ -77,18 +56,11 @@ const User = Conn.define('user', {
     type: Sequelize.STRING,
     field: 'password'
   },
-  confirmationCode: {
+  rememberToken: {
     type: Sequelize.STRING,
-    field: 'confirmation_code'
+    field: 'remember_token'
   },
-  confirmed: {
-    type: Sequelize.STRING,
-    field: 'confirmed'
-  },
-  active: {
-    type: Sequelize.STRING,
-    field: 'active'
-  }
+  
 }, {
   tableName: "users"
 });

@@ -1,11 +1,11 @@
 /* eslint-disable global-require */
 import React from 'react';
 import BibleVerseFocus from './BibleVerseFocus';
-import CourseNavigation from './Navigation';
+import BibleNavigation from './Navigation';
 import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import './Course.scss';
+import './Bible.scss';
 
 class Step extends React.Component {
 
@@ -13,7 +13,7 @@ class Step extends React.Component {
 	let step = this.props.node;
     return (
       <div>
-		 		<p>{step.body} (<em>STEP TYPE: {step.type}</em>)</p>
+        <p>{step.body} (<em>STEP TYPE: {step.type}</em>)</p>
       </div>
     );
   }
@@ -64,13 +64,13 @@ class Module extends React.Component {
 class WidgetComponent extends React.Component {
 
   render() {
+	  console.log(this.props);
     return (
       <div>
-	  		<h2>Hey matt this is a Course Widget</h2>
-				<CourseNavigation course={this.props.course} viewer={this.props.viewer} nextChapterUrl='/' searchTerm="Introduction" previousChapterUrl='/'/>
-				{this.props.course.modules.edges.map(function(mod,index,nextStep) {
-					return <Module {...mod} key={index} />
-				})}
+		<BibleNavigation data={this.props.viewer} nextChapterUrl='/' searchTerm="Introduction" previousChapterUrl='/'/>
+		{this.props.viewer.bible.book.chapter.verses.edges.map(function(mod,index,nextStep) {
+			return <Module {...mod} key={index} />
+		})}
       </div>
     );
   }

@@ -1,82 +1,57 @@
 import Relay from 'react-relay';
 import Dashboard from './DashboardComponent';
 
+
 export default Relay.createContainer(Dashboard, {
   initialVariables: {
-    chapterPageSize: 100,
-    chapterCursor: null,
-	stepPageSize: 100,
-	storePageSize:5,
-	modulePageSize:100,
-	moduleCursor:null,
-	courseId:1,
+	bibleChapterId:5,
 	libraryFilter:''
   }, 
   fragments: {
-	//id, firstName, lastName, username, createdAt, updatedAt, middleName, suffix, twitter, profileImage, gender, email, password, confirmationCode, confirmed, active
     viewer: () => Relay.QL`
-    fragment on User {
-		id
-		firstName
-		username
+      fragment on User {
+		name
 		email
-  }`,
-  store: () => Relay.QL`
-    fragment on Store {
-		courses(first:$storePageSize, filter:$libraryFilter) {
-		  edges {
-			node {
-			  id
-			  title
-			}
+		authenticated
+      }
+    `,
+  },
+});
+
+/*
+export default Relay.createContainer(Dashboard, {
+
+  fragments: {
+    viewer: () => Relay.QL`
+    fragment on Viewer{
+		id
+		auth {
+		  id
+		  email
+		  name
+		}
+		bibleChapter {
+		  id
+		  verses {
+			t
 		  }
-		  pageInfo{
-			  hasPreviousPage, hasNextPage
+		  notes {
+			body
 		  }
 		}
-		course(id:$courseId){
-		  id
-		  title
-		  url
-		  description
-		  modules(first:$modulePageSize, after:$moduleCursor){
+		bible {
+		  abbreviation
+		  language
+		  books {
 			edges {
-			  cursor
 			  node {
-				id
-				title
-				orderBy
-				chapters (first:$chapterPageSize, after:$chapterCursor){
-				  edges {
-					cursor
-					node {
-					  id
-					  title
-					  orderBy
-					  steps(first:$stepPageSize){
-						edges {
-						  node {
-							id
-							body
-                            type
-						  }
-						}
-						pageInfo {
-							hasNextPage
-							hasPreviousPage
-						  }
-					  }
-					}
-				  }
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-				  }
-				}
+				n
+				chapterCount
 			  }
 			}
 		  }
 		}
-	}`
-  }
-});
+	}
+  `
+}});
+*/

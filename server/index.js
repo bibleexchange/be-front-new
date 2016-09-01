@@ -12,6 +12,7 @@ import config from './config/environment';
 import { Schema } from './data/schema';
 import Mocks from './data/mocks';
 
+
   // Launch GraphQL
   const graphQLServer = express();
 
