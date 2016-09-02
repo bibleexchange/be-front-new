@@ -5,9 +5,16 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 2rem;
+	height:50px;
 }
+
+#MainNavbar li{
+	display:inline;
+	margin-left:15px;
+}
+
 #BrandNav .BeLogo {
-	width: 15%;
+	height:40px;
 }
 #UserNav {
 

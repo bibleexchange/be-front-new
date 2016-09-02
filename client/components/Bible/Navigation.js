@@ -14,13 +14,13 @@ class Navigation extends React.Component {
 	
     return (	
 		<div className="blueBG" style={{marginBottom:'25p', textAlign:'center'}}>
-			<Link to={this.props.nextChapterUrl} className="btn btn-default" style={styles.previous}>
+			<Link to={this.props.previousChapterUrl} className="btn btn-default" style={styles.previous}>
 				<span className="glyphicon glyphicon-chevron-left"></span>
 			</Link>
 
 			<Search term={this.props.searchTerm} changeHandler={this.searchChangeHandler} submitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
 
-			<Link to={this.props.previousChapterUrl}  className="btn btn-default" style={styles.next} onClick={this.props.getNextHandler}>
+			<Link to={this.props.nextChapterUrl}  className="btn btn-default" style={styles.next} onClick={this.props.getNextHandler}>
 				<span className="glyphicon glyphicon-chevron-right"></span>
 			</Link>
 					

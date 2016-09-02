@@ -9,7 +9,7 @@ class BibleVerseComponent extends React.Component {
 			<Link to={!this.props.url ? "":this.props.url} style={{color:"black"}}>
 				<p id={this.props.id} className="ui-widget-content">
 					<sup>{this.props.v}</sup>
-					{this.props.body}
+					{this.props.t}
 				</p>			
 			</Link>
 		</div>

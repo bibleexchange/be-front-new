@@ -8,11 +8,15 @@ export default class Feature extends React.Component {
   };
 
   render() {
-    return (
+    let heading = "";
+    
+	if(this.props.heading !== ""){
+	  heading = <h1 className="heading">{this.props.heading}</h1>;
+    }
+	
+	return (
       <main>
-        <h1 className="heading">
-          {this.props.heading}
-        </h1>
+	    {heading}
         {this.props.children}
       </main>
     );

@@ -1,7 +1,6 @@
 import Relay from 'react-relay';
 import Dashboard from './DashboardComponent';
 
-
 export default Relay.createContainer(Dashboard, {
   initialVariables: {
 	bibleChapterId:5,
@@ -15,43 +14,26 @@ export default Relay.createContainer(Dashboard, {
 		authenticated
       }
     `,
+	bibleChapter: () => Relay.QL`
+      fragment on BibleChapter {
+		verseCount
+		reference
+		nextChapter
+		previousChapter
+		notes {
+			id
+			body
+			user {
+			  id
+		      name
+			}
+		}
+		verses {
+		  id
+		  v
+		  t
+		}
+      }
+    `,
   },
 });
-
-/*
-export default Relay.createContainer(Dashboard, {
-
-  fragments: {
-    viewer: () => Relay.QL`
-    fragment on Viewer{
-		id
-		auth {
-		  id
-		  email
-		  name
-		}
-		bibleChapter {
-		  id
-		  verses {
-			t
-		  }
-		  notes {
-			body
-		  }
-		}
-		bible {
-		  abbreviation
-		  language
-		  books {
-			edges {
-			  node {
-				n
-				chapterCount
-			  }
-			}
-		  }
-		}
-	}
-  `
-}});
-*/

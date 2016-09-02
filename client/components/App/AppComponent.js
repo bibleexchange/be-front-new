@@ -15,7 +15,7 @@ class App extends React.Component {
   render() { 
 	
 	let viewer = this.props.viewer;
-	console.log("App Component props", this.props);
+
     return (
 		  <div>
 				<MainNavigation location={this.props.location} route={this.props.route} viewer={this.props.viewer}/>

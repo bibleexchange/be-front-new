@@ -3,13 +3,19 @@ import React from 'react';
 import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-class Course extends React.Component {
+import './Library.scss';
+
+class Note extends React.Component {
 	
   render() { 
-	let c = this.props;
-	  
+	let body = JSON.parse(this.props.body);
+	console.log(this.props);
 	return (
-		<li><Link to="/fff">{c.title}</Link></li>
+		<div className="bible-note">
+			<p>{body.text}</p>
+			<p>{body.tags}</p>
+			<p><Link to={"/users/" + this.props.user.id}>{this.props.user.name}</Link></p>
+		</div>
 		);
 	}
 } 
@@ -19,27 +25,25 @@ class Library extends React.Component {
   state = { loading: false };
 	
   render() {
-		
-	  let vs = this.props.relay.variables;
-		
+
 	  let getMoreButton = "loading...";
   
 	  if(!this.state.loading){
 		getMoreButton = null;
 	  }
-
+/*
 	  if (this.props.store.courses.pageInfo.hasNextPage && !this.state.loading){
 		getMoreButton = <button onClick={this.loadMore.bind(this)}>Load More</button>;
 	  }
-		
+*/		
        return (
 		<div id="minimal-list" className="container" >	
-			<h2>Courses Library (searchable/filterable & paginated interface to discover courses)</h2>
+			<h2>Notes</h2>
 			<hr />
 			<div>		
 			<input type="text" onChange={this.handleLibraryFilter.bind(this)}></input>
-			{this.props.store.courses.edges.map((c)=>{
-				return <Course key={c.node.id} {...c.node} />;
+			{this.props.bibleChapter.notes.map((n)=>{
+				return <Note key={n.id} {...n} />;
 			})}
 			
 			{getMoreButton}
@@ -78,7 +82,7 @@ class Library extends React.Component {
 }
 
 Library.propTypes = {
-    store: React.PropTypes.object.isRequired
+    bibleChapter: React.PropTypes.object.isRequired
   };
   
 export default Library;

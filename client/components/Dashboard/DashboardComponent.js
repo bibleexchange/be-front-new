@@ -24,15 +24,11 @@ class Dashboard extends React.Component {
 //localStorage.setItem('bible',JSON.stringify(this.props.bible));
 //localStorage.setItem('viewer',JSON.stringify(this.props.viewer));
 
-
-	let viewer = this.props.viewer;
-	let bible = this.props.viewer.bible;
-	
     return (
-      <Page heading={viewer.firstName+'\'s Dashboard'}>
+	<Page heading={''}>
 				<div className="WidgetContainer">
-					<Library bible={bible} relay={this.props.relay} viewer={viewer} />
-					<BibleWidget className="Widget" data={bible} viewer={viewer} relay={this.props.relay}/>
+					<BibleWidget className="Widget" bibleChapter={this.props.bibleChapter} viewer={this.props.viewer} relay={this.props.relay}/>
+					<Library bibleChapter={this.props.bibleChapter} relay={this.props.relay} />
 	    	</div>
       </Page>
     );
@@ -41,7 +37,8 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-	bible: React.PropTypes.object.isRequired
+	bibleChapter: React.PropTypes.object.isRequired,
+	viewer: React.PropTypes.object.isRequired,
   };
   
 export default Dashboard;
