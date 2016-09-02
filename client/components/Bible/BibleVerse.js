@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 class BibleVerseComponent extends React.Component {
  
   render() {
+	  console.log(this.props);
     return (
 		<div>
 			<Link to={!this.props.url ? "":this.props.url} style={{color:"black"}}>

@@ -3,8 +3,7 @@ import Dashboard from './DashboardComponent';
 
 export default Relay.createContainer(Dashboard, {
   initialVariables: {
-	bibleChapterId:5,
-	libraryFilter:''
+	libraryFilter:'',
   }, 
   fragments: {
     viewer: () => Relay.QL`
@@ -14,26 +13,5 @@ export default Relay.createContainer(Dashboard, {
 		authenticated
       }
     `,
-	bibleChapter: () => Relay.QL`
-      fragment on BibleChapter {
-		verseCount
-		reference
-		nextChapter
-		previousChapter
-		notes {
-			id
-			body
-			user {
-			  id
-		      name
-			}
-		}
-		verses {
-		  id
-		  v
-		  t
-		}
-      }
-    `,
-  },
+  }
 });

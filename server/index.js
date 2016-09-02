@@ -12,7 +12,6 @@ import config from './config/environment';
 import { Schema } from './data/schema';
 import Mocks from './data/mocks';
 
-
   // Launch GraphQL
   const graphQLServer = express();
 
@@ -24,7 +23,7 @@ import Mocks from './data/mocks';
 	  }),
 	  pretty: true,
 	  schema: Schema,
-	  mocks: Mocks,
+	  mocks: Mocks
 	}));
 	
 	graphQLServer.listen(config.graphql.port, () => console.log(chalk.green(

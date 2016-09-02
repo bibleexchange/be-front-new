@@ -9,7 +9,6 @@ class Note extends React.Component {
 	
   render() { 
 	let body = JSON.parse(this.props.body);
-	console.log(this.props);
 	return (
 		<div className="bible-note">
 			<p>{body.text}</p>
@@ -38,11 +37,12 @@ class Library extends React.Component {
 */		
        return (
 		<div id="minimal-list" className="container" >	
-			<h2>Notes</h2>
+			<h2>Notes for {this.props.bibleVerse.reference}</h2>
+			<hr />
+			<input type="text" onChange={this.handleLibraryFilter.bind(this)} placeholder="  filter"></input>
 			<hr />
 			<div>		
-			<input type="text" onChange={this.handleLibraryFilter.bind(this)}></input>
-			{this.props.bibleChapter.notes.map((n)=>{
+			{this.props.notes.map((n)=>{
 				return <Note key={n.id} {...n} />;
 			})}
 			
@@ -82,7 +82,8 @@ class Library extends React.Component {
 }
 
 Library.propTypes = {
-    bibleChapter: React.PropTypes.object.isRequired
+    notes: React.PropTypes.array.isRequired,
+	bibleVerse: React.PropTypes.object.isRequired
   };
   
 export default Library;

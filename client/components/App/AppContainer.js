@@ -3,18 +3,13 @@ import App from './AppComponent';
 import Dashboard from '../Dashboard/DashboardContainer';
 
 export default Relay.createContainer(App, {
+  initialVariables: {
+	reference:'john_3_16'
+  }, 
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-		name
-		email
-		authenticated
         ${Dashboard.getFragment('viewer')},
-      }
-    `,
-	bibleChapter: () => Relay.QL`
-      fragment on BibleChapter {
-		verseCount
       }
     `,
   },

@@ -1,6 +1,5 @@
 /* eslint-disable global-require */
 import React from 'react';
-import BibleVerseFocus from './BibleVerseFocus';
 import BibleVerse from './BibleVerse';
 import BibleNavigation from './Navigation';
 import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
@@ -37,6 +36,7 @@ class WidgetComponent extends React.Component {
 WidgetComponent.propTypes = {
     viewer: React.PropTypes.object.isRequired,
 	bibleChapter: React.PropTypes.object.isRequired,
+	bibleVerse: React.PropTypes.object,
   };
   
 export default WidgetComponent;
