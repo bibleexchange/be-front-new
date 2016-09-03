@@ -1,27 +1,18 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import BibleBooksList from './BibleBooksList';
+
 class VerseSelector extends React.Component {
   
-	constructor(props) {
-		super(props);	
-		this.state = {showModal:false};
-	  }
-	
-  toggleModal() {
-    const show = !this.state.showModal;
-    this.setState({showModal:show});
+  componentWillMount(){
+	this.state = {
+	  showModal:false,
+	  filterBooksBy:""
+	};
   }
-  
-  close(){
-	const show = !this.state.showModal;
-    this.setState({showModal:show});
-  }
-  
+  	
   render() {
-		
-		let rand = ()=> (Math.floor(Math.random() * 20) - 10);
-		
+
 		const modalStyle = {
 		  position: 'relative',
 		  zIndex: 1040,
@@ -52,9 +43,11 @@ class VerseSelector extends React.Component {
 			padding: 20
 		  };
 		};
-		
-    return (
 	
+	let bible = this.props.bible;
+
+    return (
+
 		<span>
 			<Button onClick={this.toggleModal.bind(this)} style={verseSelectorButtonStyle}>
 			  <span className="glyphicon glyphicon-th"></span>
@@ -78,13 +71,30 @@ class VerseSelector extends React.Component {
 					Choose a book and chapter to open
 				</h4>
 				
-				<BibleBooksList books={this.props.books} closeAll={this.close.bind(this)}/>	
+				<input type="text" onChange={this.handleBooksFilter.bind(this)} placeholder="  filter"></input>
+
+				<BibleBooksList bible={bible} filterBy={this.state.filterBooksBy} closeAll={this.close.bind(this)}/>	
 				
 			  </div>
 			</Modal>
 		</span>
     )
   }
+
+  toggleModal() {
+    const show = !this.state.showModal;
+    this.setState({showModal:show});
+  }
+  
+  close(){
+   const show = !this.state.showModal;
+   this.setState({showModal:show, filterBooksBy: "" });
+  }
+
+  handleBooksFilter(event){
+    this.setState({ filterBooksBy: event.target.value });
+  }
+
 }
 
 module.exports = VerseSelector;

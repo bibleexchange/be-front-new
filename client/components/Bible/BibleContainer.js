@@ -36,8 +36,7 @@ export default Relay.createContainer(Bible, {
 		  url
 		  reference
 		}
-      }
-    `,
+      }`,
 	bibleVerse: () => Relay.QL`
       fragment on BibleVerse {
 		  id
@@ -54,6 +53,25 @@ export default Relay.createContainer(Bible, {
 			}
 		}
       }
+    `,
+	bible: () => Relay.QL`
+fragment on Bible {
+ books (first:67){
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          n
+          chapterCount
+        }
+      }
+    }
+		  
+}
     `,
   },
 });

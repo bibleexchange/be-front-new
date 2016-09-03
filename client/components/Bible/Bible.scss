@@ -52,3 +52,22 @@
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
+
+.bookselect {
+  width:100%;
+}
+
+.bookselect .bookname {
+  width:100%;
+  margin:5px;
+  float:left;
+  border:solid 1px gray;
+  padding:5px;
+  
+}
+
+.bookselect li{
+  float:left;
+  margin:10px;
+  list-style:none;
+}

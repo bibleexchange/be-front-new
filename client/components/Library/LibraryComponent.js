@@ -19,34 +19,29 @@ class Note extends React.Component {
 	}
 } 
 
-class Library extends React.Component {
-	
-  state = { loading: false };
-	
-  render() {
+class Library extends React.Component {	
 
-	  let getMoreButton = "loading...";
-  
-	  if(!this.state.loading){
-		getMoreButton = null;
-	  }
-/*
-	  if (this.props.store.courses.pageInfo.hasNextPage && !this.state.loading){
-		getMoreButton = <button onClick={this.loadMore.bind(this)}>Load More</button>;
-	  }
-*/		
+  componentWillMount(){
+	this.state = {
+	  showModal:false,
+	  filterNotesBy:""
+	};
+  }
+
+  render() {
+	let filterBy = this.state.filterNotesBy.toLowerCase();
+
        return (
 		<div id="minimal-list" className="container" >	
 			<h2>Notes for {this.props.bibleVerse.reference}</h2>
 			<hr />
-			<input type="text" onChange={this.handleLibraryFilter.bind(this)} placeholder="  filter"></input>
+			<input type="text" onChange={this.handleLibraryFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} />
+			<Link to="" onClick={this.handleClearFilter.bind(this)} >&nbsp;&nbsp;clear</Link>
 			<hr />
 			<div>		
-			{this.props.notes.map((n)=>{
+			{this.props.notes.filter(function(el){return el.body.toLowerCase().includes(filterBy)}).map((n)=>{
 				return <Note key={n.id} {...n} />;
 			})}
-			
-			{getMoreButton}
 			
 			</div>			
 		</div>
@@ -55,35 +50,19 @@ class Library extends React.Component {
 
 
   handleLibraryFilter(event){
-		event.preventDefault();
-
-          this.props.relay.setVariables({
-              libraryFilter: event.target.value,
-          });
-	}
+   // event.preventDefault();
+    this.setState({ filterNotesBy: event.target.value });
+}
   
-	loadMore(event){
-		event.preventDefault();
-		 if (!this.state.loading){
-
-        this.setState({loading: true}, () => {
-          this.props.relay.setVariables({
-            storePageSize: this.props.relay.variables.storePageSize+5,
-          }, (readyState) => {
-            if (readyState.done) {
-              this.setState({loading: false});
-            }
-          });
-        });
-
-      }
-	}
-	
+  handleClearFilter(event){
+   event.preventDefault();
+    this.setState({ filterNotesBy: "" });
+}
 }
 
 Library.propTypes = {
-    notes: React.PropTypes.array.isRequired,
-	bibleVerse: React.PropTypes.object.isRequired
-  };
+   notes: React.PropTypes.array.isRequired,
+   bibleVerse: React.PropTypes.object.isRequired
+};
   
 export default Library;

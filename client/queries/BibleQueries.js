@@ -9,4 +9,5 @@ export default {
 		}
 	  }`,
   bibleVerse: () => Relay.QL`query { bibleVerseQuery(reference:$ref) }`,
+  bible: () => Relay.QL`query { bibleQuery }`,
 };

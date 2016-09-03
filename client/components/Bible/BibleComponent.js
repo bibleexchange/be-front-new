@@ -11,7 +11,7 @@ import './Bible.scss';
 class Bible extends React.Component {
 
   componentWillMount(){
-	  console.log(this.props);
+
   }
 
   render() {
@@ -26,7 +26,7 @@ class Bible extends React.Component {
     return (
 	<Page heading={''}>
 		<div className="WidgetContainer">
-		<BibleWidget className="Widget" bibleChapter={this.props.bibleChapter} viewer={this.props.viewer} relay={this.props.relay}/>
+		<BibleWidget className="Widget" bible={this.props.bible} bibleChapter={this.props.bibleChapter} viewer={this.props.viewer} relay={this.props.relay}/>
 		<Library notes={notes} relay={this.props.relay} bibleVerse={this.props.bibleVerse}/>
 	    	</div>
       </Page>
@@ -36,9 +36,10 @@ class Bible extends React.Component {
 }
 
 Bible.propTypes = {
-	bibleChapter: React.PropTypes.object.isRequired,
-	bibleVerse: React.PropTypes.object.isRequired,
-	viewer: React.PropTypes.object.isRequired,
-  };
+    bibleChapter: React.PropTypes.object.isRequired,
+    bibleVerse: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object.isRequired,
+    bible: React.PropTypes.object,
+};
   
 export default Bible;

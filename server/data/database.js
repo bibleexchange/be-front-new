@@ -6,7 +6,7 @@ import path from 'path';
 const db_config = {
 	name: "dev_exchange",
 	user: "root",
-	password: "",
+	password: "1230happy",
 	host:"127.0.0.1",
 	dialect: "mysql"
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Nav, NavItem } from 'react-bootstrap';
 import './Navbar.scss';
 import BeLogo from '../Svg/BeLogo';
 

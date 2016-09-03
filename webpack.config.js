@@ -11,12 +11,13 @@ module.exports = {
   entry: {
     app: [
       path.join(__dirname, 'client/index.js'),
-      'webpack-dev-server/client?http://localhost:3000',
+      'webpack-dev-server/client?http://127.0.0.1:3000',
       'webpack/hot/only-dev-server'
     ],
     vendor: ['react', 'react-dom', 'react-mdl', 'react-relay', 'react-router', 'react-router-relay']
   },
   output: {
+      publicPath: 'http://127.0.0.1:3000/',
     path: path.join(__dirname, 'build'),
     filename: '[name].js'
   },
@@ -40,7 +41,7 @@ module.exports = {
       ]
     }, {
       test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ico)$/,
-      loader: 'url-loader?limit=10000&name=assets/[hash].[ext]'
+      loader: 'url-loader?limit=1000000&name=assets/[hash].[ext]'
     },
 	{
 	  test: /\.eot/,

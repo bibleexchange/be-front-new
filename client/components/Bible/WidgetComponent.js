@@ -2,7 +2,6 @@
 import React from 'react';
 import BibleVerse from './BibleVerse';
 import BibleNavigation from './Navigation';
-import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import './Bible.scss';
@@ -13,7 +12,8 @@ class WidgetComponent extends React.Component {
 
     return (
       <div>
-		<BibleNavigation data={this.props.viewer} nextChapterUrl={this.props.bibleChapter.nextChapter[1]} searchTerm={this.props.bibleChapter.reference} previousChapterUrl={this.props.bibleChapter.previousChapter[1]}/>
+	<BibleNavigation bible={this.props.bible} nextChapterUrl={this.props.bibleChapter.nextChapter[1]} searchTerm={this.props.bibleChapter.reference} previousChapterUrl={this.props.bibleChapter.previousChapter[1]}/>
+
 		{this.props.bibleChapter.verses.map(function(verse) {
 			return <BibleVerse {...verse} key={verse.id}/>;
 		})}
@@ -35,8 +35,9 @@ class WidgetComponent extends React.Component {
 
 WidgetComponent.propTypes = {
     viewer: React.PropTypes.object.isRequired,
-	bibleChapter: React.PropTypes.object.isRequired,
-	bibleVerse: React.PropTypes.object,
+    bibleChapter: React.PropTypes.object.isRequired,
+    bibleVerse: React.PropTypes.object,
+    bible: React.PropTypes.object,
   };
   
 export default WidgetComponent;

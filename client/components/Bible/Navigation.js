@@ -24,7 +24,7 @@ class Navigation extends React.Component {
 				<span className="glyphicon glyphicon-chevron-right"></span>
 			</Link>
 					
-			<VerseSelector books={this.props.bibleBooks}/>
+			<VerseSelector bible={this.props.bible}/>
 		</div>
     )
   }
@@ -44,7 +44,7 @@ Navigation.defaultProps = {
 	nextChapterUrl:'/',
 	searchTerm:'Genesis 1',
 	previousChapterUrl:'/',
-	bibleBooks:[
+	bible:[
 		{id:1,n:'Zoo4rt',chapters:32, slug:'zoo4rt'},
 		{id:2,n:'Qoo4rt',chapters:4, slug:'qoort'}
 	]

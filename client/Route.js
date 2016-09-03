@@ -18,10 +18,7 @@ export default (
     <IndexRoute component={Dashboard} queries={ViewerQueries} />
     <Route path='/signup' component={Signup} />
     <Route path='/login' component={Login} />
-	<Route path='/bible/:ref' 
-	  component={Bible} 
-	  queries={BibleQueries} 
-	  />
+    <Route path='/bible/:ref' component={Bible} queries={BibleQueries} />
     <Redirect from='*' to='/bible/john_3_16' />
   </Route>
 );

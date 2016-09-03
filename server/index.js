@@ -11,11 +11,12 @@ import webpackConfig from '../webpack.config';
 import config from './config/environment';
 import { Schema } from './data/schema';
 import Mocks from './data/mocks';
+var bodyParser = require('body-parser')
 
   // Launch GraphQL
-  const graphQLServer = express();
+ /* const graphQLServer = express();
 
-	graphQLServer.use('/graphql', apolloServer({
+	graphQLServer.use('/graphql', bodyParser.json(), apolloServer({
 	  graphiql: true,
 	  formatError: (error) => ({
 		message: error.message,
@@ -29,7 +30,8 @@ import Mocks from './data/mocks';
 	graphQLServer.listen(config.graphql.port, () => console.log(chalk.green(
 	  `GraphQL Server is now running on http://127.0.0.1:${config.graphql.port}/graphql`)
 	));
-  
+  */
+
   // Launch Relay by using webpack.config.js
   const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',
