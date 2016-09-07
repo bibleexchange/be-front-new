@@ -11,6 +11,11 @@ export default Relay.createContainer(Dashboard, {
 		name
 		email
 		authenticated
+	navHistory{
+	  id
+	  url
+	  title	
+	}
       }
     `,
   }

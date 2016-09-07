@@ -1,23 +1,10 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
+import Relay from 'react-relay';
 import { Link } from 'react-router';
+import Note from '../Bible/Note';
 
 import './Library.scss';
-
-class Note extends React.Component {
-	
-  render() { 
-	let body = JSON.parse(this.props.body);
-	return (
-		<div className="bible-note">
-			<p>{body.text}</p>
-			<p>{body.tags}</p>
-			<p><Link to={"/users/" + this.props.user.id}>{this.props.user.name}</Link></p>
-		</div>
-		);
-	}
-} 
 
 class Library extends React.Component {	
 
@@ -39,8 +26,8 @@ class Library extends React.Component {
 			<Link to="" onClick={this.handleClearFilter.bind(this)} >&nbsp;&nbsp;clear</Link>
 			<hr />
 			<div>		
-			{this.props.notes.filter(function(el){return el.body.toLowerCase().includes(filterBy)}).map((n)=>{
-				return <Note key={n.id} {...n} />;
+			{this.props.bibleVerse.notes.filter(function(el){return el.body.toLowerCase().includes(filterBy)}).map((n)=>{
+				return <Note key={n.id} note={n} />;
 			})}
 			
 			</div>			
@@ -61,8 +48,21 @@ class Library extends React.Component {
 }
 
 Library.propTypes = {
-   notes: React.PropTypes.array.isRequired,
    bibleVerse: React.PropTypes.object.isRequired
 };
+
+Library.defaultProps = {bibleVerse: {reference:null}};
   
-export default Library;
+export default Relay.createContainer(Library, {
+  fragments: {
+    bibleVerse: () => Relay.QL`
+      fragment on BibleVerse  {
+	 reference
+	 notes {
+	    id
+	    body
+            ${Note.getFragment('note')}
+	  }
+     }`
+  }
+});

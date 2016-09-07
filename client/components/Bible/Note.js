@@ -1,7 +1,9 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { Link } from 'react-router';
 import Helper from '../../util/MyHelpers';
 
+/*
 class Note extends React.Component {
  
   render() {    
@@ -65,7 +67,33 @@ class ExternalLink extends React.Component {
   }
   
 }
+*/
 
 
+class Note extends React.Component {
+	
+  render() { 
+	let body = JSON.parse(this.props.note.body);
+	return (
+		<div className="bible-note">
+			<p>{body.text}</p>
+			<p>{body.tags}</p>
+			<p><Link to={"/users/" + this.props.note.user.id}>{this.props.note.user.name}</Link></p>
+		</div>
+		);
+	}
+} 
 
-module.exports = Note;
+export default Relay.createContainer(Note, {
+  fragments: {
+    note: () => Relay.QL`
+      fragment on Note  {
+	   id
+	   body
+	   user {
+	    id
+	    name
+	    }
+     }`
+  }
+});

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import './Navbar.scss';
 import BeLogo from '../Svg/BeLogo';
+import Relay from 'react-relay';
 
 class UserLoggedIn extends React.Component {
   
@@ -84,4 +85,22 @@ Navbar.propTypes = {
 	location: React.PropTypes.object.isRequired,
   };
 
-export default Navbar;
+Navbar.propTypes = {
+    viewer: React.PropTypes.object.isRequired
+  };
+
+export default Relay.createContainer(Navbar, {
+  initialVariables: {
+	slug:''
+  }, 
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+	id
+	email	
+	name
+	authenticated
+      }
+    `,
+  },
+});

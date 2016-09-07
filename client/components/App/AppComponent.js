@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Link } from 'react-router';
 import MainNavigation from '../Navbar/NavbarComponent';
 import Footer from '../Footer/FooterComponent';
-import { Grid, Row, Col } from 'react-bootstrap';
+import Relay from 'react-relay';
 
 import '../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss';
 import './App.scss';
@@ -18,7 +18,7 @@ class App extends React.Component {
 
     return (
 		  <div>
-				<MainNavigation location={this.props.location} route={this.props.route} viewer={this.props.viewer}/>
+			<MainNavigation location={this.props.location} route={this.props.route} viewer={this.props.viewer}/>
 
 			  {this.props.children}
 			  
@@ -37,4 +37,14 @@ App.propTypes = {
     viewer: React.PropTypes.object.isRequired
   };
 
-module.exports = App;
+export default Relay.createContainer(App, {
+  initialVariables: {}, 
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+	${MainNavigation.getFragment('viewer')}
+        ${Footer.getFragment('viewer')}
+      }
+    `,
+  },
+});

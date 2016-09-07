@@ -1,21 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Relay from 'react-relay';
 
 class BibleVerseComponent extends React.Component {
  
   render() {
 
     return (
-		<div style={{margin:"15px", fontSize:"1.3em"}}>
-			<Link to={!this.props.url ? "":this.props.url} style={{color:"black"}}>
-				<p id={this.props.id} className="ui-widget-content">
-					<sup>{this.props.v}</sup>
-					{this.props.t}
-				</p>			
-			</Link>
-		</div>
+	<div style={{margin:"15px", fontSize:"1.3em"}}>
+	  <Link to={!this.props.bibleVerse.url ? "":this.props.bibleVerse.url} style={{color:"black"}}>
+	    <p id={this.props.bibleVerse.id} className="ui-widget-content">
+	      <sup>{this.props.bibleVerse.v}</sup>{this.props.bibleVerse.t} [{this.props.bibleVerse.notesCount}]
+	    </p>			
+	  </Link>
+	</div>
     )
   }
 }
 
-module.exports = BibleVerseComponent;
+export default Relay.createContainer(BibleVerseComponent, {
+  initialVariables: {}, 
+  fragments: {
+  bibleVerse: () => Relay.QL`
+      fragment on BibleVerse  {
+	 id
+  	 v
+	 t
+	 url
+	 notesCount
+     }`
+  },
+});

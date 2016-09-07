@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.scss';
+import Relay from 'react-relay';
 
 class Footer extends React.Component {
 
@@ -27,4 +28,17 @@ Footer.propTypes = {
     viewer: React.PropTypes.object.isRequired,
   };
 
-export default Footer;
+export default Relay.createContainer(Footer, {
+  initialVariables: {
+	slug:''
+  }, 
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+	email	
+	name
+	authenticated
+      }
+    `,
+  },
+});

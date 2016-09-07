@@ -9,16 +9,21 @@ import './Dashboard.scss';
 class Dashboard extends React.Component {
 
   componentWillMount(){
-	  console.log(this.props);
+
   }
 
   render() {
-
+	
     return (
-	<Page heading={'Dashboard'}>
-		<div className="WidgetContainer">
-		{this.props.viewer.name}
-		</div>
+	<Page heading={''}>
+ 	  <div className="WidgetContainer">
+	    <div className="Widget">
+		<center><h1>{this.props.viewer.name} My History</h1></center>
+	  	{this.props.viewer.navHistory.map(function(el){
+		  return <li key={el.id}><Link to={el.url} >{el.title}</Link></li>;
+		})}
+	    </div>
+	  </div>
 	</Page>
     );
   }

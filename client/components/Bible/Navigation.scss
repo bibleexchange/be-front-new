@@ -1,0 +1,18 @@
+@import "../variables.scss";
+
+.bookselect {
+  width:100%;
+}
+
+.bookselect .bookname {
+  width:100%;
+  margin:5px;
+  border:solid 1px gray;
+  padding:5px;
+  
+}
+
+.bookselect li{
+  margin:10px;
+  list-style:none;
+}
