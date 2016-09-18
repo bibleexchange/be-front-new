@@ -13,17 +13,6 @@ import useRelay from 'react-router-relay';
 const mountNode = document.createElement('div');
 document.body.appendChild(mountNode);
 
-
-var token = localStorage.getItem('jwt');
-Relay.injectNetworkLayer(
-  new Relay.DefaultNetworkLayer('http://localhost:3000/graphql', {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  })
-);
-
-
 ReactDOM.render(
     <Router 
 	history={browserHistory} 

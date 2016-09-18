@@ -125,7 +125,7 @@ export default Relay.createContainer(Navigation, {
     return { stepOrderBy: stepOrderBy+1};
   },
   fragments: {
-	course: (variables) => Relay.QL`
+/*	course: (variables) => Relay.QL`
 	  fragment on Course {
 		title
 		stepsCount
@@ -149,6 +149,6 @@ export default Relay.createContainer(Navigation, {
 		  url
 		}	  
 				  
-		}`
+		}`*/
   }
 });

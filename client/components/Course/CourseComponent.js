@@ -73,7 +73,7 @@ export default Relay.createContainer(Course, {
 	courseSlug:""
   }, 
   fragments: {
-    viewer: () => Relay.QL`
+/*    viewer: () => Relay.QL`
       fragment on User {id}`, 
     bible: (variables) => Relay.QL`
 	fragment on Bible {
@@ -130,7 +130,8 @@ export default Relay.createContainer(Course, {
 		  nextStep {order_by}
 		  previousStep {order_by}
 		}	  
-	}`,
+	}`,*/
  },
+
 });
 

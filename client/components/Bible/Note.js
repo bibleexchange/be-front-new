@@ -3,94 +3,86 @@ import Relay from 'react-relay';
 import { Link } from 'react-router';
 import Helper from '../../util/MyHelpers';
 
-/*
 class Note extends React.Component {
- 
-  render() {    
-    return (
-		<div style={{marginBottom:"15px"}}>
-			{this.chooseView(this.props)}
-		</div>
-    )
+
+  componentWillMount(){
+	   this.state = {
+      oembed:{html:" "},
+      status:"open"
+    };
   }
 
-	chooseView(o){
-	
-		switch(o.object_type){
-			case "Recording":
-				let recording = JSON.parse(o.relatedObject);
-				return <Recording data={recording[0]} noteID={o.id} />;
-				break;
-			case "Link":
-				let link = JSON.parse(o.relatedObject);
-				return <ExternalLink data={link[0]} note={o}/>;
-				break;
-			case "BibleVerse":
-				let verse = JSON.parse(o.relatedObject);
-				return (<div><span className="glyphicon glyphicon-link"></span><Link to={verse.url}> {verse.reference}</Link> <p>{verse.t}</p></div>);
-				break;
-			default:
-				return (<Comment {...o} />);
-		}
-		
-	}  
- 
-}
-
-class Comment extends React.Component {
   render() {
-    return (
-		<p><i className="glyphicon glyphicon-comment"></i> {this.props.body} -- {this.props.user.username}</p>
-    )
-  }
-  
-}
 
-class Recording extends React.Component {
-  render() {
-    return (
-		<p><i className="glyphicon glyphicon-headphones"></i> <Link to={"/notes/"+this.props.noteID+"#"+Helper.safeUrl(this.props.data.title)} >{this.props.data.title}</Link></p>
-    )
-  }
-  
-}
+    let n = this.props.note.properties;
 
-class ExternalLink extends React.Component {
-  render() {	  
-    return (
-		<div>
-			<i className="glyphicon glyphicon-link"></i> 
-			{this.props.note.body} 
-			<Link to={this.props.data.url} > {this.props.data.url}</Link>
-		</div>
-    )
-  }
-  
-}
-*/
+    let resourceButton =  null;
 
+    if (n.resourceUrl !== null){
+      resourceButton =   <button style={{float:"right"}} onClick={this.handleOembed.bind(this)}>{this.state.status}</button>;
+    }
 
-class Note extends React.Component {
-	
-  render() { 
-	let body = JSON.parse(this.props.note.body);
 	return (
-		<div className="bible-note">
-			<p>{body.text}</p>
-			<p>{body.tags}</p>
-			<p><Link to={"/users/" + this.props.note.user.id}>{this.props.note.user.name}</Link></p>
+		<div className="bible-note" >
+      {resourceButton}
+			<p>{n.text}</p>
+			<p>{n.tags.map(function(t){return " #"+t})}</p>
+			<p><Link to={"/users/" + this.props.note.author.id}>{this.props.note.author.name}</Link></p>
+        <div dangerouslySetInnerHTML={{ __html: this.state.oembed.html }} />
 		</div>
 		);
 	}
-} 
+
+  // Download a file form a url.
+  handleOembed(e) {
+
+    //oembed: soundcloud,
+    //
+
+    if(this.state.status == "open"){
+
+          //let resource_url = e.target.value;
+          let host_oembed_url = "http://soundcloud.com/oembed";
+          let resource_url = this.props.note.properties.resourceUrl;
+          let url = host_oembed_url+"?format=json&&url="+resource_url;
+          let that = this;
+
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = 'json';
+
+          if (!xhr) {
+            throw new Error('CORS not supported');
+          }
+
+          xhr.onload = function() {
+           that.setState({oembed:xhr.response, status:"close"});
+          };
+
+          xhr.open('GET', url);
+          xhr.send();
+
+          console.log(xhr);
+    }else{
+      this.setState({oembed:{html:" "}, status:"open"});
+    }
+
+  }
+
+}
 
 export default Relay.createContainer(Note, {
   fragments: {
     note: () => Relay.QL`
-      fragment on Note  {
+      fragment on BibleNote  {
 	   id
 	   body
-	   user {
+     properties {
+       text
+       tags
+       resourceUrl
+       links
+     }
+	   author {
 	    id
 	    name
 	    }

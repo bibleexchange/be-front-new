@@ -12,20 +12,22 @@ import './Typography.scss';
 
 class App extends React.Component {
 
-  render() { 
-	
-	let viewer = this.props.viewer;
+    render() {
 
     return (
 		  <div>
-			<MainNavigation location={this.props.location} route={this.props.route} viewer={this.props.viewer}/>
-
+			<MainNavigation location={this.props.location} updateIt={this.state} route={this.props.route} user={this.props.viewer.user} handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}/>
 			  {this.props.children}
-			  
-			  <Footer viewer={this.props.viewer}/>
+
+			  <Footer user={this.props.viewer.user}/>
 		  </div>
     );
   }
+
+  handleUpdateBookmarks(string){
+    this.setState({string});
+  }
+
 }
 
 App.contextTypes = {
@@ -38,12 +40,18 @@ App.propTypes = {
   };
 
 export default Relay.createContainer(App, {
-  initialVariables: {}, 
+  initialVariables: {
+    token:"dummystring"
+  },
   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
-	${MainNavigation.getFragment('viewer')}
-        ${Footer.getFragment('viewer')}
+      fragment on Viewer {
+          user(token:$token){
+            email
+            ${MainNavigation.getFragment('user')}
+            ${Footer.getFragment('user')}
+          }
+
       }
     `,
   },

@@ -5,8 +5,8 @@ import BeLogo from '../Svg/BeLogo';
 import Relay from 'react-relay';
 
 class UserLoggedIn extends React.Component {
-  
-  render() {  
+
+  render() {
 	let user = this.props.user;
 
     return (
@@ -18,13 +18,13 @@ class UserLoggedIn extends React.Component {
 		</li>
 		<li>
 		  <button onClick={this.props.handleBookMark}>
-			<span className="glyphicon glyphicon-bookmark"></span>
+			   {this.props.message} <span className="glyphicon glyphicon-bookmark"></span>
 		  </button>
 		</li>
 	 </ul>
     );
   }
-  
+
 }
 
 class UserLoggedOut extends React.Component {
@@ -36,24 +36,31 @@ class UserLoggedOut extends React.Component {
 		</ul>
     );
   }
-  
-} 
+
+}
 
 
 class Navbar extends React.Component {
+
+  componentWillMount(){
+    this.state = {
+      message : ''
+    };
+  }
+
   render() {
-	
-	let viewer = this.props.viewer;
+
+	let user = this.props.user;
 	let url = this.props.location.pathname;
 	let inOrOut = 'loading...';
-	console.log('deciding session stuff based on: ', viewer);
-		
-	if(viewer.authenticated) {
-		inOrOut = <UserLoggedIn url={url} user={viewer} handleLogout={this.handleLogout.bind(this)} handleBookMark={this.handleBookMark.bind(this)}/>;
+	//console.log('deciding session stuff based on: ', user);
+
+	if(user.authenticated) {
+		inOrOut = <UserLoggedIn message={this.state.message} url={url} user={user} handleLogout={this.handleLogout.bind(this)} handleBookMark={this.handleBookMark.bind(this)}/>;
 	}else {
-	   inOrOut = <UserLoggedOut />;
+	   inOrOut = <UserLoggedOut message={this.state.message}/>;
 	}
-	
+
     return (
     	<header id="MainNavbar">
 				<nav id="BrandNav">
@@ -67,39 +74,53 @@ class Navbar extends React.Component {
 		 	</header>
     );
   }
-	
+
   handleLogout(e) {
 	e.preventDefault();
 	console.log('You should really build a way to log me out!');
   }
-  
+
   handleBookMark(e) {
 	e.preventDefault();
-	console.log('I would like a book mark feature sometime soon! ',this.viewer.__dataID__, this.props.location.pathname);
+	console.log('I would like a book mark feature sometime soon! ', this.props.location.pathname);
+
+    if(this.props.location.pathname !== null){
+      let navs = JSON.parse(localStorage.getItem('navs'));
+
+      if (navs == null){
+        navs = [];
+      }
+
+      navs.unshift(this.props.location.pathname);
+      localStorage.setItem('navs', JSON.stringify(navs));
+
+      this.props.handleUpdateBookmarks(navs);
+
+      this.setState({message:'bookmarked'});
+      var that = this;
+      setTimeout(function(){that.setState({message:''}); }, 1500);
+    }
+
   }
-  
+
 }
 
 Navbar.propTypes = {
-    viewer: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
 	location: React.PropTypes.object.isRequired,
-  };
-
-Navbar.propTypes = {
-    viewer: React.PropTypes.object.isRequired
   };
 
 export default Relay.createContainer(Navbar, {
   initialVariables: {
 	slug:''
-  }, 
+  },
   fragments: {
-    viewer: () => Relay.QL`
+    user: () => Relay.QL`
       fragment on User {
-	id
-	email	
-	name
-	authenticated
+      	id
+      	email
+      	name
+      	authenticated
       }
     `,
   },

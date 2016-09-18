@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
@@ -10,52 +9,53 @@ import './Bible.scss';
 
 class Bible extends React.Component {
 
-  componentWillMount(){
-
-  }
-
   render() {
+    let navs = localStorage.getItem('navs');
+
     return (
 	<Page heading={''}>
-		<div className="WidgetContainer">
+		<div className="WidgetContainer" >
 		  <div className="Widget">
-		    <BibleWidget history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} bibleVerse={this.props.bibleVerse}/>
-		  </div> 
-		  <div className="Widget">
-		    <Library bibleVerse={this.props.bibleVerse}/>
+		    <BibleWidget history={this.props.history} baseUrl="" bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={this.props.viewer.bibleVerse}/>
 		  </div>
+		  <div className="Widget">
+		    <Library bibleVerse={this.props.viewer.bibleVerse}/>
+		  </div>
+      <div className="Widget">
+        <center>My Bookmarks</center>
+        {navs}
+      </div>
 	    	</div>
       </Page>
     );
   }
-  
+
 }
 
 Bible.propTypes = {
-    bibleChapter: React.PropTypes.object.isRequired,
-    bibleVerse: React.PropTypes.object.isRequired,
     viewer: React.PropTypes.object.isRequired,
-    bible: React.PropTypes.object,
 };
 
 
 export default Relay.createContainer(Bible, {
   initialVariables: {
-	bibleChapterId:5,
 	libraryFilter:'',
-	reference:'john_3_16'
-  }, 
+	reference:'john_3_16',
+  	token: "nothinghere"
+  },
   fragments: {
-      viewer: () => Relay.QL`fragment on User {id}`, 
-      bibleChapter: () => Relay.QL`fragment on BibleChapter {
-	${BibleWidget.getFragment('bibleChapter')}
-      }`,
-      bibleVerse: () => Relay.QL`fragment on BibleVerse {
-	${Library.getFragment('bibleVerse')}
-	${BibleWidget.getFragment('bibleVerse')}
-      }`,
-      bible: () => Relay.QL`fragment on Bible {
-	${BibleWidget.getFragment('bible')}
+      viewer: () => Relay.QL`fragment on Viewer {
+	user(token:$token){id}
+	bibleChapter (reference:$reference) {
+	  ${BibleWidget.getFragment('bibleChapter')}
+       }
+        bibleVerse (reference:$reference) {
+          ${Library.getFragment('bibleVerse')}
+          ${BibleWidget.getFragment('bibleVerse')}
+     }
+	bible {
+	  ${BibleWidget.getFragment('bible')}
+	}
       }`,
   },
 });

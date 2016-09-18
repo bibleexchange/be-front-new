@@ -1,7 +1,7 @@
 import Relay from 'react-relay';
 
+const token = "asdfasdfasdf";
+
 export default {
-  viewer: (Component) => Relay.QL`query { viewerQuery {
-	 ${Component.getFragment('viewer')}
-} }`,
+  viewer: () => Relay.QL`query ViewerQuery {viewer}`,
 };

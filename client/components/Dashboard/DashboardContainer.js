@@ -3,20 +3,29 @@ import Dashboard from './DashboardComponent';
 
 export default Relay.createContainer(Dashboard, {
   initialVariables: {
-	libraryFilter:'',
-  }, 
+    token:"dummystring"
+  },
   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
-		name
-		email
-		authenticated
-	navHistory{
-	  id
-	  url
-	  title	
-	}
+      fragment on Viewer {
+          user(token:$token){
+            id
+            authenticated
+            name
+            email
+            navHistory(first:5){
+              edges{
+                cursor
+                node{
+                  id
+                  url
+                  title
+                }
+              }
+            }
+          }
+
       }
     `,
-  }
+  },
 });

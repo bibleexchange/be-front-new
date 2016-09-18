@@ -5,18 +5,18 @@ import Relay from 'react-relay';
 class Footer extends React.Component {
 
   render() {
-	
-	if(this.props.viewer.authenticated){
-		var user = this.props.viewer;
-		
+
+	if(this.props.user.authenticated){
+		var user = this.props.user;
+
 		var usingAs = <a href={user.email}> {user.name}</a>;
-		
+
 	}else {
 		var user = {email:"guest", name:"guest"};
 		var usingAs = "a guest";
 	}
-	  
-    return (	  
+
+    return (
 	   <center className="redBG">
 		Using Bible exchange as {usingAs}
 	   </center>
@@ -25,19 +25,19 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-    viewer: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
   };
 
 export default Relay.createContainer(Footer, {
   initialVariables: {
 	slug:''
-  }, 
+  },
   fragments: {
-    viewer: () => Relay.QL`
+    user: () => Relay.QL`
       fragment on User {
-	email	
-	name
-	authenticated
+      	email
+      	name
+      	authenticated
       }
     `,
   },
