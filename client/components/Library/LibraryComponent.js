@@ -19,11 +19,8 @@ class BrowserWidget extends React.Component {
     return (
   		<div>
         <h2 style={{textAlign:"center"}}>Previewer</h2>
-
         <input type="text" onBlur={this.myFunc.bind(this)} />
-
         <textarea value={JSON.stringify(this.state.oembed)}></textarea>
-
   		</div>
     )
   }
@@ -45,8 +42,6 @@ class BrowserWidget extends React.Component {
 
     xhr.open('GET', url);
     xhr.send();
-
-    console.log(xhr);
   }
 
 }
@@ -66,21 +61,20 @@ class Library extends React.Component {
   let notes = this.props.bibleVerse.notes.edges;
 
        return (
-		<div>
+    		<div>
 
-      <BrowserWidget />
+          {/*}<BrowserWidget />*/}
 
-			<h2>Notes for {this.props.bibleVerse.reference}</h2>
-			<hr />
-			<input type="text" onChange={this.handleLibraryFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} style={{marginLeft:"50px"}}/>
-			<Link to="" onClick={this.handleClearFilter.bind(this)} >&nbsp;&nbsp;clear</Link>
-			<hr />
+    			<h2>Notes for {this.props.bibleVerse.reference}</h2>
+    			<hr />
+    			<input type="text" onChange={this.handleLibraryFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} style={{marginLeft:"50px"}}/>
+    			<Link to="" onClick={this.handleClearFilter.bind(this)} >&nbsp;&nbsp;clear</Link>
+    			<hr />
+    			{notes.filter(function(el){return el.node.body.includes(filterBy)}).map((n)=>{
+    				return <Note key={n.node.id} note={n.node} />;
+    			})}
 
-			{notes.filter(function(el){return el.node.body.includes(filterBy)}).map((n)=>{
-				return <Note key={n.node.id} note={n.node} />;
-			})}
-
-		</div>
+    		</div>
     )
   }
 
@@ -109,16 +103,16 @@ export default Relay.createContainer(Library, {
   fragments: {
     bibleVerse: () => Relay.QL`
       fragment on BibleVerse  {
-	 reference
-	 notes (first:45, after:$opaqueCursor){
-	   edges {
-	     cursor
-	     node {
-	       id
-	       body
-               ${Note.getFragment('note')}
-             }
-	   }
+      	 reference
+      	 notes (first:45, after:$opaqueCursor){
+      	   edges {
+      	     cursor
+      	     node {
+      	       id
+      	       body
+                     ${Note.getFragment('note')}
+                   }
+      	   }
 	  }
      }`
   }

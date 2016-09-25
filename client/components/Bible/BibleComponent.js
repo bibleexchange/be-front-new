@@ -45,17 +45,17 @@ export default Relay.createContainer(Bible, {
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
-	user(token:$token){id}
-	bibleChapter (reference:$reference) {
-	  ${BibleWidget.getFragment('bibleChapter')}
-       }
-        bibleVerse (reference:$reference) {
-          ${Library.getFragment('bibleVerse')}
-          ${BibleWidget.getFragment('bibleVerse')}
-     }
-	bible {
-	  ${BibleWidget.getFragment('bible')}
-	}
+      	user(token:$token){id}
+      	bibleChapter (reference:$reference) {
+      	  ${BibleWidget.getFragment('bibleChapter')}
+             }
+              bibleVerse (reference:$reference) {
+                ${Library.getFragment('bibleVerse')}
+                ${BibleWidget.getFragment('bibleVerse')}
+           }
+      	bible {
+      	  ${BibleWidget.getFragment('bible')}
+      	}
       }`,
   },
 });

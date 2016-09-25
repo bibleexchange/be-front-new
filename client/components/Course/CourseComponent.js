@@ -5,133 +5,207 @@ import Relay from 'react-relay';
 import Page from '../Page/PageComponent';
 import Navigation from './Navigation';
 import BibleWidget from '../Bible/WidgetComponent';
+import marked from 'marked';
 
 import './Course.scss';
+
+class Note extends React.Component {
+  render() {
+
+    let component = null;
+// type, api_request, body
+    switch(this.props.note.note.output.type){
+
+      case "GITHUB":
+        component = <div dangerouslySetInnerHTML={{__html: this.props.note.note.output.body}} ></div>;
+        break;
+
+      case "BIBLE_VERSE":
+        component = JSON.parse(this.props.output.body).body;
+        break;
+
+      case "STRING":
+        component = <div dangerouslySetInnerHTML={{__html: this.props.note.note.output.body}} ></div>;
+        break;
+
+      case "MARKDOWN":
+        component = <div dangerouslySetInnerHTML={{__html: marked(this.props.note.note.output.body)}} ></div>;
+        break;
+
+      default:
+        component = this.props.note.note.output.body;
+
+    }
+
+    console.log(this.props.note.note.output.type);
+
+    return (
+        <div style={{padding:"15px"}}>
+          {component}
+        </div>
+    );
+  }
+}
+
+class Found extends React.Component {
+  render() {
+
+	  let next = false;
+    let previous = false;
+
+    if(this.props.viewer.lessonnote.next !== null){
+      	next = { pathname:'/course/'+this.props.viewer.course.id+'/note/'+this.props.viewer.lessonnote.next.id};
+    }
+    if(this.props.viewer.lessonnote.previous !== null){
+        previous = { pathname:'/course/'+this.props.viewer.course.id+'/note/'+this.props.viewer.lessonnote.previous.id};
+    }
+
+  let bibleWidget = null;
+/*
+  if(this.props.viewer.bibleChapter !== undefined){
+    next = { pathname:nexturl, query: { ref: this.props.viewer.bibleChapter.nextChapter.referenceSlug } };
+    previous = { pathname:previousurl, query: { ref: this.props.viewer.bibleChapter.previousChapter.referenceSlug } };
+    bibleWidget =   <BibleWidget bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={null} baseUrl={"/course/"+this.props.viewer.course.id+"/step/"+this.props.viewer.lessonnote.id}/>;
+  }
+*/
+    return (
+      <Page heading={''} >
+      	<div className="WidgetContainer">
+              <div className="Widget">
+      	  <Navigation course={this.props.viewer.course} lessonnote={this.props.viewer.lessonnote} nextStepUrl={next} previousStepUrl={previous}/>
+      	  <Note note={this.props.viewer.lessonnote} />
+       	</div>
+        {/*}
+      	<div className="Widget">
+      	  {bibleWidget}
+      	</div>
+        */}
+      	</div>
+      </Page>
+    );
+  }
+
+  createBodyCopy(markUp){
+    return {__html:markUp};
+  }
+}
+
+class Missing extends React.Component {
+  render() {
+
+    return (
+      <Page heading={''} >
+      	<div className="WidgetContainer">
+              <div className="Widget">
+                <h1>Sorry Cannot Find the Requested Course!</h1>
+              </div>
+       	</div>
+      	<div className="Widget">
+
+      	</div>
+      </Page>
+    );
+  }
+
+  createBodyCopy(markUp){
+    return {__html:markUp};
+  }
+}
 
 class Course extends React.Component {
 
   render() {
+    let renderThis = <Missing />;
 
-	let nexturl = '/course/'+this.props.course.currentStep.course_id+'/'+this.props.course.currentStep.nextStep.order_by;
-	let previousurl = '/course/'+this.props.course.currentStep.course_id+'/'+this.props.course.currentStep.previousStep.order_by;
+    if(this.props.viewer.course !== null){
+      renderThis = <Found {...this.props}/>
+    }
 
-	const next = { pathname:nexturl, query: { ref: this.props.bibleChapter.nextChapter.referenceSlug } };
-	const previous = { pathname:previousurl, query: { ref: this.props.bibleChapter.previousChapter.referenceSlug } };
-
-    return (
-      <Page heading={''} >
-	<div className="WidgetContainer">
-        <div className="Widget">
-	  <Navigation course={this.props.course} nextStepUrl={next} previousStepUrl={previous}/>
-	  <div style={{margin:"15px"}} dangerouslySetInnerHTML={this.createBodyCopy(this.props.course.currentStep.html)}></div> 
- 	</div> 
-	<div className="Widget">
-	  <BibleWidget bible={this.props.bible} bibleChapter={this.props.bibleChapter} bibleVerse={null} baseUrl={"/course/"+this.props.course.identifier+"/"+this.props.course.currentStep.order_by}/>
-	</div>
-	</div>   
-      </Page>
-    );
-  }
-  
-  createBodyCopy(markUp){
-    return {__html:markUp};
+    return renderThis;
   }
 
 }
 
-Course.defaultProps = {
-	course:{
-	  id:88,
-	  title:"Study of Romans",
-	  stepsCount:10,
-	  steps: []
-	},
-  bible: {
-	books: {
-	  edges:[]
-   }
-},
-  bibleChapter:{nextChapter:["1001","/bible/john_4"], previousChapter:["1001","/bible/john_4"], reference:"John 3", verseCount:5, verses:[]}
-};
-
 Course.propTypes = {
-  course: React.PropTypes.object.isRequired,
-  bible: React.PropTypes.object.isRequired,
-  bibleChapter: React.PropTypes.object.isRequired,
-  reference: React.PropTypes.string.isRequired
+  viewer: React.PropTypes.object.isRequired,
 };
-  
-const pageSize = 1;
 
 export default Relay.createContainer(Course, {
   initialVariables: {
-	reference:"amos_1",
-	courseId: 1,
-	stepOrderBy:3,
-	pageSize: pageSize,
-	opaqueCursor: "opaqueCursor",
-	courseSlug:""
-  }, 
+    reference:"amos_1",
+  	courseId: "1",
+  	lessonnoteId:"1",
+  	pageSize: 1,
+  	opaqueCursor: "opaqueCursor",
+  	courseSlug:"",
+    token:"tokentoekntoekn",
+    version:1
+  },
   fragments: {
-/*    viewer: () => Relay.QL`
-      fragment on User {id}`, 
-    bible: (variables) => Relay.QL`
-	fragment on Bible {
-	  ${BibleWidget.getFragment('bible',variables)}	
-    }`,
-	bibleChapter: (variables) => Relay.QL`
-      fragment on BibleChapter {
-	${BibleWidget.getFragment('bibleChapter',variables)}		
-		verseCount
-		reference
-		nextChapter{
-		  referenceSlug
-		}
-		previousChapter{
-		  referenceSlug
-		}
-		notes {
-			id
-			body
-			user {
-			  id
-		      name
-			}
-		}
-		verses {
-		  id
-		  v
-		  t
-		  url
-		  reference
-		}
-      }`, 
-	course: (variables) => Relay.QL`
-	fragment on Course {
-	  ${Navigation.getFragment('course',variables)}
-		id
-	        identifier
-		title
-		stepsCount
-		steps(first:100){
-		  pageInfo{hasNextPage hasPreviousPage}
-		      edges {
-			node {
-			  id
-			  order_by
-			}
-		      }
-		    }
-		currentStep( orderBy:$stepOrderBy) {
-		  id
-		  html
-		  order_by
-		  course_id
-		  nextStep {order_by}
-		  previousStep {order_by}
-		}	  
-	}`,*/
- },
-
+      viewer: () => Relay.QL`fragment on Viewer {
+        course(id:$courseId){
+          id
+          lessons(first:100){
+            edges{
+              cursor
+              node{
+                id
+                order_by
+                notes(first:100){
+                  edges {
+                    cursor
+                    node {
+                      id
+                      next {
+                        id
+                      }
+                      note {
+                        output {
+                          id
+                          type
+                          api_request
+                          body
+                        }
+                      }
+                      previous {
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ${Navigation.getFragment('course')}
+        }
+        lessonnote( id:$lessonnoteId) {
+          id
+          lesson_id
+          order_by
+          next {
+            id
+          }
+          previous {
+            id
+          }
+          note {
+            id
+            output{
+              type
+              api_request
+              body
+            }
+          }
+          ${Navigation.getFragment('lessonnote')}
+        }
+        bible {
+      	  ${BibleWidget.getFragment('bible')}
+      	}
+        bibleChapter(reference:$reference){
+          nextChapter {referenceSlug}
+          previousChapter {referenceSlug}
+          ${BibleWidget.getFragment('bibleChapter')}
+        }
+      }`,
+    },
 });
-

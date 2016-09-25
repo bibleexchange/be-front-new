@@ -19,18 +19,19 @@ class BibleChaptersList extends React.Component {
 
 	const toggle = this.props.toggle;
 	const getChapter = this.props.getChapter;
-
+console
     return (
-		<div>
-			{chapters.map(function(chapter) {
-			  return (
-				<li className="square-list" key={chapter}>
-					<Link to={"/bible/"+slugIt(book.n)+"_"+chapter} id={chapter} onClick={toggle.bind(this)}>
-						{chapter}
-					</Link>
-				</li>
-			 )})}
-		</div>
+	<div>
+	{chapters.map(function(chapter) {
+	  return (
+		<li className="square-list" key={chapter}>
+
+			<Link to={"/bible/"+slugIt(book.title)+"_"+chapter} id={chapter} onClick={toggle.bind(this)}>
+				{chapter}
+			</Link>
+		</li>
+	 )})}
+	</div>
 
     )
   }
@@ -59,17 +60,27 @@ class BibleBook extends React.Component {
 
   render() {
 	const { collapsed } = this.state;
-	const chaptersClass = collapsed ? "collapse" : "";
+
+let chaptersStyle = {
+	display:"block"
+};
+
+if(!this.state.collapsed){
+  chaptersStyle.display = "none";
+}
+ let listBreak = "";
+if(this.props.book.title == "Matthew"){
+  listBreak = <hr />;
+}
 
 	return (
 		<div className="bookselect">
-		  <a className="" onClick={this.toggleChapter.bind(this)} href="#" style={{width:'75px', height:'50px', overflow:'hidden'}}>
-			<div className="bookname"><strong>{this.props.book.n}</strong></div>
+		{listBreak}
+		  <a className="bookname" onClick={this.toggleChapter.bind(this)} href="#">
+			<strong>{this.props.book.title}</strong>
 		  </a>
-		  <ul className={"dropdown-menu" + chaptersClass} role="menu" >
-
+		  <ul style={chaptersStyle} role="menu" >
 			<BibleChaptersList book={this.props.book} toggle={this.toggleChapterAlways.bind(this)} />
-
 		  </ul>
 		</div>
 		)
@@ -84,7 +95,7 @@ class BibleBooksList extends React.Component {
 
     return (
 		<div>
-			{this.props.bible.books.edges.filter(function(el){return el.node.n.toLowerCase().includes(filterBy);}).map(function(book) {
+			{this.props.bible.books.edges.filter(function(el){return el.node.title.toLowerCase().includes(filterBy);}).map(function(book) {
 			  return <BibleBook book={book.node} key={Math.random()} closeAll={closeAll} />;
 			 })}
 		</div>
@@ -110,14 +121,8 @@ class Search extends React.Component {
 	if(this.props.term !== null){term = this.props.term;}
 
     return (
-		<form id ="bibleSearch" role="search" style={styles.formStyle}>
-			<button type="submit" className="btn btn-default" style={styles.btnSubmitStyle}  onClick={this.props.submitHandler}>
-				<span className="glyphicon glyphicon-search">
-					<span className="sr-only">Search...</span>
-				</span>
-			</button>
-
-			<input type="text" name="q" id="reference" value={term} onChange={this.props.changeHandler}
+		<form id ="bibleSearch" role="search" style={styles.formStyle} onSubmit={this.props.submitHandler}>
+			<input type="text" name="q" id="reference" value={term} onChange={this.props.changeHandler} onBlur={this.props.submitHandler}
 				style={styles.inputStyle}
 			></input>
 		</form>
@@ -131,11 +136,10 @@ class VerseSelector extends React.Component {
   render() {
 
 	const modalStyle = {
-	  position: 'fixed',
-	  top: 0, bottom: 0, left: 0, right: 0,
+	  position: 'absolute',
+	  top: 0,
+	  left: 0,
 	  verticalAlign: 'middle',
-	  position: 'fixed',
-	  top: 0, bottom: 0, left: 0, right: 0,
 	  zIndex: '1000',
 	  backgroundColor: 'rgba(0,0,0,0.5)',
 	  width:"100%"
@@ -170,6 +174,10 @@ class VerseSelector extends React.Component {
 		  <h4>Choose a book and chapter to open</h4>
 
 		  <input type="text" onChange={this.props.handleBooksFilter} placeholder="  filter"></input>
+
+		  <button>Old Testament</button>
+		  <button>New Testament</button>
+		  <button>Random</button>
 
 		  <BibleBooksList bible={bible} filterBy={this.props.filterBooksBy} closeAll={this.props.close}/>
 	  </div>
@@ -211,18 +219,18 @@ class Navigation extends React.Component {
 
     return (<div>
 		<div className="blueBG" style={{marginBottom:'25p', textAlign:'center'}}>
-			<Link to={previous} className="btn btn-default" style={styles.previous}>
-				<span className="glyphicon glyphicon-chevron-left"></span>
+			<Link to={previous} style={styles.previous}>
+				PREV
 			</Link>
 
 			<Search term={this.state.search} changeHandler={this.searchChangeHandler.bind(this)} submitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
 
-			<Link to={next}  className="btn btn-default" style={styles.next}>
-				<span className="glyphicon glyphicon-chevron-right"></span>
+			<Link to={next} style={styles.next}>
+				NEXT
 			</Link>
 
 			<button onClick={this.toggleModal.bind(this)} style={verseSelectorButtonStyle}>
-			    <span className="glyphicon glyphicon-th"></span>
+			    MENU
 			</button>
 		</div>
 			<VerseSelector bible={this.props.bible} handleBooksFilter={this.handleBooksFilter.bind(this)} toggleModal={this.props.toggleModal} shouldDisplay={this.state.showModal} filterBooksBy={this.state.filterBooksBy} close={this.close.bind(this)}/>
@@ -239,7 +247,6 @@ class Navigation extends React.Component {
   	event.preventDefault();
   	console.log('search submitted...');
   	let url = this.state.search.replace(/\W+/g, '_');
-    console.log(this.props.context.router);
   	this.props.history.push("/bible/"+url.toLowerCase());
   }
 
@@ -273,7 +280,7 @@ export default Relay.createContainer(Navigation, {
 		   edges {
 			cursor
 			node{
-			  n
+			title
 		  	chapterCount
 			}
 		   }

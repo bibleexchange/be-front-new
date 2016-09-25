@@ -11,11 +11,11 @@ class BookMarksWidget extends React.Component {
       <center><h1>{this.props.user.name}&apos;s Bookmarks</h1></center>
 
       {this.props.navs.map(function(loc){
-        return <li><Link to={loc}>{loc}</Link></li>;
+        return <li key={Math.random()}><Link to={loc}>{loc}</Link></li>;
       })}
 
         {this.props.user.navHistory.edges.map(function(el){
-        return <li key={el.cursor}><Link to={el.node.url} >{el.node.title}</Link></li>;
+        return <li key={el.node.id}><Link to={el.node.url} >{el.node.title}</Link></li>;
       })}
       </div>
     );
@@ -41,6 +41,7 @@ export default Relay.createContainer(BookMarksWidget, {
          navHistory(first:5){
            edges{
              node{
+               id
                url
                title
              }

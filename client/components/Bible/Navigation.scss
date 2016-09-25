@@ -1,18 +1,33 @@
 @import "../variables.scss";
 
 .bookselect {
-  width:100%;
+  width:95%;
+  display:inline-block;
+  margin:0;
+  padding:0;
 }
 
 .bookselect .bookname {
   width:100%;
-  margin:5px;
+  margin:15px;
   border:solid 1px gray;
-  padding:5px;
-  
+  padding:15px;
+  margin-right:60px;
+  display:block;
 }
 
 .bookselect li{
   margin:10px;
   list-style:none;
+}
+
+.square-list {
+  display:inline-block;
+  border: 1px solid gray;
+  margin:5px;
+  width:60px;
+  height:60px;
+  text-align:center;
+  vertical-align:middle;
+  line-height:60px;
 }

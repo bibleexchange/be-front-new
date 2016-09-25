@@ -18,7 +18,7 @@ class UserLoggedIn extends React.Component {
 		</li>
 		<li>
 		  <button onClick={this.props.handleBookMark}>
-			   {this.props.message} <span className="glyphicon glyphicon-bookmark"></span>
+			   {this.props.message} bookmark
 		  </button>
 		</li>
 	 </ul>

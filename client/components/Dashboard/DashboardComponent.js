@@ -4,6 +4,7 @@ import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Page from '../Page/PageComponent';
 import BookMarksWidget from './BookMarksWidget';
+import Relay from 'react-relay';
 
 import './Dashboard.scss';
 
@@ -17,7 +18,7 @@ class Dashboard extends React.Component {
 	<Page heading={''}>
  	  <div className="WidgetContainer">
 	    <div className="Widget">
-        <BookMarksWidget user={this.props.viewer.user} bookmarks={navs}/>
+        <BookMarksWidget user={this.props.viewer.user} navs={navs}/>
 		    </div>
 	  </div>
 	</Page>
@@ -34,4 +35,32 @@ Dashboard.propTypes = {
 	viewer: React.PropTypes.object.isRequired,
   };
 
-export default Dashboard;
+  export default Relay.createContainer(Dashboard, {
+    initialVariables: {
+      token:"dummystring"
+    },
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+          user(token:$token){
+            ${BookMarksWidget.getFragment('user')}
+            id
+            authenticated
+            name
+            email
+            navHistory(first:5){
+              edges{
+                cursor
+                node{
+                  id
+                  url
+                  title
+                }
+              }
+            }
+          }
+
+      }
+    `,
+  },
+});
