@@ -103,8 +103,8 @@ App.propTypes = {
 export default Relay.createContainer(App, {
   initialVariables: {
     token:"dummystring",
-    noteId: "1",
-    verseId: "01001001"
+    noteId: "YXJyYXljb25uZWN0aW9uOjc",
+    verseId: "YXJyYXljb25uZWN0aW9uOjc"
   },
   fragments: {
     viewer: () => Relay.QL`

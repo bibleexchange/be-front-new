@@ -1,6 +1,5 @@
 import React from 'react';
-import SoundCloudPlayer from '../SoundcloudPlayer';
-import { Grid, Row, Col } from 'react-bootstrap';
+import SoundCloudPlayer from '../SoundcloudPlayerComponent';
 import { Link } from 'react-router';
 const clientId = '4f6c17d18260e9acaecec51809a1ff88'; //SECRET: c8984c019d4e450e2fd4f08fb4be0529
 

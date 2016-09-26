@@ -71,7 +71,10 @@ export default Relay.createContainer(AlwaysWidgetComponent, {
     note: () => Relay.QL`fragment on Note {
       	id
       	type
-      	user_id
+      	author{
+	  id
+	  name
+	}
       	body
       	bible_verse_id
       }`,

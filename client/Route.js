@@ -4,6 +4,7 @@ import Relay from 'react-relay';
 
 //queries
 import ViewerQueries from './queries/ViewerQueries';
+import CourseQueries from './queries/CourseQueries';
 
 //relay containers/components
 import App from './components/App/AppComponent';
@@ -11,6 +12,8 @@ import Bible from './components/Bible/BibleComponent';
 import Course from './components/Course/CourseComponent';
 import LibraryIndex from './components/Library/IndexComponent';
 import CourseIndex from './components/Course/IndexComponent';
+import NotesIndex from './components/Note/NotesIndex';
+import NotePage from './components/Note/NotePageComponent';
 import CourseEditor from './components/User/CourseEditor';
 import Dashboard from './components/Dashboard/DashboardComponent';
 import JWTCallback from './components/App/JWTCallback';
@@ -23,8 +26,11 @@ export default (
 
     <Route path='course' >
       <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />
-      <Route path=':courseId/note/:lessonnoteId' component={Course} queries={ViewerQueries} />
+      <Route path=':courseId/lesson/:lessonId' component={Course} queries={CourseQueries} />
     </Route>
+
+    <Route path='/notes' component={NotesIndex} queries={ViewerQueries} />
+    <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
 
     <Route path='/signup' component={Signup} />
     <Route path='/login' component={Login} />

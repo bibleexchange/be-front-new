@@ -25,7 +25,7 @@ class LessonComponent extends React.Component {
     const baseUrl = this.props.baseUrl;
     return (
               <ol>
-                <center><h2>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</h2></center>
+                <center><h2><Link to={this.props.baseUrl+"/lesson/"+this.props.lesson.id}>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</Link></h2></center>
                 <h3>{this.props.lesson.title}</h3>
                   <p style={{textAlign:"center"}}>{this.props.lesson.summary}</p>
                 {this.props.lesson.notes.edges.map(function(note){

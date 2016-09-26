@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router";
 import Relay from 'react-relay';
 
-class LessonNote extends React.Component {
+class Note extends React.Component {
   render() {
 	return (<Link to={this.props.baseUrl+"/note/"+this.props.lessonnote.id} onClick={this.props.closeAll}>{this.props.lessonnote.order_by}</Link>)}
 }
@@ -11,9 +11,10 @@ class Lesson extends React.Component {
   render() {
     const closeAll = this.props.closeAll;
     const baseUrl = this.props.baseUrl;
-	return (<ul>
+
+	return (<ul>{this.props.lesson.title}
     {this.props.lesson.notes.edges.map(function(lessonnote){
-      return <li key={lessonnote.node.id}><LessonNote lessonnote={lessonnote.node} closeAll={closeAll} baseUrl={baseUrl}/></li>;
+      return <li key={lessonnote.node.id}><Note lessonnote={lessonnote.node} closeAll={closeAll} baseUrl={baseUrl}/></li>;
     })}
     </ul>);
   }
@@ -24,7 +25,7 @@ class Lesson extends React.Component {
 class LessonsList extends React.Component {
 
   render() {
-  const baseUrl = this.props.baseUrl;
+  let baseUrl = this.props.baseUrl;
 	const modalStyle = {
 	  position: 'fixed',
 	  top: 0, bottom: 0, left: 0, right: 0,
@@ -65,8 +66,7 @@ class LessonsList extends React.Component {
 
 			<ul>
 			{this.props.course.lessons.edges.map(function(lesson) {
-          return <li key={lesson.node.id}><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl}/></li>;
-
+          return <li key={lesson.node.id}><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></li>;
 			})}
 			</ul>
 
@@ -84,33 +84,34 @@ class Navigation extends React.Component {
   }
 
   render() {
+  let previousLink = null;
+  let nextLink = null;
 
   const baseUrl = "/course/"+this.props.course.id;
 
 	const styles = {
-		btn:{border:'none', background:'transparent'},
-		next:{border:'none', background:'transparent'},
-		previous:{border:'none', background:'transparent'}
+		btn:{border:'none', background:'transparent'}
 	};
 
 	const selectorButtonStyle = {
 	  border:'none', background:'transparent'
 	};
 
-	if(!this.props.previousStepUrl){styles.previous.display = "none";}
-	if(!this.props.nextStepUrl){styles.next.display = "none";}
+	if(this.props.previousStepUrl){
+    previousLink = <Link to={this.props.previousStepUrl} className="btn btn-default" style={styles.previous}>PREVIOUS</Link>;
+  }
+	if(this.props.nextStepUrl){
+    nextLink = 	<Link to={this.props.nextStepUrl? this.props.nextStepUrl:"#"}  className="btn btn-default" style={styles.next} onClick={this.props.getNextHandler}>NEXT</Link>;
+  }
 
     return (<div>
 		<div className="orangeBG" style={{marginBottom:'25p', textAlign:'center'}}>
-			<Link to={this.props.previousStepUrl} className="btn btn-default" style={styles.previous}>
-				PREVIOUS
-			</Link>
 
-			{this.props.course.title}: Step #{this.props.lessonnote.order_by}
+      {previousLink}
 
-			<Link to={this.props.nextStepUrl? this.props.nextStepUrl:"#"}  className="btn btn-default" style={styles.next} onClick={this.props.getNextHandler}>
-				NEXT
-			</Link>
+			{this.props.course.title}: Lesson #{this.props.lesson.order_by}
+
+      {nextLink}
 
 			<button onClick={this.toggleModal.bind(this)} style={selectorButtonStyle}>
 			  MENU
@@ -153,6 +154,7 @@ export default Relay.createContainer(Navigation, {
       			  id
       			  order_by
       			  summary
+              title
               notes(first:100){
                 edges{
                   cursor
@@ -181,21 +183,15 @@ export default Relay.createContainer(Navigation, {
 		      }
 		    }
   }`,
-  lessonnote: () => Relay.QL`
-	  fragment on LessonNote {
+  lesson: () => Relay.QL`
+	  fragment on Lesson {
       id
+      title
+      summary
       order_by
       next {
         id
         order_by
-      }
-      note {
-        output {
-          id
-          type
-          api_request
-          body
-        }
       }
       previous {
         id

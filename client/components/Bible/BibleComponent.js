@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Relay from 'react-relay';
 import Page from '../Page/PageComponent';
 import BibleWidget from './WidgetComponent';
-import Library from '../Library/LibraryComponent';
+import NotesWidget from '../Note/NotesWidget';
 
 import './Bible.scss';
 
@@ -19,7 +19,7 @@ class Bible extends React.Component {
 		    <BibleWidget history={this.props.history} baseUrl="" bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={this.props.viewer.bibleVerse}/>
 		  </div>
 		  <div className="Widget">
-		    <Library bibleVerse={this.props.viewer.bibleVerse}/>
+		    <NotesWidget filter={this.props.viewer.bibleVerse} notes={this.props.viewer.bibleVerse.notes}/>
 		  </div>
       <div className="Widget">
         <center>My Bookmarks</center>
@@ -46,11 +46,11 @@ export default Relay.createContainer(Bible, {
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
       	user(token:$token){id}
+	${NotesWidget.getFragment('viewer')}
       	bibleChapter (reference:$reference) {
       	  ${BibleWidget.getFragment('bibleChapter')}
              }
               bibleVerse (reference:$reference) {
-                ${Library.getFragment('bibleVerse')}
                 ${BibleWidget.getFragment('bibleVerse')}
            }
       	bible {

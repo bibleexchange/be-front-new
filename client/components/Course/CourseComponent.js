@@ -5,43 +5,31 @@ import Relay from 'react-relay';
 import Page from '../Page/PageComponent';
 import Navigation from './Navigation';
 import BibleWidget from '../Bible/WidgetComponent';
+import BibleVerse from '../Bible/BibleVerse';
+import NoteViewer from '../Note/NoteViewer';
 import marked from 'marked';
 
 import './Course.scss';
 
-class Note extends React.Component {
+class Lesson extends React.Component {
   render() {
 
-    let component = null;
-// type, api_request, body
-    switch(this.props.note.note.output.type){
+    let nextButton = null;
 
-      case "GITHUB":
-        component = <div dangerouslySetInnerHTML={{__html: this.props.note.note.output.body}} ></div>;
-        break;
-
-      case "BIBLE_VERSE":
-        component = JSON.parse(this.props.output.body).body;
-        break;
-
-      case "STRING":
-        component = <div dangerouslySetInnerHTML={{__html: this.props.note.note.output.body}} ></div>;
-        break;
-
-      case "MARKDOWN":
-        component = <div dangerouslySetInnerHTML={{__html: marked(this.props.note.note.output.body)}} ></div>;
-        break;
-
-      default:
-        component = this.props.note.note.output.body;
-
+    if(this.props.lesson.notes.edges.length < this.props.lesson.notesCount){
+      nextButton = <button onClick={this.props.handleNoteLoad}>Get {this.props.lesson.notes.edges.length + 1} of { this.props.lesson.notesCount}</button>;
+    }else{
+      nextButton = null;
     }
 
-    console.log(this.props.note.note.output.type);
-
-    return (
+      return (
         <div style={{padding:"15px"}}>
-          {component}
+          {this.props.lesson.notes.edges.map(function(note){
+            return <NoteViewer key={note.node.id} note={note.node} />;
+          })}
+
+          {nextButton}
+
         </div>
     );
   }
@@ -52,12 +40,13 @@ class Found extends React.Component {
 
 	  let next = false;
     let previous = false;
+    let course = this.props.course.course;
 
-    if(this.props.viewer.lessonnote.next !== null){
-      	next = { pathname:'/course/'+this.props.viewer.course.id+'/note/'+this.props.viewer.lessonnote.next.id};
+    if(course.lesson.next !== null){
+      	next = { pathname:'/course/'+course.id+'/lesson/'+course.lesson.next.id};
     }
-    if(this.props.viewer.lessonnote.previous !== null){
-        previous = { pathname:'/course/'+this.props.viewer.course.id+'/note/'+this.props.viewer.lessonnote.previous.id};
+    if(course.lesson.previous !== null){
+        previous = { pathname:'/course/'+course.id+'/lesson /'+course.lesson.previous.id};
     }
 
   let bibleWidget = null;
@@ -72,8 +61,8 @@ class Found extends React.Component {
       <Page heading={''} >
       	<div className="WidgetContainer">
               <div className="Widget">
-      	  <Navigation course={this.props.viewer.course} lessonnote={this.props.viewer.lessonnote} nextStepUrl={next} previousStepUrl={previous}/>
-      	  <Note note={this.props.viewer.lessonnote} />
+      	  <Navigation course={this.props.course.course} lesson={this.props.course.course.lesson} nextStepUrl={next} previousStepUrl={previous}/>
+      	  <Lesson lesson={this.props.course.course.lesson} handleNoteLoad={this.props.handleNoteLoad} />
        	</div>
         {/*}
       	<div className="Widget">
@@ -118,11 +107,18 @@ class Course extends React.Component {
     let renderThis = <Missing />;
 
     if(this.props.viewer.course !== null){
-      renderThis = <Found {...this.props}/>
+      renderThis = <Found {...this.props} handleNoteLoad={this.handleNoteLoad.bind(this)}/>
     }
 
     return renderThis;
   }
+
+  handleNoteLoad() {
+  // Increments the number of stories being rendered by 10.
+  this.props.relay.setVariables({
+    pageSize: this.props.relay.variables.pageSize + 1
+  });
+}
 
 }
 
@@ -135,6 +131,7 @@ export default Relay.createContainer(Course, {
     reference:"amos_1",
   	courseId: "1",
   	lessonnoteId:"1",
+    lessonId:"1",
   	pageSize: 1,
   	opaqueCursor: "opaqueCursor",
   	courseSlug:"",
@@ -142,68 +139,60 @@ export default Relay.createContainer(Course, {
     version:1
   },
   fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
+      course: () => Relay.QL`fragment on Viewer {
         course(id:$courseId){
+          ${Navigation.getFragment('course')}
           id
+          title
           lessons(first:100){
             edges{
               cursor
               node{
                 id
                 order_by
-                notes(first:100){
-                  edges {
-                    cursor
-                    node {
+              }
+            }
+          }
+          lesson(id:$lessonId){
+            ${Navigation.getFragment('lesson')}
+            id
+            order_by
+            title
+            summary
+            notesCount
+            next{id, title}
+            previous{id, title}
+            notes(first:$pageSize){
+              edges {
+                cursor
+                node {
+                  id
+                  next {
+                    id
+                  }
+                  note {
+                    output {
                       id
-                      next {
-                        id
-                      }
-                      note {
-                        output {
-                          id
-                          type
-                          api_request
-                          body
-                        }
-                      }
-                      previous {
-                        id
-                      }
+                      type
+                      api_request
+                      body
                     }
+                  }
+                  previous {
+                    id
                   }
                 }
               }
             }
-          }
-          ${Navigation.getFragment('course')}
         }
-        lessonnote( id:$lessonnoteId) {
-          id
-          lesson_id
-          order_by
-          next {
-            id
-          }
-          previous {
-            id
-          }
-          note {
-            id
-            output{
-              type
-              api_request
-              body
-            }
-          }
-          ${Navigation.getFragment('lessonnote')}
-        }
+      }
+    }`,
+
+      viewer: () => Relay.QL`fragment on Viewer {
         bible {
       	  ${BibleWidget.getFragment('bible')}
       	}
         bibleChapter(reference:$reference){
-          nextChapter {referenceSlug}
-          previousChapter {referenceSlug}
           ${BibleWidget.getFragment('bibleChapter')}
         }
       }`,

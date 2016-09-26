@@ -30,19 +30,26 @@ class Note extends React.Component {
 export default Relay.createContainer(Note, {
   fragments: {
     note: () => Relay.QL`
-      fragment on BibleNote  {
-	   id
-	   body
-     properties {
-       text
-       tags
-       resourceUrl
-       links
-     }
-	   author {
-	    id
-	    name
-	    }
+      fragment on Note  {
+        id
+        next {
+          id
+        }
+        note {
+          output {
+            id
+            type
+            api_request
+            body
+          }
+        }
+        previous {
+          id
+        }
+  	   author {
+  	    id
+  	    name
+  	    }
      }`
   }
 });
