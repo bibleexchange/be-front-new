@@ -23,11 +23,11 @@ export default Relay.createContainer(BibleVerseComponent, {
   fragments: {
   bibleVerse: () => Relay.QL`
       fragment on BibleVerse  {
-	 id
-  	 order_by
-	 body
-	 url
-	 notesCount
+      	 id
+         order_by
+      	 body
+      	 url
+      	 notesCount
      }`
   },
 });

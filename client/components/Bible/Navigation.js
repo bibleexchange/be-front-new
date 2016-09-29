@@ -92,10 +92,15 @@ class BibleBooksList extends React.Component {
     const closeAll = this.props.closeAll;
     const getChapter = this.props.getChapter;
     let filterBy = this.props.filterBy.toLowerCase();
+    let books = [];
+
+  if(this.props.bible !== null && this.props.bible.books !== null){
+    books = this.props.bible.books.edges;
+  }
 
     return (
 		<div>
-			{this.props.bible.books.edges.filter(function(el){return el.node.title.toLowerCase().includes(filterBy);}).map(function(book) {
+			{books.filter(function(el){return el.node.title.toLowerCase().includes(filterBy);}).map(function(book) {
 			  return <BibleBook book={book.node} key={Math.random()} closeAll={closeAll} />;
 			 })}
 		</div>
@@ -193,13 +198,15 @@ class Navigation extends React.Component {
 	this.state = {
 	  showModal:false,
 	  filterBooksBy:"",
-	  search:this.props.bibleChapter.reference? this.props.bibleChapter.reference:""
+	  search:this.props.bibleChapter? this.props.bibleChapter.reference:""
 	};
   }
 
   render() {
+    let next = { pathname:this.props.baseUrl, query: {} };
+    let previous = { pathname:this.props.baseUrl, query: {} };
 
-	const styles = {
+  const styles = {
 		btn:{border:'none', background:'transparent'},
 		next:{border:'none', background:'transparent'},
 		previous:{border:'none', background:'transparent'}
@@ -209,8 +216,10 @@ class Navigation extends React.Component {
 	  border:'none', background:'transparent'
 	};
 
-  let next = { pathname:this.props.baseUrl+this.props.bibleChapter.nextChapter.url, query: {} };
-  let previous = { pathname:this.props.baseUrl+this.props.bibleChapter.previousChapter.url, query: {} };
+  if(this.props.bibleChapter !== null){
+    let next = { pathname:this.props.baseUrl+this.props.bibleChapter.nextChapter.url, query: {} };
+    let previous = { pathname:this.props.baseUrl+this.props.bibleChapter.previousChapter.url, query: {} };
+  }
 
   if(this.props.baseUrl == "/"){
     next = { pathname:this.props.bibleChapter.nextChapter.url, query: {} };

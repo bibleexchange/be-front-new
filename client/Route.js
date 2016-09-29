@@ -12,6 +12,7 @@ import Bible from './components/Bible/BibleComponent';
 import Course from './components/Course/CourseComponent';
 import LibraryIndex from './components/Library/IndexComponent';
 import CourseIndex from './components/Course/IndexComponent';
+import CoursePrint from './components/Course/CoursePrintComponent';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import CourseEditor from './components/User/CourseEditor';
@@ -20,12 +21,15 @@ import JWTCallback from './components/App/JWTCallback';
 import Login from './components/Login/LoginComponent';
 import Signup from './components/Signup/SignupComponent';
 
+console.log('Route.js loaded.');
+
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
     <IndexRoute component={LibraryIndex} queries={ViewerQueries} />
 
     <Route path='course' >
       <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />
+      <Route path=':courseId/print' component={CoursePrint} queries={ViewerQueries} />
       <Route path=':courseId/lesson/:lessonId' component={Course} queries={CourseQueries} />
     </Route>
 

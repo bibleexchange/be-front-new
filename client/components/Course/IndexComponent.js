@@ -42,18 +42,28 @@ class IndexComponent extends React.Component {
 
   render() {
 
-    const baseUrl = '/course/'+this.props.viewer.course.id;
+   let baseUrl = '/course/';
+   let course = {title:"Course Could not Be Loaded!"};
+   let lessons = [];
+
+   if(this.props.viewer.course !== null){
+	course = this.props.viewer.course;
+	baseUrl = '/course/'+course.id;
+	lessons = course.lessons.edges;
+   }
 
     return (
       <Page heading={''} >
         <div className="WidgetContainer">
               <div className="Widget">
-                <center><h1>{this.props.viewer.course.title}</h1></center>
 
-                {this.props.viewer.course.lessons.edges.map(function(lesson){
+                <center><h1>{course.title}</h1></center>
+
+                {lessons.map(function(lesson){
                   return <LessonComponent key={lesson.node.id} lesson={lesson.node} baseUrl={baseUrl}/>;
                 })}
-
+                
+                <center><Link to={"/course/"+course.id+"/print"}>print this</Link></center>
               </div>
         </div>
       </Page>

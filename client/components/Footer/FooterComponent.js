@@ -6,7 +6,7 @@ class Footer extends React.Component {
 
   render() {
 
-	if(this.props.user.authenticated){
+	if(this.props.user !== null && this.props.user.authenticated){
 		var user = this.props.user;
 
 		var usingAs = <a href={user.email}> {user.name}</a>;

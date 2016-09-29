@@ -2,25 +2,11 @@ import React from 'react';
 import { Link } from "react-router";
 import Relay from 'react-relay';
 
-class Note extends React.Component {
-  render() {
-	return (<Link to={this.props.baseUrl+"/note/"+this.props.lessonnote.id} onClick={this.props.closeAll}>{this.props.lessonnote.order_by}</Link>)}
-}
-
 class Lesson extends React.Component {
   render() {
-    const closeAll = this.props.closeAll;
-    const baseUrl = this.props.baseUrl;
-
-	return (<ul>{this.props.lesson.title}
-    {this.props.lesson.notes.edges.map(function(lessonnote){
-      return <li key={lessonnote.node.id}><Note lessonnote={lessonnote.node} closeAll={closeAll} baseUrl={baseUrl}/></li>;
-    })}
-    </ul>);
+	   return (<Link to={this.props.baseUrl} onClick={this.props.closeAll}>{this.props.lesson.title}</Link>);
   }
 }
-
-
 
 class LessonsList extends React.Component {
 
@@ -62,13 +48,11 @@ class LessonsList extends React.Component {
 			  <span>&times;</span>
 			</button>
 
-			<h4>Choose a Step</h4>
+			<h4>Choose a Lesson</h4>
 
-			<ul>
 			{this.props.course.lessons.edges.map(function(lesson) {
-          return <li key={lesson.node.id}><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></li>;
+          return <h2 key={lesson.node.id}><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></h2>;
 			})}
-			</ul>
 
 		    </div>
 		</div>)
@@ -84,6 +68,16 @@ class Navigation extends React.Component {
   }
 
   render() {
+    	  let nextLessonUrl = false;
+        let previousLessonUrl = false;
+
+        if(this.props.lesson.next !== null){
+          	nextLessonUrl = { pathname:'/course/'+this.props.course.id+'/lesson/'+this.props.lesson.next.id};
+        }
+        if(this.props.lesson.previous !== null){
+            previousLessonUrl = { pathname:'/course/'+this.props.course.id+'/lesson/'+this.props.lesson.previous.id};
+        }
+
   let previousLink = null;
   let nextLink = null;
 
@@ -97,11 +91,11 @@ class Navigation extends React.Component {
 	  border:'none', background:'transparent'
 	};
 
-	if(this.props.previousStepUrl){
-    previousLink = <Link to={this.props.previousStepUrl} className="btn btn-default" style={styles.previous}>PREVIOUS</Link>;
+	if(previousLessonUrl){
+    previousLink = <Link to={previousLessonUrl} className="btn btn-default" style={styles.previous} >PREVIOUS</Link>;
   }
-	if(this.props.nextStepUrl){
-    nextLink = 	<Link to={this.props.nextStepUrl? this.props.nextStepUrl:"#"}  className="btn btn-default" style={styles.next} onClick={this.props.getNextHandler}>NEXT</Link>;
+	if(nextLessonUrl){
+    nextLink = 	<Link to={nextLessonUrl}  className="btn btn-default" style={styles.next}>NEXT</Link>;
   }
 
     return (<div>

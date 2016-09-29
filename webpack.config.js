@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   title:"this is a test",
@@ -36,19 +37,22 @@ module.exports = {
       loaders: [
         'style',
         'css',
-		'postcss',
-		'sass'
+	'postcss',
+	'sass'
       ]
     }, {
       test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ico)$/,
       loader: 'url-loader?limit=1000000&name=assets/[hash].[ext]'
     },
-	{
+    {
 	  test: /\.eot/,
       loader: 'url-loader?mimetype=application/vnd.ms-fontobject'
     }, {
       test: /\.ttf/,
       loader: 'url-loader?mimetype=application/x-font-ttf'
+    }, {
+      test: /\.json/,
+      loader: 'json-loader'
     }
 	]
   },
@@ -64,6 +68,16 @@ module.exports = {
       template: './client/index.html',
       mobile: true,
       inject: false
-    })
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('development'),
+	'GRAPHQL_ENDPOINT':JSON.stringify('http://127.0.0.1:8080/graphql'),
+	'GRAPHQL_SERVER_IS':JSON.stringify('mysql')
+      }
+    }),
+  new CopyWebpackPlugin([
+    {from : 'client/assets', to: __dirname + '/build'}
+  ]),
   ]
 };

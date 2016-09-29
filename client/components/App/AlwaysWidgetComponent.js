@@ -72,9 +72,9 @@ export default Relay.createContainer(AlwaysWidgetComponent, {
       	id
       	type
       	author{
-	  id
-	  name
-	}
+      	  id
+      	  name
+      	}
       	body
       	bible_verse_id
       }`,

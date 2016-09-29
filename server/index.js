@@ -3,7 +3,6 @@ import path from 'path';
 import webpack from 'webpack';
 import express from 'express';
 import WebpackDevServer from 'webpack-dev-server';
-import historyApiFallback from 'connect-history-api-fallback';
 import chalk from 'chalk';
 import webpackConfig from '../webpack.config';
 import config from './config/environment';
@@ -12,7 +11,6 @@ import config from './config/environment';
   const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',
     proxy: {
-      '/graphql': `http://127.0.0.1:${config.graphql.port}`,
       '/login': `http://127.0.0.1:${config.graphql.port}`,
     },
     stats: {

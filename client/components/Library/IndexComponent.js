@@ -286,7 +286,7 @@ console.log(this.props.library);
 class LibraryItem extends React.Component {
 
   render() {
-console.log(this.props.library);
+
     return (
     <div>
       <center><h1>{this.props.library.title}</h1></center>
@@ -304,6 +304,11 @@ console.log(this.props.library);
 class Index extends React.Component {
 
   render() {
+    let libraries = [];
+
+    if(this.props.viewer.libraries !== null && this.props.viewer.libraries !== undefined){
+      libraries = this.props.viewer.libraries.edges;
+    }
 
     return (
 	<Page heading={''}>
@@ -316,7 +321,9 @@ class Index extends React.Component {
 
           <div className="Widget">
 
-      		{this.props.viewer.libraries.edges.map(function(library){
+          <Link to={"/notes"}>Notes Page</Link>
+
+      		{libraries.map(function(library){
             if(library.node.courses.edges.length > 0){
         		  return (
         			<LibraryItem key={library.node.id} library={library.node}/>
@@ -384,20 +391,20 @@ export default Relay.createContainer(Index, {
 
 		 libraries(first:10){
 		       edges {
-			 cursor
-			 node {
-			   id
-			   title
-			   courses(first:10){
-			   edges {
-			    cursor
-			    node{
-				id
-				title
-			    }
-			   }
-                           }
-			 }
+      			 cursor
+      			 node {
+      			   id
+      			   title
+      			   courses(first:10){
+      			   edges {
+      			    cursor
+      			    node{
+      				id
+      				title
+      			    }
+      			   }
+              }
+      			 }
 		       }
 		     }
 		}`

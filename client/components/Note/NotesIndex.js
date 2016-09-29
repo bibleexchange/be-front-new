@@ -7,21 +7,21 @@ import NotesWidget from './NotesWidget';
 class NotesIndex extends React.Component {
 
   render() {
-console.log();
+
     return (
 			<Page heading={''} >
       	<div className="WidgetContainer">
               <div className="Widget">
-                <NotesWidget filter={null} viewer={this.props.viewer} />
+                <NotesWidget filter={''} viewer={this.props.viewer} />
               </div>
        	</div>
       </Page>
-    )
+    );
+
   }
 
 	_handleLoadMoreNotes(){
 		console.log('loading data...');
-
 	}
 
 }
@@ -37,27 +37,7 @@ export default Relay.createContainer(NotesIndex, {
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
-        ${NotesWidget.getFragment('viewer')}
-        notes (first:$pageSize, after:$after){
-					pageInfo{
-						hasNextPage
-						hasPreviousPage
-						endCursor
-					}
-      	  edges {
-						cursor
-						node{
-							id
-							output {
-								id
-								type
-								api_request
-								body
-							}
-
-						}
-					}
-      	}
-      }`,
-    },
+         ${NotesWidget.getFragment('viewer')}
+       }`,
+  }
 });

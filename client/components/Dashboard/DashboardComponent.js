@@ -1,14 +1,18 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { Button, Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Link } from 'react-router';
 import Page from '../Page/PageComponent';
 import BookMarksWidget from './BookMarksWidget';
 import Relay from 'react-relay';
 
 import './Dashboard.scss';
+import '../../assets/svg/be-background.svg';
 
 class Dashboard extends React.Component {
+
+ componentWillMount(){
+	console.log('DashboardComponent is going to mount.');
+}
 
   render() {
     let user = this.props.viewer.user;
@@ -18,8 +22,8 @@ class Dashboard extends React.Component {
 	<Page heading={''}>
  	  <div className="WidgetContainer">
 	    <div className="Widget">
-        <BookMarksWidget user={this.props.viewer.user} navs={navs}/>
-		    </div>
+              <BookMarksWidget user={this.props.viewer.user} navs={navs}/>
+	    </div>
 	  </div>
 	</Page>
     );
@@ -42,7 +46,7 @@ Dashboard.propTypes = {
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-          user(token:$token){
+          user{
             ${BookMarksWidget.getFragment('user')}
             id
             authenticated

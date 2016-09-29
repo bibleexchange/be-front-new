@@ -4,41 +4,8 @@ import './Navbar.scss';
 import BeLogo from '../Svg/BeLogo';
 import Relay from 'react-relay';
 
-class UserLoggedIn extends React.Component {
-
-  render() {
-	let user = this.props.user;
-
-    return (
-    <ul>
-		<li>
-		  <button onClick={this.props.handleLogout}>
-			{user.username}	(Logout)
-		  </button>
-		</li>
-		<li>
-		  <button onClick={this.props.handleBookMark}>
-			   {this.props.message} bookmark
-		  </button>
-		</li>
-	 </ul>
-    );
-  }
-
-}
-
-class UserLoggedOut extends React.Component {
-  render() {
-    return (
-		<ul>
-			<li><Link to="/login">Login</Link></li>
-			<li><Link to="/signup">Signup</Link></li>
-		</ul>
-    );
-  }
-
-}
-
+import UserLoggedOut from './UserLoggedOut';
+import UserLoggedIn from './UserLoggedIn';
 
 class Navbar extends React.Component {
 
@@ -53,12 +20,12 @@ class Navbar extends React.Component {
 	let user = this.props.user;
 	let url = this.props.location.pathname;
 	let inOrOut = 'loading...';
-	//console.log('deciding session stuff based on: ', user);
+	console.log('deciding session stuff based on: ', user, this.state.online);
 
-	if(user.authenticated) {
-		inOrOut = <UserLoggedIn message={this.state.message} url={url} user={user} handleLogout={this.handleLogout.bind(this)} handleBookMark={this.handleBookMark.bind(this)}/>;
+	if(user !== null && user.authenticated && user.authenticated !== "false") {
+	  inOrOut = <UserLoggedIn message={this.state.message} url={url} user={user} />;
 	}else {
-	   inOrOut = <UserLoggedOut message={this.state.message}/>;
+	  inOrOut = <UserLoggedOut message={this.state.message} user={this.props.user}/>;
 	}
 
     return (
@@ -73,34 +40,6 @@ class Navbar extends React.Component {
 				</nav>
 		 	</header>
     );
-  }
-
-  handleLogout(e) {
-	e.preventDefault();
-	console.log('You should really build a way to log me out!');
-  }
-
-  handleBookMark(e) {
-	e.preventDefault();
-	console.log('I would like a book mark feature sometime soon! ', this.props.location.pathname);
-
-    if(this.props.location.pathname !== null){
-      let navs = JSON.parse(localStorage.getItem('navs'));
-
-      if (navs == null){
-        navs = [];
-      }
-
-      navs.unshift(this.props.location.pathname);
-      localStorage.setItem('navs', JSON.stringify(navs));
-
-      this.props.handleUpdateBookmarks(navs);
-
-      this.setState({message:'bookmarked'});
-      var that = this;
-      setTimeout(function(){that.setState({message:''}); }, 1500);
-    }
-
   }
 
 }
@@ -118,9 +57,12 @@ export default Relay.createContainer(Navbar, {
     user: () => Relay.QL`
       fragment on User {
       	id
+        token
       	email
       	name
       	authenticated
+        ${UserLoggedIn.getFragment('user')}
+        ${UserLoggedOut.getFragment('user')}
       }
     `,
   },

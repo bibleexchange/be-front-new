@@ -28,11 +28,16 @@ class WidgetComponent extends React.Component {
   render() {
 
     const baseUrl = this.props.baseUrl;
+    let verses = [];
 
+    if(this.props.bibleChapter !== null){
+      verses = this.props.bibleChapter.verses.edges;
+    }
+    
     return (
       <div>
       	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl}/>
-      	  {this.props.bibleChapter.verses.edges.map(function(verse) {
+      	  {verses.map(function(verse) {
       		return <BibleVerse bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl}/>;
       	  })}
       </div>

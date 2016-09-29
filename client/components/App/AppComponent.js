@@ -15,18 +15,21 @@ import '../../assets/favicons/favicon.ico';
 class App extends React.Component {
 
     componentWillMount(){
+
       this.state = {
        oembedStatus:"closed",
        noteStatus:"closed",
-       oembed:{},
+       oembed:{}
 
      };
+
     }
-
+	
     render() {
-
-    return (
-		  <div>
+	
+   
+	return (
+	<div>
 			<MainNavigation location={this.props.location} updateIt={this.state} route={this.props.route} user={this.props.viewer.user} handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}/>
 			  {this.props.children}
 
@@ -102,14 +105,13 @@ App.propTypes = {
 
 export default Relay.createContainer(App, {
   initialVariables: {
-    token:"dummystring",
     noteId: "YXJyYXljb25uZWN0aW9uOjc",
     verseId: "YXJyYXljb25uZWN0aW9uOjc"
   },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-          user(token:$token){
+          user{
             email
             ${MainNavigation.getFragment('user')}
             ${Footer.getFragment('user')}
