@@ -9,47 +9,17 @@ class UserLoggedIn extends React.Component {
     return (
     <ul>
 		<li>
-		  <button onClick={this.handleLogout.bind(this)}>
-			{user.username}	(Logout)
+		  <button onClick={this.props.handleLogout}>
+			{user.name}	(Logout)
 		  </button>
 		</li>
 		<li>
-		  <button onClick={this.handleBookMark.bind(this)}>
-			   {this.props.message} bookmark
+		  <button onClick={this.props.handleBookmark}>
+			   bookmark
 		  </button>
 		</li>
 	 </ul>
     );
-  }
-
-  handleLogout(e) {
-  	//e.preventDefault();
-  	console.log('You should really build a way to log me out!');
-    localStorage.removeItem('be_token');
-      window.location.href = '/logout';
-  }
-
-  handleBookMark(e) {
-  	e.preventDefault();
-  	console.log('I would like a book mark feature sometime soon! ', this.props.location.pathname);
-
-    if(this.props.location.pathname !== null){
-      let navs = JSON.parse(localStorage.getItem('navs'));
-
-      if (navs == null){
-        navs = [];
-      }
-
-      navs.unshift(this.props.location.pathname);
-      localStorage.setItem('navs', JSON.stringify(navs));
-
-      this.props.handleUpdateBookmarks(navs);
-
-      this.setState({message:'bookmarked'});
-      var that = this;
-      setTimeout(function(){that.setState({message:''}); }, 1500);
-    }
-
   }
 
 }

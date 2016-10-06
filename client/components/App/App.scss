@@ -9,3 +9,43 @@ html, body {
   min-height: 100vh;
   flex-direction: column;
 }
+
+body > #root {
+      min-height: 100%;
+      height: 100%;
+      height: auto !important;
+      margin: 0 auto -25px; /* the bottom margin is the negative value of the footer's height */
+      position: relative;
+      background: url(../../assets/svg/be-background.svg);
+      background-size: 20%;
+}
+
+.container {
+  height: 100%;
+}
+
+#footer {
+      bottom: 0px;
+      width: 100%;
+      text-align: center;
+      position:absolute;
+}
+
+#footer, .push {
+    height: 25px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  min-height: 100%;
+}
+
+.heading {
+  font-size: 2em;
+  font-weight: normal;
+  width: 100%;
+  display: block;
+}

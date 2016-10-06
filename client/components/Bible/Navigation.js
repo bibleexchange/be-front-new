@@ -216,9 +216,13 @@ class Navigation extends React.Component {
 	  border:'none', background:'transparent'
 	};
 
-  if(this.props.bibleChapter !== null){
-    let next = { pathname:this.props.baseUrl+this.props.bibleChapter.nextChapter.url, query: {} };
-    let previous = { pathname:this.props.baseUrl+this.props.bibleChapter.previousChapter.url, query: {} };
+  if(this.props.bibleChapter !== null ){
+    if(this.props.bibleChapter.nextChapter !== undefined ){
+      next = { pathname:this.props.baseUrl+this.props.bibleChapter.nextChapter.url, query: {} };
+    }
+    if(this.props.bibleChapter.previousChapter !== undefined ){
+        previous = { pathname:this.props.baseUrl+this.props.bibleChapter.previousChapter.url, query: {} };
+    }
   }
 
   if(this.props.baseUrl == "/"){

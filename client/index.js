@@ -23,8 +23,7 @@ if (navigator.serviceWorker) {
 }
 
 //send to dom
-const mountNode = document.createElement('div');
-document.body.appendChild(mountNode);
+const mountNode = document.getElementById('root');
 
 if(process.env.GRAPHQL_SERVER_IS === "mock"){
  //ahavent fugured this out yet
@@ -33,11 +32,10 @@ if(process.env.GRAPHQL_SERVER_IS === "mock"){
 }
 
   ReactDOM.render(
-    <Router 
-	history={browserHistory} 
-	routes={Route} 
-	render={applyRouterMiddleware(useRelay)} 
+    <Router
+	history={browserHistory}
+	routes={Route}
+	render={applyRouterMiddleware(useRelay)}
 	environment={Relay.Store} />,
   mountNode
 );
-

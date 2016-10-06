@@ -1,33 +1,61 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import Page from '../Page/PageComponent';
 import BibleWidget from './WidgetComponent';
-import NotesWidget from '../Bible/NotesWidget';
+import NotesWidget from '../Note/NotesWidget';
 
 import './Bible.scss';
+import './NotesWidget.scss';
 
 class Bible extends React.Component {
 
+  componentDidUpdate() {
+    window.scrollTo(0,0);
+  }
+
   render() {
-    let navs = localStorage.getItem('navs');
+
     let reference = "";
 
-    if(this.props.viewer !== null && this.props.viewer.bibleVerse !== null){
+    let user = {null};
+    let bibleChapter = {null};
+    let bibleVerse = {null};
+
+    if(this.props.viewer.user !== null){
+      user = this.props.viewer.user;
+    }
+
+    if(this.props.viewer.bibleChapter !== null && this.props.viewer.bibleChapter !== undefined){
+      bibleChapter = this.props.viewer.bibleChapter;
+    }
+
+    if(this.props.viewer.bibleVerse !== null && this.props.viewer.bibleVerse !== undefined){
+      bibleVerse = this.props.viewer.bibleVerse;
+    }
+
+    if(this.props.viewer !== null && this.props.viewer.bibleVerse !== null && this.props.viewer.bibleVerse !== undefined){
       reference = this.props.viewer.bibleVerse.reference;
     }
-    
+
     return (
-	<Page heading={''}>
-		<div className="WidgetContainer" >
+		<div id="bible" className="WidgetContainer" >
 		  <div className="Widget">
-			    <BibleWidget history={this.props.history} baseUrl="" bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={this.props.viewer.bibleVerse}/>
+			    <BibleWidget
+            history={this.props.history}
+            baseUrl=""
+            bible={this.props.viewer.bible}
+            bibleChapter={bibleChapter}
+            bibleVerse={bibleVerse}
+          />
 			  </div>
 			  <div className="Widget">
-		      <NotesWidget filter={reference} viewer={this.props.viewer.bibleVerse} />
+    		  <NotesWidget
+            filter={reference}
+    		    viewer={this.props.viewer}
+    		    selectNote={null}
+            tags={true}/>
 			  </div>
 	 </div>
-  </Page>
     );
   }
 
@@ -44,12 +72,12 @@ export default Relay.createContainer(Bible, {
     token: "nothinghere",
     startCursor : "",
     pageSize: 5,
-    filter:"Genesis 1:2"
+    filter:""
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
+        ${NotesWidget.getFragment('viewer')}
         user {id}
-
         bibleChapter (reference:$reference) {
       	  ${BibleWidget.getFragment('bibleChapter')}
         }
@@ -58,7 +86,6 @@ export default Relay.createContainer(Bible, {
           id
           reference
           ${BibleWidget.getFragment('bibleVerse')}
-	        ${NotesWidget.getFragment('viewer')}
           notes(first:$pageSize){
             edges{
               node{

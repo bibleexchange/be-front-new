@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import Page from '../Page/PageComponent';
 import Navigation from './Navigation';
 import BibleWidget from '../Bible/WidgetComponent';
 import BibleVerse from '../Bible/BibleVerse';

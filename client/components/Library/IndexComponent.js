@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router";
 import Relay from 'react-relay';
-import Page from '../Page/PageComponent';
 import BibleWidget from '../Bible/WidgetComponent';
 
 import './Index.scss';
@@ -310,13 +309,26 @@ class Index extends React.Component {
       libraries = this.props.viewer.libraries.edges;
     }
 
-    return (
-	<Page heading={''}>
+    let bibleChapter = {};
+    let bibleVerse = {};
 
+    if(this.props.viewer.bibleChapter !== null){
+      bibleChapter = this.props.viewer.bibleChapter;
+    }
+
+    if(this.props.viewer.bibleVerse !== null){
+      bibleVerse = this.props.viewer.bibleVerse;
+    }
+
+
+    return (
 	      <div className="WidgetContainer" >
 
           <div className="Widget" >
-      		    <BibleWidget history={this.props.history} baseUrl="" bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={this.props.viewer.bibleVerse}/>
+      		    <BibleWidget history={this.props.history} baseUrl=""
+                bible={this.props.viewer.bible}
+                bibleChapter={bibleChapter}
+                bibleVerse={bibleVerse}/>
       		</div>
 
           <div className="Widget">
@@ -332,7 +344,6 @@ class Index extends React.Component {
       		})}
           </div>
 	      </div>
-      </Page>
     )
   }
 

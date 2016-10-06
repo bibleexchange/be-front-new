@@ -1,21 +1,31 @@
 import React from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
-import Page from '../Page/PageComponent';
 import NotesWidget from './NotesWidget';
+
+import '../Bible/NotesWidget.scss';
 
 class NotesIndex extends React.Component {
 
   render() {
 
+    let filterBy = '';
+
+    if(this.props.params.filterBy !== undefined){
+      filterBy = this.props.params.filterBy;
+    }
+
     return (
-			<Page heading={''} >
-      	<div className="WidgetContainer">
+      	<div id="bible" className="WidgetContainer">
               <div className="Widget">
-                <NotesWidget filter={''} viewer={this.props.viewer} />
+                <NotesWidget
+                  filter={filterBy}
+                  viewer={this.props.viewer}
+                  selectNote={null}
+                  tags={true}
+                   />
               </div>
        	</div>
-      </Page>
     );
 
   }

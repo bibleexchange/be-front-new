@@ -1,35 +1,67 @@
 import React from 'react';
 import Relay from 'react-relay';
 import LoginComponent from '../Login/LoginComponent';
+import SignUpComponent from '../Login/SignUpComponent';
 import { Link } from 'react-router';
 
 class UserLoggedOut extends React.Component {
 
   componentWillMount(){
     this.state = {
-      closed : true
+      closed : true,
+      signUpStatus: false
     };
   }
 
   render() {
 
+    let Login = null;
+
+    if(this.props.online){
+      Login = <div><li>
+        <button onClick={this.handleLoginStatus.bind(this)} >Login</button></li><li>
+        <button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li></div>;
+    }
+
     return (
 		<ul>
-			<li><button onClick={this.handleLogin.bind(this)} onMouseEnter={this.handleLogin.bind(this)}>Login</button></li>
-			<li><Link to="/signup">Signup</Link></li>
+      {Login}
 
-      <LoginComponent status={this.state.closed} handleStatus={this.handleLogin.bind(this)} user={this.props.user} />
+      <LoginComponent
+       status={this.state.closed}
+       handleLogin={this.props.handleLogin}
+       handleStatus={this.handleLoginStatus.bind(this)}
+       user={this.props.user}
+       UpdateLoginEmail={this.props.UpdateLoginEmail}
+       UpdateLoginPassword={this.props.UpdateLoginPassword}
+      />
 
+      <SignUpComponent
+       status={this.state.signUpStatus}
+       handleEditSignup={this.props.handleEditSignup}
+       handleStatus={this.handleSignUpStatus.bind(this)}
+       user={this.props.user}
+       handleSignUp={this.props.handleSignUp}
+      />
 		</ul>
     );
   }
 
-  handleLogin(){
+  handleLoginStatus(){
     let status = this.state.closed;
     this.setState({closed:status? false:true});
   }
 
+  handleSignUpStatus(){
+    let status = this.state.signUpStatus;
+    this.setState({signUpStatus:status? false:true});
+  }
+
 }
+
+UserLoggedOut.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 UserLoggedOut.propTypes = {
   user: React.PropTypes.object.isRequired

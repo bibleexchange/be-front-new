@@ -20,12 +20,28 @@ class Navbar extends React.Component {
 	let user = this.props.user;
 	let url = this.props.location.pathname;
 	let inOrOut = 'loading...';
-	console.log('deciding session stuff based on: ', user, this.state.online);
+	console.log('deciding session stuff based on: 1) User is Loggedin--'+ this.props.loggedIn, '& 2) User is online--'+  this.props.online);
 
-	if(user !== null && user.authenticated && user.authenticated !== "false") {
-	  inOrOut = <UserLoggedIn message={this.state.message} url={url} user={user} />;
+	if(this.props.loggedIn) {
+	  inOrOut = <UserLoggedIn
+      loggedIn={this.props.loggedIn}
+      handleLogout={this.props.handleLogout}
+      message={this.state.message}
+      url={url} user={user}
+      handleBookmark={this.props.handleBookmark}
+      online={this.props.online}
+      />;
 	}else {
-	  inOrOut = <UserLoggedOut message={this.state.message} user={this.props.user}/>;
+	  inOrOut = <UserLoggedOut
+      loggedIn={this.props.loggedIn}
+      handleLogin={this.props.handleLogin}
+      handleSignUp={this.props.handleSignUp}
+      message={this.state.message}
+      user={this.props.user}
+      UpdateLoginEmail={this.props.UpdateLoginEmail}
+      UpdateLoginPassword={this.props.UpdateLoginPassword}
+      online={this.props.online}
+      />;
 	}
 
     return (

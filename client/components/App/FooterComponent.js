@@ -6,20 +6,16 @@ class Footer extends React.Component {
 
   render() {
 
-	if(this.props.user !== null && this.props.user.authenticated){
+	if(this.props.loggedIn & this.props.user !== null){
 		var user = this.props.user;
-
 		var usingAs = <a href={user.email}> {user.name}</a>;
-
 	}else {
 		var user = {email:"guest", name:"guest"};
 		var usingAs = "a guest";
 	}
 
     return (
-	   <center className="redBG">
-		Using Bible exchange as {usingAs}
-	   </center>
+	   <center>Using Bible exchange as {usingAs}</center>
     );
   }
 }

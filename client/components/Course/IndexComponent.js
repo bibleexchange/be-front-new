@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import Page from '../Page/PageComponent';
 
 //import './Course.scss';
 
@@ -53,20 +52,18 @@ class IndexComponent extends React.Component {
    }
 
     return (
-      <Page heading={''} >
         <div className="WidgetContainer">
               <div className="Widget">
 
-                <center><h1>{course.title}</h1></center>
+                <center><h1>{course.title} <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup></h1></center>
 
                 {lessons.map(function(lesson){
                   return <LessonComponent key={lesson.node.id} lesson={lesson.node} baseUrl={baseUrl}/>;
                 })}
-                
+
                 <center><Link to={"/course/"+course.id+"/print"}>print this</Link></center>
               </div>
         </div>
-      </Page>
     );
   }
 

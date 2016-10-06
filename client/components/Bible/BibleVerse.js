@@ -9,7 +9,7 @@ class BibleVerseComponent extends React.Component {
     return (
 	<div style={{margin:"15px", fontSize:"1.3em"}}>
 	  <Link to={!this.props.bibleVerse.url ? "":this.props.bibleVerse.url} style={{color:"black"}}>
-	    <p id={this.props.bibleVerse.id} className="ui-widget-content">
+	    <p id={this.props.bibleVerse.id} >
 	      <sup>{this.props.bibleVerse.order_by}</sup>{this.props.bibleVerse.body} [{this.props.bibleVerse.notesCount}]
 	    </p>
 	  </Link>

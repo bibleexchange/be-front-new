@@ -1,33 +1,12 @@
 import React from 'react';
-import LoginUserMutation from '../../mutations/LoginUserMutation';
 import Relay from 'react-relay';
+import './Login.scss';
 
 class LoginComponent extends React.Component {
 
-  componentWillMount(){
-    this.state = {
-      email : null,
-      password:null,
-      token:null
-    };
-  }
-
   render() {
 
-    let loginFormStyle = {
-      position:"absolute",
-      display:"none",
-      width: '100%',
-      backgroundColor:"rgba(0, 0, 0, 0.5)",
-      left:"0"
-    };
-
-    let inputStyle = {
-      display:"block",
-      padding:"20px",
-      width:"100%",
-      margin:"auto"
-    };
+    let loginFormStyle = {};
 
     if(!this.props.status){
       loginFormStyle.display = "block";
@@ -35,50 +14,24 @@ class LoginComponent extends React.Component {
 
     return (
 
-        <div style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
+        <div id="login-form" style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
 
-            <form id="login-form" style={{ margin: 'auto', width:"70%" , padding:"50px"}} >
+            <form >
 
-                <input type="text" onChange={(e) => {this.setState({email:e.target.value})}} placeholder='email' style={inputStyle} ref="email" />
+                <input type="text" onChange={this.props.UpdateLoginEmail} placeholder='email' ref="email" />
 
-                <input type="password" onChange={(e) => {this.setState({password:e.target.value})}} placeholder='password' style={inputStyle} ref="password" />
+                <input type="password" onChange={this.props.UpdateLoginPassword} placeholder='password' ref="password" />
 
-                <input type="checkbox" label='Remember me' style={inputStyle} />
+                <input type="checkbox" label='Remember me'  />
                 <hr />
 
-                <input type="button" value="Login" style={inputStyle} onClick={this.handleSubmit.bind(this)}/>
+                <input type="button" value="Login" onClick={this.props.handleLogin}/>
                 <br />
                 <a href='#'>Forgot password</a>
             </form>
 
         </div>
     );
-  }
-
-  handleSubmit(e){
-    //e.preventDefault();
-
-    var onSuccess = (Login) => {
-      console.log('Mutation successful!', Login ,' Stored token: ', Login.loginUser.user.token);
-	    localStorage.setItem("be_token", Login.loginUser.user.token);
-      this.setState({token:Login.loginUser.user.token});
-      window.location.href = '/log-me-in';
-    };
-
-    var onFailure = (transaction) => {
-      var error = transaction.getError() || new Error('Mutation failed.');
-      console.error(error);
-    };
-
-   let details = {
-	email: this.refs.email.value,
-	password: this.refs.password.value
-   };
-
-    Relay.Store.commitUpdate(
-       new LoginUserMutation({input: details, user: this.props.user}), {onFailure, onSuccess}
-     );
-
   }
 
 }
@@ -96,7 +49,6 @@ export default Relay.createContainer(LoginComponent, {
       	email
       	name
       	authenticated
-        ${LoginUserMutation.getFragment('user')}
       }
     `,
   },

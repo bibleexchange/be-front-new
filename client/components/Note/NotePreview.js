@@ -2,7 +2,10 @@ import React from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
 import N from '../../NoteTypes';
+
 import DCRecording from './Preview/DCRecording';
+import BibleVerse from './Preview/BibleVerse';
+
 import marked from 'marked';
 
 class NotePreview extends React.Component {
@@ -31,11 +34,10 @@ class NotePreview extends React.Component {
         break;
 
       case N.DC_RECORDING:
-
-          let recording = JSON.parse(note.output.body);
-          if(note.output.api_request === false){recording.body = JSON.parse(recording.body);}
-
-          component = <DCRecording recording={recording} request={note.output.api_request} type={note.output.type} author={note.author} verse={this.props.note.verse}/>;
+          if(typeof note.output.body === 'string' || note.output.body instanceof String){
+            note.output.body = JSON.parse(note.output.body);
+          }
+          component = <DCRecording note={note} />;
         break;
 
       default:

@@ -1,7 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
-import NotesWidgetComponent from '../Note/NotesWidgetComponent';
-import NotePreview from '../Note/NotePreview';
+import NotesWidgetComponent from './NotesWidgetComponent';
+import NotePreview from './NotePreview';
 
 NotesWidgetComponent.propTypes = {
    viewer: React.PropTypes.object.isRequired
@@ -14,7 +14,7 @@ export default Relay.createContainer(NotesWidgetComponent, {
   },
   fragments: {
     viewer: () => Relay.QL`
-      fragment on BibleVerse  {
+      fragment on Viewer  {
       	 notes (first:$pageSize, after:$startCursor){
       	   edges {
       	     cursor

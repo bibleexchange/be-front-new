@@ -5,9 +5,6 @@ import BibleVerse from './BibleVerse';
 import BibleNavigation from './Navigation';
 import { Link } from 'react-router';
 
-import './Widget.scss';
-
-
 class BibleChapterComponent extends React.Component {
 
   render() {
@@ -30,10 +27,10 @@ class WidgetComponent extends React.Component {
     const baseUrl = this.props.baseUrl;
     let verses = [];
 
-    if(this.props.bibleChapter !== null){
+    if(this.props.bibleChapter !== null && this.props.bibleChapter.verses !== undefined){
       verses = this.props.bibleChapter.verses.edges;
     }
-    
+
     return (
       <div>
       	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl}/>

@@ -18,7 +18,7 @@ export default class NotesWidgetComponent extends React.Component {
 	let filterBy = this.state.filterNotesBy.toLowerCase();
   let notes = [];
 
-      if(this.props.viewer !== null && this.props.viewer.notes !== null){
+      if(this.props.viewer !== null && this.props.viewer.notes !== null && this.props.viewer.notes !== undefined){
           notes = this.props.viewer.notes.edges;
       }
 

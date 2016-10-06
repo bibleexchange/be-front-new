@@ -1,31 +1,40 @@
 /* eslint-disable global-require */
 import React from 'react';
 import { Link } from 'react-router';
-import Page from '../Page/PageComponent';
 import BookMarksWidget from './BookMarksWidget';
 import Relay from 'react-relay';
-
 import './Dashboard.scss';
 import '../../assets/svg/be-background.svg';
 
 class Dashboard extends React.Component {
 
+  constructor(props) {
+    super(props);
+}
+
  componentWillMount(){
-	console.log('DashboardComponent is going to mount.');
+  if(this.props.viewer.user.authenticated === "false"){
+    this.context.router.push('/');
+  }
 }
 
   render() {
-    let user = this.props.viewer.user;
-    let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
-    localStorage.setItem('navs',JSON.stringify(navs));
+
+    let user = {};
+    let navs = [];
+
+    if(this.props.viewer.user.authenticated !== "false"){
+      user = this.props.viewer.user;
+      navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
+      localStorage.setItem('navs',JSON.stringify(navs));
+    }
+
     return (
-	<Page heading={''}>
  	  <div className="WidgetContainer">
 	    <div className="Widget">
-              <BookMarksWidget user={this.props.viewer.user} navs={navs}/>
+          <BookMarksWidget user={this.props.viewer.user} navs={navs}/>
 	    </div>
 	  </div>
-	</Page>
     );
   }
 
@@ -34,6 +43,10 @@ class Dashboard extends React.Component {
   }
 
 }
+
+Dashboard.contextTypes = {
+   router: React.PropTypes.object.isRequired
+ };
 
 Dashboard.propTypes = {
 	viewer: React.PropTypes.object.isRequired,
@@ -47,7 +60,6 @@ Dashboard.propTypes = {
     viewer: () => Relay.QL`
       fragment on Viewer {
           user{
-            ${BookMarksWidget.getFragment('user')}
             id
             authenticated
             name

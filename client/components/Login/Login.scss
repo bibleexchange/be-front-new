@@ -1,0 +1,20 @@
+#login-form {
+      position:absolute;
+      display:none;
+      width: 100%;
+      background-color:rgba(0, 0, 0, 0.5);
+      left:0;
+    }
+
+#login-form form {
+  margin: auto;
+  width:70%;
+  padding:50px;
+}
+
+#login-form input  {
+      display:block;
+      padding:20px;
+      width:100%;
+      margin:auto;
+    }

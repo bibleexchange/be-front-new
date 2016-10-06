@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import Page from '../Page/PageComponent';
 import Lesson from './LessonComponent';
 import Navigation from './Navigation';
 import BibleWidget from '../Bible/WidgetComponent';
@@ -24,7 +23,6 @@ class Found extends React.Component {
   }
 */
     return (
-      <Page heading={''} >
       	<div className="WidgetContainer">
               <div className="Widget">
       	  <Navigation course={this.props.course.course} lesson={this.props.course.course.lesson} />
@@ -36,7 +34,6 @@ class Found extends React.Component {
       	</div>
         */}
       	</div>
-      </Page>
     );
   }
 

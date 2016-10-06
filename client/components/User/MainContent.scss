@@ -1,0 +1,67 @@
+@import "./variables.scss";
+
+#course-editor {
+
+  #main-content {
+
+    border:none;
+    width:100%;
+    margin:0;
+
+    #lesson {
+      width:100%;
+      margin:0;
+
+      > div {
+        border:none;
+      }
+
+      #notes-count{
+        margin:15px;
+      }
+
+      #main {
+        background-color:rgba(255,255,255,0.7);
+        margin:15px;
+        height:100%;
+        padding:15px;
+      }
+
+      #notes {
+        background-color:rgba(255,255,255,0.7);
+        margin:15px;
+        clear:both;
+
+          .note {
+            background-color:white;
+            width:45%;
+            height:auto;
+            margin:15px;
+            display:inline-block;
+            border-radius: 5px;
+            padding:10px;
+
+            input {
+              width:100%;
+            }
+
+            #preview {
+              overflow: hidden;
+              max-height: 300px;
+            }
+
+            #delete {
+              border: solid 1px red;
+              float:right;
+              background: none;
+              color:red;
+              margin:5px;
+            }
+
+          }
+
+      }
+
+    }
+  }
+}

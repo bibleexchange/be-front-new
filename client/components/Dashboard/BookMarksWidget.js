@@ -5,16 +5,12 @@ import Relay from 'react-relay';
 class BookMarksWidget extends React.Component {
 
   render() {
-    let navs = localStorage.getItem('navs');
+
     return (
       <div>
       <center><h1>{this.props.user.name}&apos;s Bookmarks</h1></center>
 
-      {this.props.navs.map(function(loc){
-        return <li key={Math.random()}><Link to={loc}>{loc}</Link></li>;
-      })}
-
-        {this.props.user.navHistory.edges.map(function(el){
+        {this.props.navs.map(function(el){
         return <li key={el.node.id}><Link to={el.node.url} >{el.node.title}</Link></li>;
       })}
       </div>
@@ -29,24 +25,4 @@ BookMarksWidget.propTypes = {
 };
 
 
-export default Relay.createContainer(BookMarksWidget, {
-  initialVariables: {
-	  libraryFilter:'',
-	  reference:'john_3_16',
-  	token: "nothinghere"
-  },
-  fragments: {
-      user: () => Relay.QL`fragment on User {
-	       name
-         navHistory(first:5){
-           edges{
-             node{
-               id
-               url
-               title
-             }
-           }
-         }
-       }`
-  },
-});
+export default BookMarksWidget;

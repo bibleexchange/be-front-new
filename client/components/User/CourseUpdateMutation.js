@@ -3,7 +3,7 @@ import Relay from 'react-relay';
 export default class CourseUpdateMutation extends Relay.Mutation {
 
   static fragments = {
- /*   course: () => Relay.QL`fragment on Course {id, identifier, title}`,*/
+   course: () => Relay.QL`fragment on Course {id, title}`,
   };
 
   getMutation(){
@@ -11,15 +11,14 @@ export default class CourseUpdateMutation extends Relay.Mutation {
   }
 
   getVariables(){
-    console.log(this.props);
-	  return {
-      id:this.props.course.identifier,
-      title:this.props.course.title
-    };
+	return {
+	      id:this.props.course.id,
+	      title:this.props.title
+	    };
   }
 
   getFatQuery(){
-//	  return Relay.QL`fragment on CourseUpdatePayload {course {id, identifier, title}}`;
+	  return Relay.QL`fragment on UpdateCoursePayload {course {id, title}}`;
   }
 
   getConfigs(){
@@ -30,16 +29,13 @@ export default class CourseUpdateMutation extends Relay.Mutation {
   }
 
   getOptimisticResponse(){
-	  return {course : {id:this.props.course.id, title:this.props.course.title}};
+	  return {course : {id:this.props.course.id, title:this.props.title}};
   }
-
-
-
 }
 
 /*
-mutation CourseUpdate($courseId: Int, $courseTitle: String) {
-  courseUpdate(input: {id: $courseId, title: $courseTitle, clientMutationId:""}) {
+mutation CourseUpdate {
+  courseUpdate(input: {id: "Q291cnNlOjc", title: "Romans 1", clientMutationId: "1"}) {
     clientMutationId
     course {
       title
