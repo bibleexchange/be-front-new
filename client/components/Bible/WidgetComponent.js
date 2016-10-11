@@ -26,17 +26,23 @@ class WidgetComponent extends React.Component {
 
     const baseUrl = this.props.baseUrl;
     let verses = [];
+    let viewer = this.props.viewer;
 
     if(this.props.bibleChapter !== null && this.props.bibleChapter.verses !== undefined){
       verses = this.props.bibleChapter.verses.edges;
     }
 
+let clickVerseBody= this.props.clickVerseBody;
+
     return (
       <div>
       	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl}/>
       	  {verses.map(function(verse) {
-      		return <BibleVerse bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl}/>;
+      		return <BibleVerse viewer={viewer} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl}/>;
       	  })}
+
+          <Link className="nextChapter" to={this.props.bibleChapter.nextChapter.url} >next</Link>
+
       </div>
     );
   }
@@ -57,6 +63,8 @@ export default Relay.createContainer(WidgetComponent, {
   },
   fragments: {
     bibleChapter: () => Relay.QL`fragment on BibleChapter {
+      nextChapter{url}
+      previousChapter{url}
 		verses (first:200){
 		  edges {
 		    cursor
@@ -72,6 +80,9 @@ export default Relay.createContainer(WidgetComponent, {
    bible: (variables) => Relay.QL`fragment on Bible {
      ${BibleNavigation.getFragment('bible')}
    }`,
-   bibleVerse: () => Relay.QL`fragment on BibleVerse {c}`
+   bibleVerse: () => Relay.QL`fragment on BibleVerse {c}`,
+   viewer: () => Relay.QL`fragment on Viewer {
+      ${BibleVerse.getFragment('viewer')}
+   }`
   },
 });

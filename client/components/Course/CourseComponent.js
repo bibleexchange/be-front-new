@@ -24,7 +24,7 @@ class Found extends React.Component {
 */
     return (
       	<div className="WidgetContainer">
-              <div className="Widget">
+          <div className="Widget">
       	  <Navigation course={this.props.course.course} lesson={this.props.course.course.lesson} />
       	  <Lesson lesson={this.props.course.course.lesson} />
        	</div>

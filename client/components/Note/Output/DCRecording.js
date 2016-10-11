@@ -36,7 +36,7 @@ class DCRecordingNoteComponent extends React.Component {
       }
 
     return (
-	<div style={{margin:"15px", fontSize:"1.3em"}}>
+	<div>
 		<center><h1>A Deliverance Center Recording</h1></center>
 
     {soundCloud}

@@ -1,12 +1,13 @@
 @import '../variables.scss';
 
-.root {
-  background-color: $black-light !important;
+footer {
+  background-color: white;
   justify-content: center !important;
-  padding: 30px 16px !important;
-
+  color: #777;
+  border-top:1px solid #777;
+  
   a {
-    color: $white;
+    color: #777;
     text-decoration: none;
   }
 }

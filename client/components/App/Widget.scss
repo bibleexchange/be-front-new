@@ -4,19 +4,22 @@
   display: flex;
   flex-wrap: wrap;
   width:100%;
-}
+  background: transparent;
+  margin:0;
+  padding:0;
+  padding-bottom:25px;
 
-.WidgetContainer > div {
-  flex-basis: 500px;
-  flex: 1;
-  background-color: rgba(255,255,255, .95);
-  margin: 3rem;
-  min-width:600px;
-}
+  .Widget{
+    width:100%;
+  }
 
-.WidgetContainer > div:nth-of-type(2) {
-    flex-basis: 500px;
-    width:40%;
+  > div {
+    flex: 0;
+    margin: 0;
+    flex-basis: 670px;
+    background-color: white;
+  }
+
 }
 
 .WidgetContainer h2 {
@@ -25,4 +28,31 @@
 	padding: 2rem;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+}
+
+
+@media screen and (min-width: 670px) {
+
+  .WidgetContainer > div {
+    background-color: rgba(255,255,255, .95);
+    margin: 3rem;
+  }
+
+
+  .WidgetContainer {
+    width:50%;
+    margin:auto;
+
+    .Widget{
+      width:100%;
+    }
+
+    > div {
+      flex: 0;
+      margin: 0;
+      flex-basis: 1000px;
+    }
+
+  }
+
 }

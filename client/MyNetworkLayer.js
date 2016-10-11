@@ -65,8 +65,8 @@ export default class NetworkLayer {
       console.log('FETCHING FROM LOCAL STORAGE.');
       let data = {data:JSON.parse(localStorage.getItem(requestId))};
       return new Promise(function(resolve, reject) {return resolve(data)});
-
-    }else if(window.navigator.onLine) {
+	//forcing load from server even if offline
+    }else if(/*window.navigator.onLine*/ true) {
 	console.log('FETCHING FROM SERVER.');
       return fetch(this.url, {
 			  method: 'POST',

@@ -49,7 +49,7 @@ if(note !== null && note !== ""){
     }
 }
     return (
-        <div style={{padding:"15px",  wordWrap: "break-word"}}>
+        <div style={{padding:"10px", wordWrap: "break-word"}}>
           {component}
         </div>
     );

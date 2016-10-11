@@ -1,10 +1,24 @@
 import React from 'react';
 import Relay from 'react-relay';
+import BookMarksWidget from './BookMarksWidget';
 
 class UserLoggedIn extends React.Component {
 
+  componentWillMount(){
+    this.state = {
+      bookmarks:false
+    };
+  }
+
   render() {
 	let user = this.props.user;
+  let bookmarksStyle = {
+    display:"none"
+  };
+
+  if(this.state.bookmarks){
+    bookmarksStyle.display = "block";
+  }
 
     return (
     <ul>
@@ -14,12 +28,22 @@ class UserLoggedIn extends React.Component {
 		  </button>
 		</li>
 		<li>
-		  <button onClick={this.props.handleBookmark}>
-			   bookmark
-		  </button>
+    <button onClick={this.toggleBookmark.bind(this)} >
+       bookmarks
+    </button>
+      <div id="bookmarks" style={bookmarksStyle} onBlur={this.toggleBookmark.bind(this)} >
+  		  <button onClick={this.props.handleBookmark} >
+  			   bookmark
+  		  </button>
+        <BookMarksWidget navs={this.props.navs} />
+      </div>
 		</li>
 	 </ul>
     );
+  }
+
+  toggleBookmark(){
+    this.setState({bookmarks: !this.state.bookmarks});
   }
 
 }

@@ -5,33 +5,16 @@ import Relay from 'react-relay';
 
 //import './Course.scss';
 
-class NoteComponent extends React.Component {
-
-  render() {
-      const baseUrl = this.props.baseUrl+"/note/"+this.props.note.id;
-    return (
-              <div style={{width:"25%", display:"inline-block"}}>
-                <p><Link to={baseUrl}>#{this.props.note.order_by} {this.props.note.id} {this.props.note.note.output.type}</Link></p>
-              </div>
-    );
-  }
-
-}
-
 class LessonComponent extends React.Component {
 
   render() {
     const baseUrl = this.props.baseUrl;
     return (
-              <ol>
+              <div>
                 <center><h2><Link to={this.props.baseUrl+"/lesson/"+this.props.lesson.id}>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</Link></h2></center>
                 <h3>{this.props.lesson.title}</h3>
-                  <p style={{textAlign:"center"}}>{this.props.lesson.summary}</p>
-                {this.props.lesson.notes.edges.map(function(note){
-                  return <NoteComponent key={note.node.id} note={note.node} baseUrl={baseUrl}/>;
-                })}
-
-              </ol>
+                <p style={{textAlign:"center"}}>{this.props.lesson.summary}</p>
+              </div>
     );
   }
 

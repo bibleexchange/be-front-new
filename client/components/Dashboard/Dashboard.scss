@@ -1,20 +1,124 @@
-.WidgetContainer {
-  display: flex;
-  flex-wrap: wrap;
-  background: url(../../assets/svg/be-background.svg);
-  background-size: 20%;
+#dashboard {
+
+  #main-search {
+		height:100%;
+		padding:0;
+		width:100%;
+		border:none;
+		height: 50px;
+		margin:0;
+		clear:both;
+		display:block;
+		background-color: white;
+    border-top:solid #777 1px;
+
+		input{
+			border:none;
+			height:100%;
+			margin:0;
+			padding:0;
+		}
+
+    #magnifying-glass {
+      height:20px;
+      margin:0;
+      padding:0;
+      margin-top: 9px;
+      margin-left: 10px;
+      display:inline-block;
+    }
+
+		#search-text {
+			color:#777;
+			width:250px;
+			padding-left: 10px;
+			text-align: center;
+			width:75%;
+			padding: 0;
+		}
+
+		#search {
+			background-color: transparent;
+			color:#777;
+		}
+
+	}
+
+  .WidgetContainer {
+      display: flex;
+      background: transparent;
+      margin:0;
+      padding:0;
+      padding-bottom:30px;
+
+    > div {
+      margin: 2rem;
+    }
+
+    h2 {
+      display:block;
+      color:white;
+      padding:0;
+      margin:0;
+      width:100%;
+
+      a {
+        color:white;
+        display:block;
+        height:100%;
+        text-align: center;
+        text-decoration: none;
+        margin:0;
+        padding:1.4rem;
+        line-height: 70px;
+
+        img {
+          display:none;
+        }
+
+      }
+
+    }
+
+  }
 }
 
-.WidgetContainer > div {
-  flex: 1;
-  background-color: rgba(255,255,255, .95);
-  margin: 3rem;
-}
+@media screen and (min-width: 670px) {
+  #dashboard {
 
-.WidgetContainer h2 {
-	background: -webkit-linear-gradient(left, #28B6CD , #00C97B );
-	-webkit-margin-before: 0;
-	padding: 2rem;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+  .WidgetContainer > div {
+    background-color: rgba(255,255,255, .95);
+    margin: 3rem;
+  }
+
+
+  .WidgetContainer {
+    width:50%;
+    margin:auto;
+
+    .Widget{
+      width:100%;
+    }
+
+    > div {
+      flex: 0;
+      flex-basis: 1000px;
+    }
+
+    h2 {
+
+
+      a {
+          height:70px;
+        img {
+          display:inline-block;
+          height:50px;
+        }
+
+      }
+
+    }
+
+  }
+}
 }

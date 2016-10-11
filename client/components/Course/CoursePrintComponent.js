@@ -20,7 +20,7 @@ class CoursePrintComponent extends React.Component {
 
     return (
 
-        <div>
+        <div id="print">
                 <h1><center>{course.title}</center></h1>
 
                 <h2>Table of Contents</h2>

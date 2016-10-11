@@ -10,6 +10,7 @@ import CourseQueries from './queries/CourseQueries';
 import App from './components/App/AppComponent';
 import Bible from './components/Bible/BibleComponent';
 import Course from './components/Course/CourseComponent';
+import Dashboard from './components/Dashboard/DashboardComponent';
 import LibraryIndex from './components/Library/IndexComponent';
 import CourseIndex from './components/Course/IndexComponent';
 import CoursePrint from './components/Course/CoursePrintComponent';
@@ -17,14 +18,13 @@ import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import CourseEditor from './components/User/CourseEditor';
 import LessonEditor from './components/User/LessonEditor';
-import Dashboard from './components/Dashboard/DashboardComponent';
 import JWTCallback from './components/App/JWTCallback';
-import Login from './components/Login/LoginComponent';
-import Signup from './components/Signup/SignupComponent';
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
-    <IndexRoute component={LibraryIndex} queries={ViewerQueries} />
+    <IndexRoute component={Dashboard} queries={ViewerQueries} />
+
+    <Route path='/courses' component={LibraryIndex} queries={ViewerQueries} />
 
     <Route path='course' >
       <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />
@@ -35,12 +35,9 @@ export default (
     <Route path='/notes(/tag/:filterBy)' component={NotesIndex} queries={ViewerQueries} />
     <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
 
-    <Route path='/signup' component={Signup} />
-    <Route path='/login' component={Login} />
-
     <Route path='/set-jwt' component={JWTCallback} />
     <Route path='bible/:reference' component={Bible} queries={ViewerQueries}  />
-    <Route path='/user' component={Dashboard} queries={ViewerQueries} />
+    <Route path='/user' component={LibraryIndex} queries={ViewerQueries} />
     <Route path='/user/course/:courseId/edit' component={CourseEditor} queries={ViewerQueries} >
       <Route path=':lessonId' component={LessonEditor} queries={ViewerQueries} />
     </Route>

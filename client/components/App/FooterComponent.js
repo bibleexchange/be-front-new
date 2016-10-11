@@ -2,6 +2,8 @@ import React from 'react';
 import './Footer.scss';
 import Relay from 'react-relay';
 
+import './Footer.scss';
+
 class Footer extends React.Component {
 
   render() {

@@ -16,45 +16,49 @@ class UserLoggedOut extends React.Component {
   render() {
 
     let Login = null;
+    let Signup = null;
 
     if(this.props.online){
-      Login = <div><li>
-        <button onClick={this.handleLoginStatus.bind(this)} >Login</button></li><li>
-        <button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li></div>;
+      Login = <li><button onClick={this.handleLoginStatus.bind(this)} >Login</button></li>;
+      Signup = <li><button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li>;
     }
 
     return (
-		<ul>
-      {Login}
+    		<ul>
+          {Login}
+          {Signup}
 
-      <LoginComponent
-       status={this.state.closed}
-       handleLogin={this.props.handleLogin}
-       handleStatus={this.handleLoginStatus.bind(this)}
-       user={this.props.user}
-       UpdateLoginEmail={this.props.UpdateLoginEmail}
-       UpdateLoginPassword={this.props.UpdateLoginPassword}
-      />
+          <LoginComponent
+           status={this.state.closed}
+           handleLogin={this.props.handleLogin}
+           handleStatus={this.handleLoginStatus.bind(this)}
+           user={this.props.user}
+           UpdateLoginEmail={this.props.UpdateLoginEmail}
+           UpdateLoginPassword={this.props.UpdateLoginPassword}
+          />
 
-      <SignUpComponent
-       status={this.state.signUpStatus}
-       handleEditSignup={this.props.handleEditSignup}
-       handleStatus={this.handleSignUpStatus.bind(this)}
-       user={this.props.user}
-       handleSignUp={this.props.handleSignUp}
-      />
-		</ul>
+          <SignUpComponent
+           status={this.state.signUpStatus}
+           handleEditSignUpEmail={this.props.handleEditSignUpEmail}
+           handleEditSignUpPassword={this.props.handleEditSignUpPassword}
+           handleEditSignUpPasswordConfirm={this.props.handleEditSignUpPasswordConfirm}
+           handleStatus={this.handleSignUpStatus.bind(this)}
+           user={this.props.user}
+           handleSignUp={this.props.handleSignUp}
+           signup={this.props.signup}
+          />
+    		</ul>
     );
   }
 
   handleLoginStatus(){
     let status = this.state.closed;
-    this.setState({closed:status? false:true});
+    this.setState({closed:!status, signUpStatus:false});
   }
 
   handleSignUpStatus(){
     let status = this.state.signUpStatus;
-    this.setState({signUpStatus:status? false:true});
+    this.setState({signUpStatus:!status, closed:true});
   }
 
 }
@@ -80,6 +84,7 @@ export default Relay.createContainer(UserLoggedOut, {
       	name
       	authenticated
         ${LoginComponent.getFragment('user')}
+        ${SignUpComponent.getFragment('user')}
       }
     `,
   },

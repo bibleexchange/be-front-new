@@ -1,3 +1,17 @@
 @import "../variables.scss";
 
+#print {
+background-color:white;
+}
 
+#lessons-modal {
+
+  background-color: rgba(175,175,175,0.5);
+  top: -72px;
+  position: relative;
+
+  h2 {
+    padding:0;
+  }
+
+}

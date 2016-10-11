@@ -27,7 +27,7 @@ export default class SignUpUserMutation extends Relay.Mutation {
       fragment on SignUpUserPayload {
   	    user {
   	      id
-          token
+              token
   	      name
   	      email
   	      authenticated
@@ -40,7 +40,7 @@ export default class SignUpUserMutation extends Relay.Mutation {
   }
 
   getMutation() {
-    return Relay.QL`mutation SignUpUserMutation {loginUser}`;
+    return Relay.QL`mutation SignUpUserMutation {signUpUser}`;
   }
 
   getVariables() {
@@ -49,8 +49,11 @@ export default class SignUpUserMutation extends Relay.Mutation {
 
   getOptimisticResponse() {
      return {
-       email: this.props.input.email,
-       id: this.props.user.id
+	user: {         
+         id: this.props.user.id,
+         email: this.props.input.email,
+	 authenticated: false
+	}
      };
    }
 

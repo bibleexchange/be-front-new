@@ -2,6 +2,7 @@ html, body {
   height: 100%;
   padding:0;
   margin:0;
+  width:100%;
 }
 
 .App > div:first-of-type {
@@ -16,12 +17,15 @@ body > #root {
       height: auto !important;
       margin: 0 auto -25px; /* the bottom margin is the negative value of the footer's height */
       position: relative;
-      background: url(../../assets/svg/be-background.svg);
-      background-size: 20%;
+    //  background: url(../../assets/svg/be-background.svg);
+      background: -webkit-linear-gradient(left, #28B6CD , #00C97B );
+    //  background-size: 20%;
+      width:100%;
 }
 
 .container {
   height: 100%;
+  width:100%;
 }
 
 #footer {
@@ -41,6 +45,7 @@ main {
   flex-direction: column;
   flex-wrap: wrap;
   min-height: 100%;
+  width:100%;
 }
 
 .heading {

@@ -1,5 +1,42 @@
 @import "../variables.scss";
 
+#biblenav{
+
+  #bibleSearch {width:50%;}
+  a.previous {width:15%;}
+  a.next {width:15%;}
+  .menu {width:15%;}
+
+  a.previous, a.next {
+    text-decoration: none;
+    font-weight: bold;
+    display:inline-block;
+  }
+
+  .previous {
+    border:none;
+    background:transparent;
+  }
+  .next {
+    border:none;
+    background:transparent;
+  }
+  .menu {
+    border:none;
+    background:transparent;
+    float:right;
+    height:24px;
+  }
+
+  #bibleSearch{
+    input {
+      color:white;
+    }
+
+  }
+
+}
+
 .bookselect {
   width:95%;
   display:inline-block;
@@ -8,7 +45,6 @@
 }
 
 .bookselect .bookname {
-  width:100%;
   margin:15px;
   border:solid 1px gray;
   padding:15px;

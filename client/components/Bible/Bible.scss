@@ -1,23 +1,69 @@
 @import "../variables.scss";
 
 #bible {
-	
-	.selectedVerse {background-color:$BLUE_TRANS;}
-	
+
+	#notes-widget {
+		display:block;
+	}
+
+	#toggle-bible {
+		position:fixed;
+		bottom: 35px;
+		right:35px;
+		background-color: #00C97B;
+		border:none;
+		height:35px;
+		color:black;
+		font-weight: bold;
+	}
+
+	#toggle-bible.bible {
+		background-color: $BLUE;
+		color:white;
+	}
+
+
+	.WidgetContainer {
+
+			padding-bottom:25px;
+
+			> div {
+				margin: 0;
+			}
+
+			h3 {
+				background-color:#00C97B;
+				color:black;
+				padding:10px;
+				margin:0;
+			}
+
+	}
+
+.nextChapter{
+	text-decoration: none;
+	background-color:$BLUE;
+	color:white;
+	margin-top:15px;
+	margin-bottom: 15px;
+	display:block;
+}
+
+.selectedVerse {background-color:$BLUE_TRANS;}
+
 	p {
-		font-size: 1.8rem;
 		font-weight: 300;
-		line-height: 2.7rem;
+		line-height: 1.7rem;
 		margin-bottom: 0;
 		margin-left: .7rem;
 		margin-right: .7rem;
 	}
-	
+
 	sup {
 		font-size: 1.3rem;
 		color: $GRAY;
 	}
-	
+
 	.jesus {
 		color:$RED;
 		font-family: 'Lato', sans-serif;
@@ -32,3 +78,36 @@
 	font-weight: 300;
 }
 
+@media screen and (min-width: 670px) {
+
+#bible {
+	#notes-widget {
+		display:block;
+	}
+
+	#toggle-bible {
+		display:none;
+	}
+
+	.WidgetContainer {
+	  display: flex;
+	  flex-wrap: wrap;
+	  width:100%;
+	  margin:0;
+		padding:0;
+
+	  .Widget{
+	    width:100%;
+	  }
+
+	  > div {
+	    flex: 1;
+	    margin: 1rem;
+	    flex-basis: 500px;
+	  }
+
+	}
+
+}
+
+}

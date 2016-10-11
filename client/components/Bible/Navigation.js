@@ -206,12 +206,6 @@ class Navigation extends React.Component {
     let next = { pathname:this.props.baseUrl, query: {} };
     let previous = { pathname:this.props.baseUrl, query: {} };
 
-  const styles = {
-		btn:{border:'none', background:'transparent'},
-		next:{border:'none', background:'transparent'},
-		previous:{border:'none', background:'transparent'}
-	};
-
 	const verseSelectorButtonStyle = {
 	  border:'none', background:'transparent'
 	};
@@ -230,20 +224,20 @@ class Navigation extends React.Component {
     previous = { pathname:this.props.bibleChapter.previousChapter.url, query: {} };
   }
 
-    return (<div>
+    return (<div id="biblenav">
 		<div className="blueBG" style={{marginBottom:'25p', textAlign:'center'}}>
-			<Link to={previous} style={styles.previous}>
-				PREV
+			<Link className="previous" to={previous} >
+				&lt;
 			</Link>
 
 			<Search term={this.state.search} changeHandler={this.searchChangeHandler.bind(this)} submitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
 
-			<Link to={next} style={styles.next}>
-				NEXT
+			<Link className="next" to={next} >
+				&gt;
 			</Link>
 
-			<button onClick={this.toggleModal.bind(this)} style={verseSelectorButtonStyle}>
-			    MENU
+			<button  className="menu" onClick={this.toggleModal.bind(this)} >
+			    &#x2637;
 			</button>
 		</div>
 			<VerseSelector bible={this.props.bible} handleBooksFilter={this.handleBooksFilter.bind(this)} toggleModal={this.props.toggleModal} shouldDisplay={this.state.showModal} filterBooksBy={this.state.filterBooksBy} close={this.close.bind(this)}/>

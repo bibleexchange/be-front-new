@@ -6,30 +6,26 @@ class SignUpComponent extends React.Component {
 
   render() {
 
-    let loginFormStyle = {};
+    let loginFormStyle = {display:"none"};
 
-    if(!this.props.status){
+    if(this.props.status){
       loginFormStyle.display = "block";
     }
 
+    let messageStyle = {color:"red", height:"20px"};
+    if(this.props.signup.message === "passwords match :)"){messageStyle.color ="green";}
     return (
-
         <div id="login-form" style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
+          {this.props.signup.message}
 
             <form >
-
-                <input type="text" onChange={this.props.editSignUp} placeholder='email' ref="email" />
-
-                <input type="password" onChange={this.props.editSignUp} placeholder='password' ref="password" />
-
-                <input type="password" onChange={this.props.editSignUp} placeholder='password confirmation' ref="password_confirmation" />
+                <input value={this.props.signup.email} type="text" onChange={this.props.handleEditSignUpEmail} placeholder='email' ref="email" />
+                <input value={this.props.signup.password} type="password" onChange={this.props.handleEditSignUpPassword} placeholder='password' ref="password" />
+                <input id="message" style={messageStyle} value={this.props.signup.message} type="text" disabled="disabled" />
+                <input value={this.props.signup.password_confirmation} type="password" onChange={this.props.handleEditSignUpPasswordConfirm} placeholder='password confirmation' ref="password_confirmation" />
                 <hr />
-
                 <input type="button" value="Sign Up" onClick={this.props.handleSignUp}/>
-                <br />
-                <a href='#'>Forgot password</a>
             </form>
-
         </div>
     );
   }
@@ -37,10 +33,6 @@ class SignUpComponent extends React.Component {
 }
 
 export default Relay.createContainer(SignUpComponent, {
-  initialVariables: {
-	slug:'',
-  token:''
-  },
   fragments: {
     user: () => Relay.QL`
       fragment on User {

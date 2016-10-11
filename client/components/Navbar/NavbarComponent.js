@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import './Navbar.scss';
 import BeLogo from '../Svg/BeLogo';
 import Relay from 'react-relay';
-
 import UserLoggedOut from './UserLoggedOut';
 import UserLoggedIn from './UserLoggedIn';
 
@@ -22,7 +21,7 @@ class Navbar extends React.Component {
 	let inOrOut = 'loading...';
 	console.log('deciding session stuff based on: 1) User is Loggedin--'+ this.props.loggedIn, '& 2) User is online--'+  this.props.online);
 
-	if(this.props.loggedIn) {
+	if(this.props.loggedIn === true) {
 	  inOrOut = <UserLoggedIn
       loggedIn={this.props.loggedIn}
       handleLogout={this.props.handleLogout}
@@ -30,6 +29,7 @@ class Navbar extends React.Component {
       url={url} user={user}
       handleBookmark={this.props.handleBookmark}
       online={this.props.online}
+      navs={this.props.navs}
       />;
 	}else {
 	  inOrOut = <UserLoggedOut
@@ -40,7 +40,11 @@ class Navbar extends React.Component {
       user={this.props.user}
       UpdateLoginEmail={this.props.UpdateLoginEmail}
       UpdateLoginPassword={this.props.UpdateLoginPassword}
+      handleEditSignUpEmail={this.props.handleEditSignUpEmail}
+      handleEditSignUpPassword={this.props.handleEditSignUpPassword}
+      handleEditSignUpPasswordConfirm={this.props.handleEditSignUpPasswordConfirm}
       online={this.props.online}
+      signup={this.props.signup}
       />;
 	}
 
@@ -48,12 +52,14 @@ class Navbar extends React.Component {
     	<header id="MainNavbar">
 				<nav id="BrandNav">
 					<Link to="/">
-						<BeLogo/>
+						<BeLogo />
+            <span className="brandName">Bible exchange</span>
+            <sup className="beta">beta 2.0</sup>
 					</Link>
 				</nav>
-				<nav id="UserNav">
+        <nav id="UserNav">
 					{inOrOut}
-				</nav>
+        </nav>
 		 	</header>
     );
   }

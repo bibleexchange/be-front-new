@@ -12,16 +12,7 @@ class LessonsList extends React.Component {
 
   render() {
   let baseUrl = this.props.baseUrl;
-	const modalStyle = {
-	  position: 'fixed',
-	  top: 0, bottom: 0, left: 0, right: 0,
-	  verticalAlign: 'middle',
-	  position: 'fixed',
-	  top: 0, bottom: 0, left: 0, right: 0,
-	  zIndex: '1000',
-	  backgroundColor: 'rgba(0,0,0,0.5)',
-	  width:"100%"
-	};
+	const modalStyle = {};
 
 	if(!this.props.shouldDisplay){
 	 modalStyle.display = 'none';
@@ -41,7 +32,7 @@ class LessonsList extends React.Component {
 
 	const closeAll = this.props.close;
 
-    return (<div style={modalStyle}>
+    return (<div id="lessons-modal" style={modalStyle}>
 		  <div style={dialogStyle} >
 
 			<button onClick={this.props.toggleModal}>
@@ -50,10 +41,11 @@ class LessonsList extends React.Component {
 
 			<h4>Choose a Lesson</h4>
 
-			{this.props.course.lessons.edges.map(function(lesson) {
-          return <h2 key={lesson.node.id}><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></h2>;
-			})}
-
+      <ol>
+  			{this.props.course.lessons.edges.map(function(lesson) {
+            return <li key={lesson.node.id}><h2 ><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></h2></li>;
+  			})}
+      </ol>
 		    </div>
 		</div>)
   }
@@ -62,9 +54,18 @@ class LessonsList extends React.Component {
 
 class Navigation extends React.Component {
   componentWillMount(){
-	this.state = {
-	  showSelector:false
-	};
+  	this.state = {
+  	  showSelector:false
+  	};
+
+    localStorage.setItem('course-nav', "/course/"+this.props.course.id+"/lesson/"+this.props.lesson.id);
+
+  }
+
+  componentWillReceiveProps(newProps){
+    if(newProps.course.id !== this.props.course.id || newProps.lesson.id !== this.props.lesson.id){
+      localStorage.setItem('course-nav', "/course/"+newProps.course.id+"/lesson/"+newProps.lesson.id);
+    }
   }
 
   render() {
@@ -92,23 +93,19 @@ class Navigation extends React.Component {
 	};
 
 	if(previousLessonUrl){
-    previousLink = <Link to={previousLessonUrl} className="btn btn-default" style={styles.previous} >PREVIOUS</Link>;
+    previousLink = <Link to={previousLessonUrl} className="btn btn-default" style={styles.previous} >&lt;</Link>;
   }
 	if(nextLessonUrl){
-    nextLink = 	<Link to={nextLessonUrl}  className="btn btn-default" style={styles.next}>NEXT</Link>;
+    nextLink = 	<Link to={nextLessonUrl}  className="btn btn-default" style={styles.next}>&gt;</Link>;
   }
 
     return (<div>
 		<div className="orangeBG" style={{marginBottom:'25p', textAlign:'center'}}>
 
-      {previousLink}
-
 			{this.props.course.title}: Lesson #{this.props.lesson.order_by}
 
-      {nextLink}
-
 			<button onClick={this.toggleModal.bind(this)} style={selectorButtonStyle}>
-			  MENU
+			  &#x2637;
 			</button>
 		</div>
 			<LessonsList baseUrl={baseUrl} shouldDisplay={this.state.showSelector} course={this.props.course} close={this.close.bind(this)} toggleModal={this.toggleModal.bind(this)}/>

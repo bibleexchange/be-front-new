@@ -10,10 +10,25 @@ import marked from 'marked';
 
 class NoteThumbnail extends React.Component {
 
+  componentWillMount(){
+    this.state = {
+      tags: false
+    };
+  }
+
   render() {
     let note = this.props.note;
     let component = null;
     let tags = [];
+    let tagsStyle = {
+      display:"none"
+    };
+
+    if(this.state.tags){
+      tagsStyle.display = "block";
+    }else{
+      tagsStyle.display = "none";
+    }
 
     if(this.props.tags){
       tags = this.props.note.tags;
@@ -53,8 +68,8 @@ class NoteThumbnail extends React.Component {
   	return (
   		<div id={note.id} className="note-thumbnail" draggable="true" onClick={this.props.selectNote}>
         {component}
-
-        <p>{tags.map(function(t,key){
+        <button onClick={this.toggleTags.bind(this)}> tags...</button>
+        <p style={tagsStyle}>{tags.map(function(t,key){
 
           if(t !== ''){
             return <Link key={key} style={{marginRight:"10px"}} to={"/notes/tag/"+t.trim()} >#{t}</Link>;
@@ -66,6 +81,10 @@ class NoteThumbnail extends React.Component {
   		</div>
   		);
 	}
+
+toggleTags(){
+  this.setState({tags: !this.state.tags});
+}
 
 }
 

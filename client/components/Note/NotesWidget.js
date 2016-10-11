@@ -8,11 +8,16 @@ class NotesWidget extends React.Component {
   componentWillMount(){
 
   let filterBy = this.props.relay.variables.filterNotesBy;
-
-	if(this.props.relay.variables.filterNotesBy == ""){
+  
+  if(filterBy == ""){
 	  this.props.relay.setVariables({filterNotesBy :this.props.filter});
     filterBy = this.props.filter;
-	}
+	}else if(localStorage.getItem('notes-filter') !== null){
+    filterBy = localStorage.getItem('notes-filter');
+    this.props.relay.setVariables({filterNotesBy: filterBy});
+  }
+
+  localStorage.setItem('notes-filter',filterBy);
 
 	this.state = {
 	  showModal:false,
@@ -24,6 +29,8 @@ class NotesWidget extends React.Component {
     if(newProps.filter !== this.props.filter){
 
       this.props.relay.setVariables({filterNotesBy:newProps.filter});
+
+      localStorage.setItem('notes-filter',newProps.filter);
 
       this.setState({
         filterNotesBy:newProps.filter
@@ -43,15 +50,16 @@ class NotesWidget extends React.Component {
 
       let nextPage = null;
 
-      if(this.props.viewer.notes.pageInfo.hasNextPage){
-        nextPage = <button onClick={this.handleNextPage.bind(this)}>{this.props.relay.variables.pageSize} more</button>;
+      if(this.props.viewer.notes !== undefined && this.props.viewer.notes.pageInfo.hasNextPage){
+        nextPage = <button onClick={this.handleNextPage.bind(this)}>more</button>;
       }
 
        return (
     		<div id="notes-widget">
+          <Link to="" className="clearFilter" onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
           <div id="search">
-    			    <Link to="" onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
               <input type="text" onKeyUp={this.runScriptOnPressEnter.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.applyFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} />
+
               {nextPage}
           </div>
     			{notes.map((n)=>{
@@ -70,6 +78,8 @@ class NotesWidget extends React.Component {
     this.props.relay.setVariables({
       filterNotesBy: this.state.filterNotesBy
     });
+
+    localStorage.setItem('notes-filter',this.state.filterNotesBy);
 
   }
 

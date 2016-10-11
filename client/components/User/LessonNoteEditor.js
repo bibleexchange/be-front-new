@@ -126,6 +126,7 @@ export default Relay.createContainer(LessonNoteEditor, {
           id
           type
           body
+          tags
           output {
             id
             type

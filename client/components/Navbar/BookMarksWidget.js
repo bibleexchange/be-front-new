@@ -7,20 +7,17 @@ class BookMarksWidget extends React.Component {
   render() {
 
     return (
-      <div>
-      <center><h1>{this.props.user.name}&apos;s Bookmarks</h1></center>
-
-        {this.props.navs.map(function(el){
-        return <li key={el.node.id}><Link to={el.node.url} >{el.node.title}</Link></li>;
+      <ul>
+        {this.props.navs.map(function(value, key){
+        return <li key={key}><Link to={value} >{value}</Link></li>;
       })}
-      </div>
+      </ul>
     );
   }
 
 }
 
 BookMarksWidget.propTypes = {
-    user: React.PropTypes.object.isRequired,
     navs: React.PropTypes.array.isRequired
 };
 

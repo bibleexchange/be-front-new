@@ -7,19 +7,30 @@ import '../Bible/NotesWidget.scss';
 
 class NotesIndex extends React.Component {
 
-  render() {
+  componentWillMount(){
 
-    let filterBy = '';
+    let filterBy = this.props.params.filterBy;
 
-    if(this.props.params.filterBy !== undefined){
-      filterBy = this.props.params.filterBy;
+    if(filterBy == undefined && localStorage.getItem('notes-filter') !== null){
+      filterBy = localStorage.getItem('notes-filter');
+    }else if(filterBy == undefined ){
+      filterBy = "";
     }
+    
+    localStorage.setItem('notes-filter',filterBy);
+
+  	this.state = {
+  	  filterBy:filterBy
+  	};
+  }
+
+  render() {
 
     return (
       	<div id="bible" className="WidgetContainer">
               <div className="Widget">
                 <NotesWidget
-                  filter={filterBy}
+                  filter={this.state.filterBy}
                   viewer={this.props.viewer}
                   selectNote={null}
                   tags={true}

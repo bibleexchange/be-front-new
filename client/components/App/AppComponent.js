@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Link } from 'react-router';
 import MainNavigation from '../Navbar/NavbarComponent';
 import Footer from './FooterComponent';
-import AlwaysWidget from './AlwaysWidgetComponent';
 import Relay from 'react-relay';
 import auth from './auth'
 
@@ -21,14 +20,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    let loggedIn = false;
+
+    if(this.props.viewer.user !== null){
+      loggedIn = this.props.viewer.user.authenticated;
+    }
+
     this.state = {
      oembedStatus:"closed",
      noteStatus:"closed",
      oembed:{},
-     loggedIn: auth.loggedIn(),
+     loggedIn: loggedIn, //auth.loggedIn()
      online: navigator.onLine,
      email : null,
-     password:null
+     password:null,
+     signup :{}
    };
   }
 
@@ -45,44 +51,39 @@ class App extends React.Component {
 
     render() {
 
-      let user = {};
+      let user = this.props.viewer.user;
+      console.log('User is Logged In: ' + this.state.loggedIn);
 
-      if(this.props.viewer.user !== null){
-        user = this.props.viewer.user;
-      }
+      let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
+      localStorage.setItem('navs',JSON.stringify(navs));
 
-    console.log('User is Logged In: ' + this.state.loggedIn);
 	return (
 	<div className="container">
   	<MainNavigation location={this.props.location}
           updateIt={this.state}
           route={this.props.route}
           user={user}
+          signup={this.state.signup}
           handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}
           handleLogout={this.handleLogout.bind(this)}
           handleLogin={this.handleLogin.bind(this)}
           handleSignUp={this.handleSignUp.bind(this)}
+          handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
+          handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
+          handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
           handleBookmark={this.handleBookmark.bind(this)}
           loggedIn = {this.state.loggedIn}
           online={this.state.online}
           UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
           UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
+          navs={navs}
           />
 
       <main>
         {this.props.children}
-
       </main>
 
-      <footer id="footer" className="redBG push"><Footer loggedIn={this.state.loggedIn} user={user}/></footer>
-	{/*
-          <AlwaysWidget
-            oembed={this.state.oembed}
-            note={this.props.viewer.note}
-            handleChangeNote={this.handleChangeNote.bind(this)}
-            handleChangeOembed={this.handleChangeOembed.bind(this)}
-            />
-        */}
+      <footer id="footer" className="push"><Footer loggedIn={this.state.loggedIn} user={user}/></footer>
 	</div>
     );
   }
@@ -168,23 +169,24 @@ class App extends React.Component {
   handleSignUp(e){
 
     var onSuccess = (Login) => {
-      console.log('Mutation successful!', Login ,' Stored token: ', Login.loginUser.user.token);
-	    localStorage.setItem("be_token", Login.loginUser.user.token);
-      this.setState({token:Login.loginUser.user.token});
+      console.log('Mutation successful!', Login ,' Stored token: ', Login.signUpUser.user.token);
+	    localStorage.setItem("be_token", Login.signUpUser.user.token);
+      this.setState({token:Login.signUpUser.user.token});
       auth.login();
-      //this.context.router.push('/log-me-in');
+      this.setState({signup:{}});
+      console.log('Signup and Login Successful!');
     };
 
     var onFailure = (transaction) => {
-      var error = transaction.getError() || new Error('Mutation failed.');
-      console.error(error);
+      var error = transaction.getError() || new Error('Sign Up failed.');
+      console.error("Signup failed", error);
     };
 
    let details = {
-  	email: this.state.email,
-  	password: this.state.password
+  	email: this.state.signup.email,
+  	password: this.state.signup.password
    };
-
+console.log(details);
     Relay.Store.commitUpdate(
        new SignUpUserMutation({input: details, user: this.props.viewer.user}), {onFailure, onSuccess}
      );
@@ -197,6 +199,32 @@ class App extends React.Component {
 
   UpdateLoginPassword(e){
     this.state.password = e.target.value;
+  }
+
+  handleEditSignUpEmail(e){
+    let newSignup = this.state.signup;
+    console.log(e.target.value);
+    newSignup.email = e.target.value;
+    this.setState({signup:newSignup});
+  }
+
+  handleEditSignUpPassword(e){
+    let newSignup = this.state.signup;
+    newSignup.password = e.target.value;
+    this.setState({signup:newSignup});
+  }
+
+  handleEditSignUpPasswordConfirm(e){
+
+    let newSignup = this.state.signup;
+    newSignup.password_confirmation = e.target.value;
+
+    if(e.target.value !== this.state.signup.password){
+      newSignup.message = "passwords do not match :(";
+    }else{
+      newSignup.message = "passwords match :)";
+    }
+      this.setState({signup:newSignup});
   }
 
   handleBookmark(e) {
@@ -222,6 +250,10 @@ class App extends React.Component {
 
   }
 
+  uniques(array) {
+   return Array.from(new Set(array));
+  }
+
 }
 
 App.contextTypes = {
@@ -242,16 +274,15 @@ export default Relay.createContainer(App, {
     viewer: () => Relay.QL`
       fragment on Viewer {
           user{
-            email
-            ${MainNavigation.getFragment('user')}
-            ${Footer.getFragment('user')}
-            ${LoginUserMutation.getFragment('user')}
-          }
-          note(id:$noteId){
-            ${AlwaysWidget.getFragment('note')}
-          }
-          bibleVerse(id:$verseId){
-            ${AlwaysWidget.getFragment('verse')}
+              id
+              token
+  	      name
+  	      email
+  	      authenticated
+          ${MainNavigation.getFragment('user')}
+          ${Footer.getFragment('user')}
+          ${LoginUserMutation.getFragment('user')}
+          ${SignUpUserMutation.getFragment('user')}
           }
       }
     `,
