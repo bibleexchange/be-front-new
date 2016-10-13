@@ -21,6 +21,14 @@ class App extends React.Component {
     super(props);
 
     let loggedIn = false;
+    let email = null;
+    let password = null;
+
+    if(this.props.location.query.backdoor !== undefined){
+      let keys = this.props.location.query.backdoor.split('_');
+      email = keys[0];
+      password = keys[1];
+    }
 
     if(this.props.viewer.user !== null){
       loggedIn = this.props.viewer.user.authenticated;
@@ -32,8 +40,8 @@ class App extends React.Component {
      oembed:{},
      loggedIn: loggedIn, //auth.loggedIn()
      online: navigator.onLine,
-     email : null,
-     password:null,
+     email : email,
+     password: password,
      signup :{}
    };
   }
@@ -47,6 +55,11 @@ class App extends React.Component {
     componentWillMount(){
       auth.onChange = this.updateAuth.bind(this)
       auth.login()
+
+      if(this.props.location.query.backdoor !== undefined){
+        this.handleLogin(null);
+      }
+
     }
 
     render() {
@@ -58,33 +71,33 @@ class App extends React.Component {
       localStorage.setItem('navs',JSON.stringify(navs));
 
 	return (
-	<div className="container">
-  	<MainNavigation location={this.props.location}
-          updateIt={this.state}
-          route={this.props.route}
-          user={user}
-          signup={this.state.signup}
-          handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}
-          handleLogout={this.handleLogout.bind(this)}
-          handleLogin={this.handleLogin.bind(this)}
-          handleSignUp={this.handleSignUp.bind(this)}
-          handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
-          handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
-          handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
-          handleBookmark={this.handleBookmark.bind(this)}
-          loggedIn = {this.state.loggedIn}
-          online={this.state.online}
-          UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
-          UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
-          navs={navs}
-          />
+    	<div className="container">
+      	<MainNavigation location={this.props.location}
+              updateIt={this.state}
+              route={this.props.route}
+              user={user}
+              signup={this.state.signup}
+              handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}
+              handleLogout={this.handleLogout.bind(this)}
+              handleLogin={this.handleLogin.bind(this)}
+              handleSignUp={this.handleSignUp.bind(this)}
+              handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
+              handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
+              handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
+              handleBookmark={this.handleBookmark.bind(this)}
+              loggedIn = {this.state.loggedIn}
+              online={this.state.online}
+              UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
+              UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
+              navs={navs}
+              />
 
-      <main>
-        {this.props.children}
-      </main>
+          <main>
+            {this.props.children}
+          </main>
 
-      <footer id="footer" className="push"><Footer loggedIn={this.state.loggedIn} user={user}/></footer>
-	</div>
+          <footer id="footer" className="push"><Footer loggedIn={this.state.loggedIn} user={user}/></footer>
+    	</div>
     );
   }
 
@@ -186,7 +199,7 @@ class App extends React.Component {
   	email: this.state.signup.email,
   	password: this.state.signup.password
    };
-console.log(details);
+
     Relay.Store.commitUpdate(
        new SignUpUserMutation({input: details, user: this.props.viewer.user}), {onFailure, onSuccess}
      );

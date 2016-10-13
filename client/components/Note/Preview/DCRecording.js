@@ -16,7 +16,7 @@ class DCRecordingNoteComponent extends React.Component {
 
         let notes = recording.text;
         let links = recording.links;
-        let tags = recording.tags;
+        let tags = this.props.note.tags;
         let author = this.props.note.author;
 
     return (

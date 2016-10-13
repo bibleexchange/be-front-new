@@ -3,14 +3,15 @@
 .WidgetContainer {
   display: flex;
   flex-wrap: wrap;
-  width:100%;
   background: transparent;
-  margin:0;
+  margin:auto auto;
   padding:0;
   padding-bottom:25px;
+  margin-bottom: 15px;
 
   .Widget{
     width:100%;
+    box-shadow: $boxShadow;
   }
 
   > div {
@@ -42,10 +43,7 @@
   .WidgetContainer {
     width:50%;
     margin:auto;
-
-    .Widget{
-      width:100%;
-    }
+    margin-bottom: 15px;
 
     > div {
       flex: 0;

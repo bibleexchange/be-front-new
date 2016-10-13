@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { Link } from 'react-router';
 import BibleVerse from '../../Bible/BibleVerse';
 
@@ -10,7 +11,7 @@ class DCRecordingNoteComponent extends React.Component {
 
   render() {
 
-      let verse = <blockquote>{this.props.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.verse} /></blockquote>;
+      let verse = <blockquote>{this.props.note.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.note.verse} viewer={this.props.viewer}/></blockquote>;
       let notes = null;
       let links = [];
       let tags = null;
@@ -25,14 +26,13 @@ class DCRecordingNoteComponent extends React.Component {
 
       if(this.props.request){
         notes = this.props.recording.text;
-        links = this.props.recording.links;
+        links = this.props.recording.links? this.props.recording.links:[];
         tags = this.props.recording.tags.split("#");
-        author = this.props.author;
+        author = author = this.props.note.author;
       }else{
         notes = this.props.recording.body.text;
-        links = this.props.recording.body.links;
+        links = this.props.recording.body.links? this.props.recording.body.links:[];
         tags = this.props.recording.body.tags.split("#");
-        author = this.props.author;
       }
 
     return (
@@ -70,4 +70,37 @@ class DCRecordingNoteComponent extends React.Component {
   }
 }
 
-export default DCRecordingNoteComponent;
+DCRecordingNoteComponent.propTypes = {
+  viewer: React.PropTypes.object.isRequired,
+  note: React.PropTypes.object.isRequired,
+  recording: React.PropTypes.object.isRequired
+};
+
+export default Relay.createContainer(DCRecordingNoteComponent, {
+  fragments: {
+    viewer: () => Relay.QL`fragment on Viewer {
+      user {
+        authenticated
+      }
+    }`,
+    note: () => Relay.QL`fragment on Note {
+      id
+      author{
+        name
+      }
+      verse{
+        id
+        body
+        reference
+        url
+        notesCount
+        order_by
+      }
+      output{
+        type
+        api_request
+        body
+      }
+    }`,
+    },
+});

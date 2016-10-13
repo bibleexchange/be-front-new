@@ -123,7 +123,9 @@ export default Relay.createContainer(Bible, {
       viewer: () => Relay.QL`fragment on Viewer {
         ${NotesWidget.getFragment('viewer')}
         ${BibleWidget.getFragment('viewer')}
-        user {id}
+        user {
+          id
+        }
         bibleChapter (reference:$reference) {
       	  ${BibleWidget.getFragment('bibleChapter')}
         }

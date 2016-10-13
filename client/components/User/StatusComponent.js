@@ -15,6 +15,9 @@ class StatusComponent extends React.Component {
         case 'saving':
           component = <span style={{color:"red"}}dangerouslySetInnerHTML={{__html: '...saving'}} ></span>;
           break;
+      case 'original':
+        component = <span style={{color:"green"}}dangerouslySetInnerHTML={{__html: 'nothing changed'}} ></span>;
+        break;
       default:
         component = <div />;
     }

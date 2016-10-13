@@ -8,7 +8,7 @@ class NotesWidget extends React.Component {
   componentWillMount(){
 
   let filterBy = this.props.relay.variables.filterNotesBy;
-  
+
   if(filterBy == ""){
 	  this.props.relay.setVariables({filterNotesBy :this.props.filter});
     filterBy = this.props.filter;
@@ -42,6 +42,7 @@ class NotesWidget extends React.Component {
   render() {
       let filterBy = this.state.filterNotesBy.toLowerCase();
       let notes = [];
+      let noNotes = <h2>No notes match your search!</h2>;
       let selectNote = this.props.selectNote;
 
       if(this.props.viewer !== null && this.props.viewer.notes !== null && this.props.viewer.notes !== undefined){
@@ -54,17 +55,23 @@ class NotesWidget extends React.Component {
         nextPage = <button onClick={this.handleNextPage.bind(this)}>more</button>;
       }
 
+      if(notes.length >= 1){
+        noNotes = null;
+      }
+
        return (
     		<div id="notes-widget">
-          <Link to="" className="clearFilter" onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
-          <div id="search">
-              <input type="text" onKeyUp={this.runScriptOnPressEnter.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.applyFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} />
 
-              {nextPage}
+          <div id="search">
+            <Link to="" className="clearFilter" onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
+            <input type="text" onKeyUp={this.runScriptOnPressEnter.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.applyFilter.bind(this)} placeholder="  filter" value={this.state.filterNotesBy} />
+            {nextPage}
           </div>
     			{notes.map((n)=>{
     				return <NoteThumbnail tags={this.props.tags} key={n.node.id} note={n.node} selectNote={selectNote}/>;
     			})}
+
+          <div style={{display:"inline-block", height:"175px", lineHeight:"175px"}}>{noNotes}</div>
 
     		</div>
     )
@@ -76,7 +83,8 @@ class NotesWidget extends React.Component {
 
   applyFilter(event){
     this.props.relay.setVariables({
-      filterNotesBy: this.state.filterNotesBy
+      filterNotesBy: this.state.filterNotesBy,
+      startCursor: null
     });
 
     localStorage.setItem('notes-filter',this.state.filterNotesBy);

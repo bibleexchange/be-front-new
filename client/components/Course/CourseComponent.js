@@ -13,26 +13,12 @@ import './Course.scss';
 
 class Found extends React.Component {
   render() {
-
-  let bibleWidget = null;
-/*
-  if(this.props.viewer.bibleChapter !== undefined){
-    next = { pathname:nexturl, query: { ref: this.props.viewer.bibleChapter.nextChapter.referenceSlug } };
-    previous = { pathname:previousurl, query: { ref: this.props.viewer.bibleChapter.previousChapter.referenceSlug } };
-    bibleWidget =   <BibleWidget bible={this.props.viewer.bible} bibleChapter={this.props.viewer.bibleChapter} bibleVerse={null} baseUrl={"/course/"+this.props.viewer.course.id+"/step/"+this.props.viewer.lessonnote.id}/>;
-  }
-*/
     return (
       	<div className="WidgetContainer">
           <div className="Widget">
       	  <Navigation course={this.props.course.course} lesson={this.props.course.course.lesson} />
       	  <Lesson lesson={this.props.course.course.lesson} />
        	</div>
-        {/*}
-      	<div className="Widget">
-      	  {bibleWidget}
-      	</div>
-        */}
       	</div>
     );
   }

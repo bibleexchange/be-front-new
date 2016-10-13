@@ -5,22 +5,20 @@
   margin:0;
   padding:0;
 
-  .clearFilter {
-    text-align: right;
-    width:auto;
-    display: block;
-    padding-top: 5px;
-    height:30px;
-    position:absolute;
-    right:10px;
-  }
-
   #search{
     width:100%;
     display:block;
     overflow: hidden;
     height:100%;
     margin:0;
+
+    .clearFilter {
+      text-align: center;
+      width:auto;
+      display: block;
+      padding-top: 5px;
+      height:30px;
+    }
 
     input {
       width:100%;

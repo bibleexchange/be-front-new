@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import Relay from 'react-relay';
 import LessonComponent from './LessonListComponent';
 
+import './CoursePrint.scss';
+
 class CoursePrintComponent extends React.Component {
 
   render() {
@@ -18,7 +20,7 @@ class CoursePrintComponent extends React.Component {
 	lessons = course.lessons.edges;
    }
 
-    return (
+console.log(this.props.lessons);    return (
 
         <div id="print">
                 <h1><center>{course.title}</center></h1>
@@ -27,7 +29,7 @@ class CoursePrintComponent extends React.Component {
 
                 <ul>
                 {lessons.map(function(lesson){
-                  return <li key={lesson.node.id} ><Link to={"#lesson_"+lesson.node.order_by}>{lesson.node.title}</Link><p>{lesson.node.summary}</p></li>;
+                  return <li key={lesson.node.id} ><a href={"/course/"+course.id+"/print#lesson_"+lesson.node.order_by}>{lesson.node.title}</a><p>{lesson.node.summary}</p></li>;
                 })}
                 </ul>
 
@@ -60,6 +62,7 @@ export default Relay.createContainer(CoursePrintComponent, {
               cursor
               node{
                 id
+                order_by
                 title
                 summary
                 ${LessonComponent.getFragment('lesson')}

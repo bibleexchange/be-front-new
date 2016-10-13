@@ -179,11 +179,11 @@ class VerseSelector extends React.Component {
 		  <h4>Choose a book and chapter to open</h4>
 
 		  <input type="text" onChange={this.props.handleBooksFilter} placeholder="  filter"></input>
-
+      {/*
 		  <button>Old Testament</button>
 		  <button>New Testament</button>
 		  <button>Random</button>
-
+      */}
 		  <BibleBooksList bible={bible} filterBy={this.props.filterBooksBy} closeAll={this.props.close}/>
 	  </div>
 	</div>

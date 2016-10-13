@@ -26,16 +26,22 @@ class Index extends React.Component {
 
   render() {
     let libraries = [];
+    let continueHere = null;
 
     if(this.props.viewer.libraries !== null && this.props.viewer.libraries !== undefined){
       libraries = this.props.viewer.libraries.edges;
+    }
+    let nav = localStorage.getItem('course-nav');
+    console.log(nav);
+    if(nav !== null){
+      continueHere = <div className="orangeBG" style={{textAlign: "center", color:"white"}} id="continue"><Link to={nav}>Continue? </Link></div>;
     }
 
     return (
 	      <div className="WidgetContainer" >
           <div className="Widget">
 
-          <div className="orangeBG" style={{textAlign: "center", color:"white"}} id="continue"><Link to={localStorage.getItem('course-nav')}>Continue? </Link></div>
+          {continueHere}
 
           <div id="libraries">
         		{libraries.map(function(library){

@@ -14,7 +14,6 @@ class NoteViewer extends React.Component {
     let note = this.props.note;
 
 if(note !== null && note !== ""){
-// type, api_request, body
     switch(note.output.type){
 
       case N.GITHUB:
@@ -23,7 +22,7 @@ if(note !== null && note !== ""){
 
       case N.BIBLE_VERSE:
         let verse = JSON.parse(note.output.body);
-        component = <BibleVerse bibleVerse={verse} request={note.api_request}/>;
+        component = <BibleVerse bibleVerse={verse} request={note.api_request} />;
         break;
 
       case N.STRING:
@@ -35,11 +34,10 @@ if(note !== null && note !== ""){
         break;
 
       case N.DC_RECORDING:
-
           let recording = JSON.parse(note.output.body);
           if(note.output.api_request === false){recording.body = JSON.parse(recording.body);}
 
-          component = <DCRecording recording={recording} request={note.output.api_request} type={note.output.type} author={note.author} verse={this.props.note.verse}/>;
+          component = <DCRecording recording={recording} request={note.output.api_request} note={note} viewer={this.props.viewer}/>;
 
         break;
 
@@ -65,24 +63,31 @@ export default Relay.createContainer(NoteViewer, {
   	noteId: "55555",
   },
   fragments: {
-      note: () => Relay.QL`fragment on Note {
+    viewer: () => Relay.QL`fragment on Viewer {
+      ${DCRecording.getFragment('viewer')}
+      user {
+        authenticated
+      }
+    }`,
+    note: () => Relay.QL`fragment on Note {
+        ${DCRecording.getFragment('note')}
+      id
+    	author{
+    	  name
+    	}
+      verse{
         id
-      	author{
-      	  name
-      	}
-        verse{
-          id
-          body
-          reference
-          url
-          notesCount
-          order_by
-        }
-        output{
-          type
-          api_request
-          body
-        }
-      }`,
+        body
+        reference
+        url
+        notesCount
+        order_by
+      }
+      output{
+        type
+        api_request
+        body
+      }
+    }`,
     },
 });

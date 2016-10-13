@@ -1,0 +1,56 @@
+@import "../variables.scss";
+
+#note-updater {
+
+  border:none;
+
+  select {
+    width:100%;
+  }
+
+  #note-options {
+
+    p {
+      display:inline-block;
+    }
+
+  }
+
+  textarea{
+    width:95%;
+    margin:auto auto;
+    min-height:50px;
+  }
+
+  #actions {
+
+    width: 100%;
+    color: white;
+    .hidden {display: none;}
+    .save{
+      background-color: $GREEN;
+    }
+
+    .clear{
+      background-color: $YELLOW;
+      width:34%
+    }
+
+    .delete{
+      background-color: $RED;
+    }
+
+    button {
+      width:33%;
+      display: inline-block;
+      margin: 0;
+      height: 50px;
+      color:white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border:none;
+    }
+
+ }
+
+}

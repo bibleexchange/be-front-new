@@ -47,6 +47,7 @@
 	margin-top:15px;
 	margin-bottom: 15px;
 	display:block;
+	text-align: center;
 }
 
 .selectedVerse {background-color:$BLUE_TRANS;}
@@ -93,8 +94,6 @@
 	  display: flex;
 	  flex-wrap: wrap;
 	  width:100%;
-	  margin:0;
-		padding:0;
 
 	  .Widget{
 	    width:100%;

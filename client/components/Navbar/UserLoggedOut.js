@@ -18,7 +18,7 @@ class UserLoggedOut extends React.Component {
     let Login = null;
     let Signup = null;
 
-    if(this.props.online){
+    if(this.props.online && false){
       Login = <li><button onClick={this.handleLoginStatus.bind(this)} >Login</button></li>;
       Signup = <li><button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li>;
     }

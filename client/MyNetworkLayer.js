@@ -75,7 +75,8 @@ export default class NetworkLayer {
 			}).then(response => {
 			   return response.json();
 			}).then(results => {
-			   localStorage.setItem(requestId, JSON.stringify(results.data));
+				//disabled caching query results as results are mixed with it
+			   //localStorage.setItem(requestId, JSON.stringify(results.data));
 			   return results;
 			}).catch(function(error) {
 		    		console.log('Request failed fetching from GRAPHQL server, Stephen. You better fix that problem pronto!', error)

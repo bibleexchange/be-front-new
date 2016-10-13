@@ -1,0 +1,49 @@
+#note-options-menu {
+  width:200px;
+  position:fixed;
+  right: 15px;
+  bottom:15px;
+  text-align: center;
+  font-size: 1.5rem;
+  padding:15px;
+
+  #shareIcon {
+    padding:15px;
+    vertical-align: middle;
+    text-align: c;
+
+    img {
+      width:50px;
+      margin:auto;
+      display:block;
+    }
+  }
+
+  ul {
+    display:none;
+    width:99%;
+    clear:both;
+    margin:0;
+    padding:0;
+    background:rgba(255,255,255,0.5);
+
+    li {
+      display: block;
+      border:none;
+      padding:15px;
+      vertical-align: middle;
+      width:100%;
+
+      a {
+        width:100%;
+      }
+
+    }
+
+  }
+
+}
+
+@media screen and (min-width: 670px) {
+
+}

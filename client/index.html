@@ -7,22 +7,16 @@
 <head>
   <meta charset="utf-8">
   <title><%= htmlWebpackPlugin.options.title || 'Bible exchange'%></title>
-
   <link rel="icon" type="image/png" href="<%= require('./assets/favicons/favicon.ico') %>" sizes="16x16">
-
   <meta name="application-name" content="Bible exchange"/>
   <meta name="msapplication-TileColor" content="#FFFFFF" />
-
   <% if (htmlWebpackPlugin.options.mobile) { %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <% } %>
-
   <% for (var css in htmlWebpackPlugin.files.css) { %>
   <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
   <% } %>
-
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin">
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo&amp;subset=latin">
 
   <style>
 
@@ -51,6 +45,15 @@
 <body>
 
 <div id="root"></div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1529479753993292";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 <script>
 
@@ -124,6 +127,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 <% } %>
 
 <script src="/service-worker.js"></script>
+<script>!function(d,s,id){var js,ajs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://assets.tumblr.com/share-button.js";ajs.parentNode.insertBefore(js,ajs);}}(document, "script", "tumblr-js");</script>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script>
+<script type="text/javascript">(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/platform.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);})();</script>
 
 </body>
 </html>

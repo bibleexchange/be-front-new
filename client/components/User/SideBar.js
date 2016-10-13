@@ -82,11 +82,12 @@ class SideBar extends React.Component {
           <LessonsList course={this.props.course} style={mainStyle}/>
         </div>
         <div style={notesStyle}>
-          <NotesWidget
-            filter={''}
-            viewer={this.props.viewer}
-            selectNote={this.props.selectNote} />
-        </div>
+        <NotesWidget
+          filter={''}
+          viewer={this.props.viewer}
+          selectNote={this.props.selectNote}
+          tags={false}/>
+      </div>
     	</div>
     );
   }

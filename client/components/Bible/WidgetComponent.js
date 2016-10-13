@@ -83,6 +83,9 @@ export default Relay.createContainer(WidgetComponent, {
    bibleVerse: () => Relay.QL`fragment on BibleVerse {c}`,
    viewer: () => Relay.QL`fragment on Viewer {
       ${BibleVerse.getFragment('viewer')}
+      user {
+        authenticated
+      }
    }`
   },
 });

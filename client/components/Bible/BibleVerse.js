@@ -12,12 +12,10 @@ class BibleVerseComponent extends React.Component {
   }
 
   render() {
-
-
     let noteCreator = null;
 
     if(this.state.noteStatus){
-      noteCreator = <NoteCreator viewer={this.props.viewer} verse_id={this.props.bibleVerse.id} />;
+      noteCreator = <NoteCreator viewer={this.props.viewer} bibleVerse={this.props.bibleVerse} />;
     }
 
     return (
@@ -42,7 +40,9 @@ class BibleVerseComponent extends React.Component {
   }
 
   clickVerseBody(e){
-    this.setState({noteStatus: !this.state.noteStatus});
+    if(this.props.viewer.user.authenticated === "true"){
+      this.setState({noteStatus: !this.state.noteStatus});
+    }
   }
 
   clearVerseForm(e){
@@ -56,6 +56,7 @@ export default Relay.createContainer(BibleVerseComponent, {
   fragments: {
   bibleVerse: () => Relay.QL`
       fragment on BibleVerse  {
+        ${NoteCreator.getFragment('bibleVerse')}
       	 id
          order_by
       	 body
@@ -64,6 +65,7 @@ export default Relay.createContainer(BibleVerseComponent, {
      }`,
   viewer: () => Relay.QL`
       fragment on Viewer  {
+        user{authenticated}
         ${NoteCreator.getFragment('viewer')}
      }`
   },

@@ -27,18 +27,23 @@ class IndexComponent extends React.Component {
    let baseUrl = '/course/';
    let course = {title:"Course Could not Be Loaded!"};
    let lessons = [];
+   let edit = null;
 
    if(this.props.viewer.course !== null){
-	course = this.props.viewer.course;
-	baseUrl = '/course/'+course.id;
-	lessons = course.lessons.edges;
+    course = this.props.viewer.course;
+    baseUrl = '/course/'+course.id;
+    lessons = course.lessons.edges;
+   }
+
+   if(this.props.viewer.user.authenticated == "true"){
+     edit = <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup>;
    }
 
     return (
         <div className="WidgetContainer">
               <div className="Widget">
 
-                <center><h1>{course.title} <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup></h1></center>
+                <center><h1>{course.title} {edit}</h1></center>
 
                 {lessons.map(function(lesson){
                   return <LessonComponent key={lesson.node.id} lesson={lesson.node} baseUrl={baseUrl}/>;
@@ -62,6 +67,9 @@ export default Relay.createContainer(IndexComponent, {
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
+        user{
+          authenticated
+        }
         course(id:$courseId){
           id
           title
