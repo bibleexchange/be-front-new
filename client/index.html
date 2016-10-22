@@ -16,73 +16,11 @@
   <% for (var css in htmlWebpackPlugin.files.css) { %>
   <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
   <% } %>
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin">
-
-  <style>
-
-  .onlinefalse {
-    display:block;
-    height:40px;
-    width:100%;
-    background-color:rgba(100, 100, 100, 0.5);
-    color:white;
-    text-align:center;
-    line-height:100%;
-    margin:0;
-    padding:0;
-    position:fixed;
-    bottom:0;
-    padding-bottom:10px;
-  }
-
-  .onlinetrue {
-    display:none;
-  }
-
-  </style>
-
+<!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin"> -->
 </head>
 <body>
 
 <div id="root"></div>
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1529479753993292";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function(event) {
-
- checkIfOnline();
-
-  let x = setInterval(checkIfOnline, 20000);
-
-    function checkIfOnline(){
-      let online = navigator.onLine;
-      console.log("Am I connected to the internet?: " + online );
-      document.getElementById("im-online").className = "online"+online;
-    }
-});
-
-</script>
-
-<div id="im-online" class="onlinetrue"><h2>YOU ARE OFFLINE</h2></div>
-
-<% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
-<style>.unsupported-browser { display: none; }</style>
-<div class="unsupported-browser">
-  Sorry, your browser is not supported.  Please upgrade to
-  the latest version or switch your browser to use this site.
-  See <a href="http://outdatedbrowser.com/">outdatedbrowser.com</a>
-  for options.
-</div>
-<% } %>
 
 <% if (htmlWebpackPlugin.options.appMountId) { %>
 <div id="<%= htmlWebpackPlugin.options.appMountId%>"></div>
@@ -94,14 +32,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 <% } %>
 <% } %>
 
-<% if (htmlWebpackPlugin.options.window) { %>
-<script>
-  <% for (var varName in htmlWebpackPlugin.options.window) { %>
-    window['<%=varName%>'] = <%= JSON.stringify(htmlWebpackPlugin.options.window[varName]) %>;
-  <% } %>
-</script>
-<% } %>
-
 <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
 <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
 <% } %>
@@ -110,27 +40,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
 <% } %>
 
-<% if (htmlWebpackPlugin.options.googleAnalytics) { %>
-
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  <% if (htmlWebpackPlugin.options.googleAnalytics.trackingId) { %>
-    ga('create', '<%= htmlWebpackPlugin.options.googleAnalytics.trackingId%>', 'auto');
-    <% } else { throw new Error("html-webpack-template requires googleAnalytics.trackingId config"); }%>
-  <% if (htmlWebpackPlugin.options.googleAnalytics.pageViewOnLoad) { %>
-    ga('send', 'pageview');
-  <% } %>
-</script>
-<% } %>
+setTimeout(function() {
+    //service worker
+    var newScript = document.createElement('script');
+    newScript.type = 'text/javascript';
+    newScript.src = '/service-worker.js';
 
-<script src="/service-worker.js"></script>
-<script>!function(d,s,id){var js,ajs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://assets.tumblr.com/share-button.js";ajs.parentNode.insertBefore(js,ajs);}}(document, "script", "tumblr-js");</script>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script>
-<script type="text/javascript">(function() {var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/platform.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);})();</script>
+    var headID = document.getElementsByTagName("head")[0];
+    headID.appendChild(newScript);
+  });
+</script>
 
 </body>
 </html>

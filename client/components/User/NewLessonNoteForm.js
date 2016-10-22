@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import LessonNoteCreateMutation from './LessonNoteCreateMutation';
+import StepCreateMutation from './StepCreateMutation';
 import Status from './StatusComponent';
 import NotePreview from '../Note/NotePreview';
 import TextInput from './TextInput';
@@ -38,7 +38,7 @@ class NewLessonNoteForm extends React.Component {
           <TextInput label="order by:" name="order_by" value={this.state.note.order_by} handleEdit={this.handleEdit.bind(this)} />
           <input type="submit" value={"create new lesson note"} onClick={this.handleUpdate.bind(this)}/>
 
-          
+
           <NotePreview note={this.props.note} />
 
         </div>
@@ -61,8 +61,8 @@ class NewLessonNoteForm extends React.Component {
     console.log('Saving LessonNote...', this.state.note);
     this.setState({status: <Status type="saving"/>});
 
-    Relay.Store.commitUpdate(new LessonNoteCreateMutation({
-      lessonnote: this.state.note
+    Relay.Store.commitUpdate(new StepCreateMutation({
+      step: this.state.note
     }));
   }
 }

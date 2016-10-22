@@ -7,7 +7,7 @@
   margin:auto auto;
   padding:0;
   padding-bottom:25px;
-  margin-bottom: 15px;
+  margin-bottom: 60px;
 
   .Widget{
     width:100%;
@@ -37,13 +37,14 @@
   .WidgetContainer > div {
     background-color: rgba(255,255,255, .95);
     margin: 3rem;
+
   }
 
 
   .WidgetContainer {
     width:50%;
     margin:auto;
-    margin-bottom: 15px;
+    margin-bottom:60px;
 
     > div {
       flex: 0;

@@ -14,13 +14,13 @@ class CoursePrintComponent extends React.Component {
    let course = {title:"Course Could not Be Loaded!"};
    let lessons = [];
 
-   if(this.props.viewer.course !== null){
-	course = this.props.viewer.course;
+   if(this.props.viewer.courses !== null){
+	course = this.props.viewer.courses.edges[0].node;
 	baseUrl = '/course/'+course.id;
 	lessons = course.lessons.edges;
    }
 
-console.log(this.props.lessons);    return (
+ return (
 
         <div id="print">
                 <h1><center>{course.title}</center></h1>
@@ -54,21 +54,25 @@ export default Relay.createContainer(CoursePrintComponent, {
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
-        course(id:$courseId){
-          id
-          title
-          lessons(first:100){
-            edges{
-              cursor
-              node{
-                id
-                order_by
-                title
-                summary
-                ${LessonComponent.getFragment('lesson')}
+        courses(first:1, id:$courseId){
+          edges{
+            node{
+              id
+              title
+              lessons(first:100){
+                edges{
+                  cursor
+                  node{
+                    id
+                    order_by
+                    title
+                    summary
+                    ${LessonComponent.getFragment('lesson')}
+                    }
+                  }
                 }
-              }
             }
+          }
           }
       }`,
     },

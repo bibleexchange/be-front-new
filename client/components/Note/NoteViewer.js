@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Relay from 'react-relay';
 import ExternalLink from './Output/ExternalLinkNote';
 import Recording from './Output/RecordingNote';
@@ -45,6 +46,8 @@ if(note !== null && note !== ""){
         component = note.output.body;
 
     }
+}else{
+  component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
 }
     return (
         <div style={{padding:"10px", wordWrap: "break-word"}}>
@@ -72,6 +75,7 @@ export default Relay.createContainer(NoteViewer, {
     note: () => Relay.QL`fragment on Note {
         ${DCRecording.getFragment('note')}
       id
+      tags
     	author{
     	  name
     	}

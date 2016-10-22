@@ -66,8 +66,9 @@ class NoteThumbnail extends React.Component {
     }
 
   	return (
-  		<div id={note.id} className="note-thumbnail" draggable="true" onClick={this.props.selectNote}>
-        {component}
+  		<div id={note.id} className="note-thumbnail" draggable="true" >
+        <button id={note.id} className="select-note" onClick={this.props.selectNote}>&nbsp;</button>
+        <div className="output">{component}</div>
         <button onClick={this.toggleTags.bind(this)}> tags...</button>
         <p style={tagsStyle}>{tags.map(function(t,key){
 

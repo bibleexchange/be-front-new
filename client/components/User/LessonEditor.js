@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import LessonNoteEditor from './LessonNoteEditor';
+import StepEditor from './StepEditor';
 import NewLessonNoteForm from './NewLessonNoteForm';
 import LessonUpdateMutation from './LessonUpdateMutation';
 import Status from './StatusComponent';
@@ -15,7 +15,7 @@ class LessonEditor extends React.Component {
   constructor(props) {
     super(props);
 
-    let lesson = this.props.viewer.course.lesson;
+    let lesson = this.props.viewer.lessons.edges[0].node;
 
     this.state = {
      lesson: {
@@ -31,9 +31,9 @@ class LessonEditor extends React.Component {
 
   componentWillReceiveProps(newProps){
 
-    let lesson = newProps.viewer.course.lesson;
+    let lesson = newProps.viewer.lessons.edges[0].node;
 
-    if(lesson.id !== this.props.viewer.course.lesson.id){
+    if(lesson.id !== this.props.viewer.lessons.edges[0].node.id){
 
       this.setState({
         lesson: {
@@ -56,11 +56,11 @@ class LessonEditor extends React.Component {
   render() {
 
     let newNote = null;
-    let lesson = this.props.viewer.course.lesson;
-    let note = this.props.note;
+    let lesson = this.props.viewer.lessons[0].node;
+    let note = this.props.viewer.notes.edges[0].node;
 
     if(note !== null && note.id !== undefined){
-      newNote = <NewLessonNoteForm lessonnote={{}} note={note} lesson={lesson} orderBy={lesson.notesCount+1} />;
+      newNote = <NewLessonNoteForm step={{}} note={note} lesson={lesson} orderBy={lesson.notesCount+1} />;
     }
 
       return (
@@ -81,7 +81,7 @@ class LessonEditor extends React.Component {
 
           <div id="notes">
             {lesson.notes.edges.map(function(bridge){
-              return <LessonNoteEditor key={bridge.node.id} lessonnote={bridge.node} />;
+              return <StepEditor key={bridge.node.id} step={bridge.node} />;
             })}
           </div>
 
@@ -150,33 +150,38 @@ export default Relay.createContainer(LessonEditor, {
   },
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
-      course(id: $courseId) {
-        id
-        lesson (id: $lessonId){
-          ${LessonUpdateMutation.getFragment('lesson')}
-          id
-          course_id
-          order_by
-          title
-          summary
-          notesCount
-          next{id, title}
-          previous{id, title}
-          notes(first:$pageSize){
-            edges {
-              cursor
-              node {
-                ${LessonNoteEditor.getFragment('lessonnote')}
-                id
+        lessons (first:1, id: $lessonId){
+          edges{
+            node {
+              ${LessonUpdateMutation.getFragment('lesson')}
+              id
+              course_id
+              order_by
+              title
+              summary
+              stepsCount
+              next{id, title}
+              previous{id, title}
+              steps(first:$pageSize){
+                edges {
+                  cursor
+                  node {
+                    ${StepEditor.getFragment('step')}
+                    id
+                  }
+                }
               }
             }
           }
         }
-      }
 
-    note(id:$noteId){
-        ${NewLessonNoteForm.getFragment('note')}
-        id
+    notes(first:1, id:$noteId){
+      edges{
+        node{
+          ${NewLessonNoteForm.getFragment('note')}
+          id
+        }
+      }
       }
   }`
  },

@@ -18,7 +18,7 @@ class CourseEditor extends React.Component {
     this.state = {
      loggedIn: auth.loggedIn(),
      online: navigator.onLine,
-     course:this.props.viewer.course,
+     course:this.props.viewer.courses.edges[0].node,
      status: <Status type="done"/>,
      sideBarState: true,
      noteDrawerState: false
@@ -49,7 +49,7 @@ componentWillReceiveProps(newProps){
           <div id="course-editor">
             <MenuBar
               course={this.state.course}
-              courseInfo={this.props.viewer.course}
+              courseInfo={this.props.viewer.courses.edges[0].node}
               editTitle={this.handleEditTitle.bind(this)}
               updateTitle={this.handleUpdateTitle.bind(this)}
               status={this.state.status}
@@ -59,7 +59,7 @@ componentWillReceiveProps(newProps){
               noteDrawerState={this.state.noteDrawerState}
               />
 
-            <SideBar course={this.props.viewer.course}
+            <SideBar course={this.state.course}
               style={newLessonForm}
               status={this.state.sideBarState}
               notesStatus={this.state.noteDrawerState}
@@ -67,7 +67,7 @@ componentWillReceiveProps(newProps){
               viewer={this.props.viewer}
             />
 
-            <MainContent children={this.props.children} note={this.props.viewer.note} />
+            <MainContent children={this.props.children} note={this.props.viewer.note} viewer={this.props.viewer}/>
 
         </div>
     );
@@ -101,6 +101,7 @@ componentWillReceiveProps(newProps){
   }
 
   selectNote(e){
+    console.log('selecting note: ', e.target);
    this.props.relay.setVariables({
      noteId: e.target.id
    });
@@ -152,25 +153,38 @@ export default Relay.createContainer(CourseEditor, {
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
       ${SideBar.getFragment('viewer')}
-      course(id: $courseId) {
-        ${CourseUpdateMutation.getFragment('course')}
-        ${SideBar.getFragment('course')}
-        id
-        title
-        lessonsCount
-        lesson (id:$lessonId){
-          id
-        }
-        lessons (first:100){
-          pageInfo
-          edges{
-            cursor
-            node{
-              id
+      ${MainContent.getFragment('viewer')}
+
+      courses(first:1, id: $courseId) {
+        edges{
+          node{
+            ${CourseUpdateMutation.getFragment('course')}
+            ${SideBar.getFragment('course')}
+            id
+            title
+            lessonsCount
+            lessons (first:100){
+              pageInfo
+              edges{
+                cursor
+                node{
+                  id
+                }
+              }
             }
           }
         }
     }
+
+    lessons(first: 1, id:$lid){
+      edges{
+        cursor
+        node{
+          id
+        }
+      }
+    }
+
     notes(first:$pageSize){
       pageInfo{
         hasNextPage
@@ -180,14 +194,13 @@ export default Relay.createContainer(CourseEditor, {
         cursor
         node{
           id
+          tags
+          type
+          ${MainContent.getFragment('note')}
         }
       }
     }
-    note(id:$noteId){
-        id
-        type
-        ${MainContent.getFragment('note')}
-      }
+
   }`
  },
 });

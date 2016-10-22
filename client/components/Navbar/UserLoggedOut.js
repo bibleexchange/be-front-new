@@ -1,8 +1,8 @@
-import React from 'react';
-import Relay from 'react-relay';
-import LoginComponent from '../Login/LoginComponent';
-import SignUpComponent from '../Login/SignUpComponent';
-import { Link } from 'react-router';
+import React from 'react'
+import Relay from 'react-relay'
+import LoginComponent from '../Login/LoginComponent'
+import SignUpComponent from '../Login/SignUpComponent'
+import { Link } from 'react-router'
 
 class UserLoggedOut extends React.Component {
 
@@ -10,17 +10,17 @@ class UserLoggedOut extends React.Component {
     this.state = {
       closed : true,
       signUpStatus: false
-    };
+    }
   }
 
   render() {
 
-    let Login = null;
-    let Signup = null;
+    let Login = null
+    let Signup = null
 
     if(this.props.online && false){
-      Login = <li><button onClick={this.handleLoginStatus.bind(this)} >Login</button></li>;
-      Signup = <li><button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li>;
+      Login = <li><button onClick={this.handleLoginStatus.bind(this)} >Login</button></li>
+      Signup = <li><button onClick={this.handleSignUpStatus.bind(this)} >Signup</button></li>
     }
 
     return (
@@ -48,28 +48,28 @@ class UserLoggedOut extends React.Component {
            signup={this.props.signup}
           />
     		</ul>
-    );
+    )
   }
 
   handleLoginStatus(){
-    let status = this.state.closed;
-    this.setState({closed:!status, signUpStatus:false});
+    let status = this.state.closed
+    this.setState({closed:!status, signUpStatus:false})
   }
 
   handleSignUpStatus(){
-    let status = this.state.signUpStatus;
-    this.setState({signUpStatus:!status, closed:true});
+    let status = this.state.signUpStatus
+    this.setState({signUpStatus:!status, closed:true})
   }
 
 }
 
 UserLoggedOut.contextTypes = {
     router: React.PropTypes.object.isRequired
-};
+}
 
 UserLoggedOut.propTypes = {
   user: React.PropTypes.object.isRequired
-};
+}
 
 export default Relay.createContainer(UserLoggedOut, {
   initialVariables: {
@@ -88,4 +88,4 @@ export default Relay.createContainer(UserLoggedOut, {
       }
     `,
   },
-});
+})

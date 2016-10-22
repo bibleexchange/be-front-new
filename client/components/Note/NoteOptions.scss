@@ -1,36 +1,39 @@
 #note-options-menu {
-  width:200px;
+  width:auto;
   position:fixed;
   right: 15px;
   bottom:15px;
   text-align: center;
   font-size: 1.5rem;
   padding:15px;
+  z-index:2000;
 
   #shareIcon {
     padding:15px;
     vertical-align: middle;
-    text-align: c;
+    text-align: center;
 
     img {
       width:50px;
       margin:auto;
       display:block;
+      float:right;
     }
   }
 
   ul {
     display:none;
-    width:99%;
+    width:100%;
     clear:both;
     margin:0;
-    padding:0;
-    background:rgba(255,255,255,0.5);
+    padding:10px;
+    background:rgba(255,255,255,0.9);
+    text-align: center;
 
     li {
       display: block;
       border:none;
-      padding:15px;
+      padding:0;
       vertical-align: middle;
       width:100%;
 

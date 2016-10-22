@@ -8,14 +8,15 @@
     height:200px;
     margin:0;
     overflow-x: scroll;
-    overflow-y: hidden;
     background: transparent;
 
     #notes-widget {
       border: none;
       margin:0;
       padding:0;
-      white-space: nowrap;
+    white-space: normal;
+      height:175px;
+
     }
 
     ul {

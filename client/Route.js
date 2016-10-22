@@ -4,7 +4,6 @@ import Relay from 'react-relay';
 
 //queries
 import ViewerQueries from './queries/ViewerQueries';
-import CourseQueries from './queries/CourseQueries';
 
 //relay containers/components
 import App from './components/App/AppComponent';
@@ -16,10 +15,10 @@ import CourseIndex from './components/Course/IndexComponent';
 import CoursePrint from './components/Course/CoursePrintComponent';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
+import NotePrintPage from './components/Note/NotePrintPageComponent';
 import NoteEditorPage from './components/Note/NoteEditorComponent';
 import CourseEditor from './components/User/CourseEditor';
 import LessonEditor from './components/User/LessonEditor';
-import JWTCallback from './components/App/JWTCallback';
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
@@ -30,14 +29,14 @@ export default (
     <Route path='course' >
       <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />
       <Route path=':courseId/print' component={CoursePrint} queries={ViewerQueries} />
-      <Route path=':courseId/lesson/:lessonId' component={Course} queries={CourseQueries} />
+      <Route path=':courseId/lesson/:lessonId' component={Course} queries={ViewerQueries} />
     </Route>
 
     <Route path='/notes(/tag/:filterBy)' component={NotesIndex} queries={ViewerQueries} />
     <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
+    <Route path='/notes/:noteId/print' component={NotePrintPage} queries={ViewerQueries} />
     <Route path='/notes/:noteId/edit' component={NoteEditorPage} queries={ViewerQueries} />
 
-    <Route path='/set-jwt' component={JWTCallback} />
     <Route path='bible/:reference' component={Bible} queries={ViewerQueries}  />
     <Route path='/user' component={Dashboard} queries={ViewerQueries} />
     <Route path='/user/course/:courseId/edit' component={CourseEditor} queries={ViewerQueries} >

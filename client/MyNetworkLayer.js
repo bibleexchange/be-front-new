@@ -17,18 +17,26 @@ class Response {
 export default class NetworkLayer {
   constructor(auth, url = null) {
     this.auth = auth
-    this.url = url || 'http://localhost:3000/graphql'
+    this.url = url || 'http://localhost:80/graphql'
   }
 
   get defaultHeaders() {
 
-    let bearer = 'Bearer '+ this.auth;
+	if(this.auth !== null){
+		  let bearer = 'Bearer '+ this.auth;
 
-    return {
-      'Authorization': bearer,
-      'Accept': '*/*',
-      'Content-Type': 'application/json'
-    }
+		return {
+			'Authorization': bearer,
+			'Accept': '*/*',
+			'Content-Type': 'application/json'
+		}
+	}else{
+		return {
+			'Accept': '*/*',
+			'Content-Type': 'application/json'
+		}
+	}
+
   }
 
   buildRequest(request) {
@@ -48,7 +56,7 @@ export default class NetworkLayer {
     then(response => response.json()).
     then(results => {
       if (results.errors) {
-	console.log('we cannot connect to server to send mutation. :(');
+				console.log('we cannot connect to server to send mutation. :(');
         request.reject(new Error(this.formatRequestErrors(results.errors, request)))
       } else {
         request.resolve({ response: results.data })
@@ -60,13 +68,14 @@ export default class NetworkLayer {
 
     let requestId = btoa(JSON.stringify(request.getQueryString()) + JSON.stringify(request.getVariables()));
     let localResponse = localStorage.getItem(requestId);
-    console.log('I temporarily disabled local cached responses in MyNetworkLayer.js page 63.');
+
+		//disabled local response
     if (false && localResponse !== null && localResponse !== "") {
       console.log('FETCHING FROM LOCAL STORAGE.');
       let data = {data:JSON.parse(localStorage.getItem(requestId))};
       return new Promise(function(resolve, reject) {return resolve(data)});
-	//forcing load from server even if offline
-    }else if(/*window.navigator.onLine*/ true) {
+
+    }else if(window.navigator.onLine) {
 	console.log('FETCHING FROM SERVER.');
       return fetch(this.url, {
 			  method: 'POST',
@@ -75,12 +84,11 @@ export default class NetworkLayer {
 			}).then(response => {
 			   return response.json();
 			}).then(results => {
-				//disabled caching query results as results are mixed with it
-			   //localStorage.setItem(requestId, JSON.stringify(results.data));
+			   localStorage.setItem(requestId, JSON.stringify(results.data));
 			   return results;
 			}).catch(function(error) {
 		    		console.log('Request failed fetching from GRAPHQL server, Stephen. You better fix that problem pronto!', error)
-				let data = {data:{viewer:error}};
+				let data = {data:{viewer:{error:{message:"Cannot connect with server!",code:500}}}};
 				return new Promise(function(resolve, reject) {return resolve(data)});
 		  });
 
@@ -96,13 +104,15 @@ export default class NetworkLayer {
 	  return Promise.all(requests.map(
 	     request => this.myCachedFetch(request)
 		.then(results => {
-		       if (results.errors) {
-			  request.reject(new Error(this.formatRequestErrors(results.errors, request)))
-		       } else {
-			  request.resolve({ response: results.data })
-		       }
+		    if (results.errors) {
+			  	 request.reject(new Error(this.formatRequestErrors(results.errors, request)))
+				} else {
+			  	request.resolve({ response: results.data })
+		    }
 		 }).catch(function(error) {
-		    console.log('Request failed Stephen. You better fix that problem pronto!', error)
+		    console.log('Request failed Stephen. You better fix that problem pronto! (LINE #105)', error)
+				let data = {data:{viewer:{error:{message:"Cannot connect with server!",code:500}}}};
+				return new Promise(function(resolve, reject) {return resolve(data)});
 		  })
 	  ));
 

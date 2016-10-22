@@ -1,21 +1,19 @@
-/* eslint-disable global-require */
-import React from 'react';
-import Relay from 'react-relay';
-import BibleVerse from './BibleVerse';
-import BibleNavigation from './Navigation';
-import { Link } from 'react-router';
+import React from 'react'
+import Relay from 'react-relay'
+import BibleVerse from './BibleVerse'
+import BibleNavigation from './Navigation'
+import { Link } from 'react-router'
 
 class BibleChapterComponent extends React.Component {
 
   render() {
-
     return (
       <div>
       	{this.props.bibleChapter.verses.edges.map(function(verse) {
-              	return <BibleVerse bibleVerse={verse.node} key={verse.node.id}/>;
+              	return <BibleVerse bibleVerse={verse.node} key={verse.node.id}/>
       	})}
       </div>
-    );
+    )
   }
 
 }
@@ -24,27 +22,30 @@ class WidgetComponent extends React.Component {
 
   render() {
 
-    const baseUrl = this.props.baseUrl;
-    let verses = [];
-    let viewer = this.props.viewer;
+    const baseUrl = this.props.baseUrl
+    let verses = []
+    let viewer = this.props.viewer
+    let nextChapterUrl = null
+    let goToNext = null
 
-    if(this.props.bibleChapter !== null && this.props.bibleChapter.verses !== undefined){
-      verses = this.props.bibleChapter.verses.edges;
+    if(this.props.bibleChapter !== undefined && this.props.bibleChapter !== null && this.props.bibleChapter.verses !== undefined){
+      verses = this.props.bibleChapter.verses.edges
+      nextChapterUrl = this.props.bibleChapter.nextChapter.url
+      goToNext = <Link className="nextChapter" to={nextChapterUrl} >next</Link>
     }
 
-let clickVerseBody= this.props.clickVerseBody;
+let clickVerseBody= this.props.clickVerseBody
 
     return (
       <div>
       	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl}/>
       	  {verses.map(function(verse) {
-      		return <BibleVerse viewer={viewer} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl}/>;
+      		return <BibleVerse viewer={viewer} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl}/>
       	  })}
 
-          <Link className="nextChapter" to={this.props.bibleChapter.nextChapter.url} >next</Link>
-
+          {goToNext}
       </div>
-    );
+    )
   }
 
 }
@@ -52,7 +53,7 @@ let clickVerseBody= this.props.clickVerseBody;
 WidgetComponent.propTypes = {
     bibleChapter: React.PropTypes.object.isRequired,
     bible: React.PropTypes.object,
-  };
+  }
 
 export default Relay.createContainer(WidgetComponent, {
   initialVariables: {
@@ -73,7 +74,6 @@ export default Relay.createContainer(WidgetComponent, {
 		      ${BibleVerse.getFragment('bibleVerse')}
 		     }
 		  }
-
 		}
 	   ${BibleNavigation.getFragment('bibleChapter')}
       }`,
@@ -88,4 +88,4 @@ export default Relay.createContainer(WidgetComponent, {
       }
    }`
   },
-});
+})

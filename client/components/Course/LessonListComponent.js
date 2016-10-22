@@ -38,8 +38,8 @@ export default Relay.createContainer(LessonListComponent, {
           order_by
           title
           summary
-          notesCount
-          notes(first:100){
+          stepsCount
+          steps(first:100){
             edges{
               cursor
               node{

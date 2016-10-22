@@ -1,53 +1,55 @@
-import React from 'react';
-import Relay from 'react-relay';
-import { Link } from 'react-router';
+import React from 'react'
+import Relay from 'react-relay'
+import { Link } from 'react-router'
 
-import FacebookShareButton from '../SocialMedia/FacebookShareButton';
-import TumblrShareButton from '../SocialMedia/TumblrShareButton';
-import TwitterShareButton from '../SocialMedia/TwitterShareButton';
-import PinterestShareButton from '../SocialMedia/PinterestShareButton';
-import GooglePlusShareButton from '../SocialMedia/GooglePlusShareButton';
+import SocialShareButton from '../SocialMedia/SocialShareButton'
 
-import './NoteOptions.scss';
+import './NoteOptions.scss'
 
-const shareIcon = require('../../assets/svg/share.svg');
+const shareIcon = require('../../assets/svg/share.svg')
 
 class NoteOptions extends React.Component {
 
   componentWillMount(){
     this.state = {
       status: false
-    };
+    }
   }
 
   render() {
 
-    let shareURL = "notes/"+this.props.note.id;
-    let mainStyle = {display:"none"};
+    let shareURL = null
+    let mainStyle = {display:"none"}
+    let editNote = null
+
     if(this.state.status){
-      mainStyle.display = "block";
+      mainStyle.display = "block"
+    }
+
+    if(this.props.note !== null){
+      editNote = <li><SocialShareButton site="edit" url={"/notes/"+this.props.note.id+"/edit"}/></li>
+      shareURL = "notes/"+this.props.note.id
     }
 
   	return (
   		<nav id="note-options-menu" >
         <ul style={mainStyle} >
-          <li><Link to={"/notes/"+this.props.note.id+"/edit"} className="view-it">edit</Link></li>
-          <li><FacebookShareButton url={shareURL}/></li>
-          <li><TwitterShareButton ur={shareURL}/></li>
-          <li><PinterestShareButton url={shareURL} /></li>
-          <li><GooglePlusShareButton url={shareURL} /></li>
-          <li><TumblrShareButton /></li>
+          {editNote}
+          <li><SocialShareButton site="print" url={"/notes/"+this.props.note.id+"/print"}/></li>
+          <li><SocialShareButton site="facebook" url={shareURL}/></li>
+          <li><SocialShareButton site="twitter" message="waht a great day" url={shareURL}/></li>
+          <li><SocialShareButton site="googleplus" url={shareURL}/></li>
+          <li><SocialShareButton site="pinterest" media="" message="waht a great day" url={shareURL}/></li>
         </ul>
         <div id="shareIcon">
-          <img src={shareIcon} onClick={this.toggleSocial.bind(this)}/>
-          (share)
+          <img src={shareIcon} onClick={this.toggleSocial.bind(this)} />
         </div>
   		</nav>
-  		);
+  		)
 	}
 
   toggleSocial(e){
-    this.setState({status: !this.state.status});
+    this.setState({status: !this.state.status})
   }
 
 }
@@ -80,4 +82,4 @@ export default Relay.createContainer(NoteOptions, {
     	    }
      }`
   }
-});
+})

@@ -130,12 +130,18 @@ export default Relay.createContainer(NoteCreator, {
           name
           email
         }
-        note(id:"newNote"){
-          ${NoteCreateMutation.getFragment('note')}
-          id
-          type
-          body
-          tags_string
+        
+        notes(first:1, id:"newNote"){
+          edges{
+            node{
+              ${NoteCreateMutation.getFragment('note')}
+              id
+              type
+              body
+              tags_string
+            }
+          }
+
         }
       }`,
     bibleVerse: () => Relay.QL`fragment on BibleVerse {

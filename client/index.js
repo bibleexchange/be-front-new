@@ -10,23 +10,14 @@ import { browserHistory, applyRouterMiddleware, Router } from 'react-router';
 import useRelay from 'react-router-relay';
 
 //register service worker
-if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('/service-worker.js', {scope: './'})
-        .then(function (registration) {
-            console.log(registration);
-        })
-        .catch(function (e) {
-            console.error(e);
-        })
-} else {
-    console.log('Service Worker is not supported in this browser.')
-}
+//import ServiceWorker from './service-worker-load';
+//ServiceWorker.register();
 
 //send to dom
 const mountNode = document.getElementById('root');
 
 if(process.env.GRAPHQL_SERVER_IS === "mock"){
- //ahavent fugured this out yet
+ // havent fugured this out yet
 }else{
   Relay.injectNetworkLayer(new MyNetworkLayer(localStorage.getItem('be_token'), process.env.GRAPHQL_ENDPOINT));
 }

@@ -1,9 +1,15 @@
 #bible {
 #notes-widget {
-
   width:100%;
   margin:0;
   padding:0;
+  white-space: normal;
+
+  .note-count {
+    text-align: right;
+    margin:15px;
+    font-style: italic;
+  }
 
   #search{
     width:100%;
@@ -11,6 +17,7 @@
     overflow: hidden;
     height:100%;
     margin:0;
+    border: none;
 
     .clearFilter {
       text-align: center;
@@ -31,8 +38,17 @@
     button {
       width:100%;
       height:40px;
+      display: block;
+      clear: both;
     }
 
+    a {
+      text-align: center;
+      width:100%;
+      display: block;
+      font-size: 2em;
+      padding-top: 5px;
+    }
 
   }
 
@@ -49,6 +65,34 @@
     overflow: hidden;
     height:100%;
     margin-bottom:30px;
+    padding:0;
+    background-color:rgba(255,255,255,0.7);
+
+    button.select-note {
+      position:absolute;
+      left:0;
+      display: block;
+      width:100%;
+      height:100%;
+      background: rgba(255,255,255, 0.1);
+      z-index: 1000;
+    }
+
+    button {
+      display: none;
+    }
+
+    .output {
+      height:140px;
+      overflow: hidden;
+      h1, h2, h3, h4, h5, h6, p, blockquote {font-size: 1em;}
+
+      div {
+        height:140px;
+        overflow: hidden;
+        margin:0;
+        padding:0;
+      }
 
     a.view-it {
       position:relative;
@@ -62,5 +106,6 @@
     }
 
   }
+}
 }
 }

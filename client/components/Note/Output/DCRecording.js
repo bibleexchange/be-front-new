@@ -12,27 +12,16 @@ class DCRecordingNoteComponent extends React.Component {
   render() {
 
       let verse = <blockquote>{this.props.note.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.note.verse} viewer={this.props.viewer}/></blockquote>;
-      let notes = null;
-      let links = [];
-      let tags = null;
-      let author = {};
+      let notes = this.props.recording.text;
+      let links = this.props.recording.links? this.props.recording.links:[];
+      let tags = this.props.note.tags;
+      let author = this.props.note.author;
       let soundCloud = null;
 
       if(this.props.recording.soundcloudId !== undefined){
         let trackNumber = this.props.recording.soundcloudId;
         let srcString = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/"+trackNumber+"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;visual=true";
         soundCloud =  <iframe width='100%' height='600px' scrolling='no' frameBorder='no' src={srcString}></iframe>;
-      }
-
-      if(this.props.request){
-        notes = this.props.recording.text;
-        links = this.props.recording.links? this.props.recording.links:[];
-        tags = this.props.recording.tags.split("#");
-        author = author = this.props.note.author;
-      }else{
-        notes = this.props.recording.body.text;
-        links = this.props.recording.body.links? this.props.recording.body.links:[];
-        tags = this.props.recording.body.tags.split("#");
       }
 
     return (
@@ -85,6 +74,7 @@ export default Relay.createContainer(DCRecordingNoteComponent, {
     }`,
     note: () => Relay.QL`fragment on Note {
       id
+      tags
       author{
         name
       }

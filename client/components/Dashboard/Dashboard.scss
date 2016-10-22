@@ -22,11 +22,8 @@
 		}
 
     #magnifying-glass {
-      height:20px;
-      margin:0;
-      padding:0;
-      margin-top: 9px;
-      margin-left: 10px;
+      height:100%;
+      margin:auto auto;
       display:inline-block;
     }
 
@@ -37,6 +34,7 @@
 			text-align: center;
 			width:75%;
 			padding: 0;
+      float:left;
 		}
 
 		#search {

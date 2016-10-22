@@ -2,22 +2,24 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import LessonNoteUpdateMutation from './LessonNoteUpdateMutation';
-import LessonNoteDestroyMutation from './LessonNoteDestroyMutation';
+import StepUpdateMutation from './StepUpdateMutation';
+import StepDestroyMutation from './StepDestroyMutation';
 import Status from './StatusComponent';
 import NotePreview from '../Note/NotePreview';
 import TextInput from './TextInput';
 
-class LessonNoteEditor extends React.Component {
+import './StepEditor.scss';
+
+class StepEditor extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-     lessonnote: {
-       id: this.props.lessonnote.id,
-       lesson_id: this.props.lessonnote.lesson_id,
-       note_id: this.props.lessonnote.note_id,
-       order_by: this.props.lessonnote.order_by
+     step: {
+       id: this.props.step.id,
+       lesson_id: this.props.step.lesson_id,
+       note_id: this.props.step.note_id,
+       order_by: this.props.step.order_by
      },
      status: <Status type="done"/>,
      preview: false
@@ -40,10 +42,10 @@ class LessonNoteEditor extends React.Component {
 
     let preview = "Something wrong with connecting with this note.";
 
-    if(this.props.lessonnote.note !== undefined){
-      preview = <div><button onClick={this.togglePreview.bind(this)} >preview {this.props.lessonnote.note.type}</button>
+    if(this.props.step.note !== undefined){
+      preview = <div><button onClick={this.togglePreview.bind(this)} >preview {this.props.step.note.type}</button>
         <div id="preview" style={previewStyle}>
-          <NotePreview note={this.props.lessonnote.note} />
+          <NotePreview note={this.props.step.note} />
         </div></div>;
     }else{
       preview = "Something wrong with connecting with this note.";
@@ -54,9 +56,9 @@ class LessonNoteEditor extends React.Component {
           <button id="delete" onClick={this.handleDestroy.bind(this)}>&#10008;</button>
           {this.state.status}
 
-          <TextInput label="lesson" name="lesson_id" value={this.state.lessonnote.lesson_id} handleEdit={this.handleEdit.bind(this)}/>
-          <TextInput label="note" name="note_id" value={this.state.lessonnote.note_id} handleEdit={this.handleEdit.bind(this)} />
-          <TextInput label="order" name="order_by" value={this.state.lessonnote.order_by} handleEdit={this.handleEdit.bind(this)} />
+          <TextInput label="lesson" name="lesson_id" value={this.state.step.lesson_id} handleEdit={this.handleEdit.bind(this)}/>
+          <TextInput label="note" name="note_id" value={this.state.step.note_id} handleEdit={this.handleEdit.bind(this)} />
+          <TextInput label="order" name="order_by" value={this.state.step.order_by} handleEdit={this.handleEdit.bind(this)} />
 
           <input type="submit" value={"save"} onClick={this.handleUpdate.bind(this)}/>
           {preview}
@@ -72,27 +74,27 @@ class LessonNoteEditor extends React.Component {
     n[p] = e.target.value;
 
     this.setState({
-    	lessonnote:n,
+    	step:n,
     	status: <Status type="changes-not-saved"/>
     	});
   }
 
   handleUpdate(e){
-    console.log('Saving...', this.state.lessonnote);
+    console.log('Saving...', this.state.step);
     this.setState({status: <Status type="saving"/>});
 
-    Relay.Store.commitUpdate(new LessonNoteUpdateMutation({
-      noteChanged: this.state.lessonnote,
-      lessonnote: this.props.lessonnote
+    Relay.Store.commitUpdate(new StepUpdateMutation({
+      noteChanged: this.state.step,
+      step: this.props.step
     }));
   }
 
   handleDestroy(e){
-    console.log('Destroying LessonNote...');
+    console.log('Destroying Step...');
     this.setState({status: <Status type="saving"/>});
 
-    Relay.Store.commitUpdate(new LessonNoteDestroyMutation({
-      lessonnote: this.props.lessonnote
+    Relay.Store.commitUpdate(new StepDestroyMutation({
+      step: this.props.step
     }));
 
   }
@@ -103,18 +105,18 @@ togglePreview(){
 
 }
 
-LessonNoteEditor.propTypes = {
-  lessonnote: React.PropTypes.object.isRequired,
+StepEditor.propTypes = {
+  step: React.PropTypes.object.isRequired,
 };
 
-export default Relay.createContainer(LessonNoteEditor, {
+export default Relay.createContainer(StepEditor, {
   initialVariables: {
     null
   },
   fragments: {
-      lessonnote: () => Relay.QL`fragment on LessonNote {
-	       ${LessonNoteUpdateMutation.getFragment('lessonnote')}
-         ${LessonNoteDestroyMutation.getFragment('lessonnote')}
+      step: () => Relay.QL`fragment on Step {
+	      ${StepUpdateMutation.getFragment('step')}
+        ${StepDestroyMutation.getFragment('step')}
         id
       	lesson_id
       	note_id

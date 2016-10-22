@@ -54,3 +54,24 @@ main {
   width: 100%;
   display: block;
 }
+
+
+.onlinefalse {
+  display:block;
+  height:40px;
+  width:100%;
+  background-color:rgba(100, 100, 100, 0.5);
+  color:white;
+  text-align:center;
+  line-height:100%;
+  margin:0;
+  padding:0;
+  position:fixed;
+  bottom:0;
+  padding-bottom:40px;
+  z-index: 1100;
+}
+
+.onlinetrue {
+  display:none;
+}

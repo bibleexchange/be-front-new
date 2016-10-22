@@ -3,13 +3,24 @@ import Relay from 'react-relay';
 import { Link } from 'react-router';
 import N from '../../NoteTypes';
 import NoteUpdateMutation from './NoteUpdateMutation';
-import NoteDeleteMutation from './NoteDeleteMutation';
+import NoteDestroyMutation from './NoteDestroyMutation';
 import Status from '../User/StatusComponent';
 import PickNoteForm from './PickNoteForm';
 
 import './NoteUpdater.scss';
 
-class NoteUpdater extends React.Component {
+class Missing extends React.Component {
+  render() {
+      return (
+      <div id="note-updater">
+        <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
+      </div>
+    );
+  }
+}
+
+
+class Found extends React.Component {
 
   componentWillMount(){
     let note = this.clone(this.props.note);
@@ -24,9 +35,23 @@ class NoteUpdater extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    this.setState({
-      status: <Status type="done"/>,
-    });
+
+    if(newProps.note.id !== this.props.note.id){
+
+      let note = this.clone(newProps.note);
+
+      this.setState({
+        status: <Status type="done"/>,
+        note: note,
+        inputs:this.setBody(note),
+      });
+    }else{
+      this.setState({
+        status: <Status type="done"/>
+      });
+    }
+
+
   }
 
   render() {
@@ -153,15 +178,18 @@ handleUpdateNote(e){
    e.preventDefault();
    this.setState({status: "saving"});
    console.log('Are you sure you want to Deleting Note...');
+
+   this.handleDeleteNote(e);
   }
 
  handleDeleteNote(e){
    e.preventDefault();
    this.setState({status: "saving"});
-   console.log('Deleting Note...', note);
+   console.log('Deleting Note...', this.props.note);
 
-   Relay.Store.commitUpdate(new NoteDeleteMutation({
-      note: this.props.note
+   Relay.Store.commitUpdate(new NoteDestroyMutation({
+      note: this.props.note,
+      viewer: this.props.viewer
     }));
 
   }
@@ -196,6 +224,22 @@ handleUpdateNote(e){
 
 }
 
+class NoteUpdater extends React.Component {
+
+  render() {
+    let component = null;
+
+    if(this.props.note !== null){
+      component = <Found {...this.props}/>
+    }else{
+      component = <Missing />
+    }
+
+    return (<div>{component}</div>
+    );
+  }
+}
+
 NoteUpdater.propTypes = {
   viewer: React.PropTypes.object.isRequired,
   bibleVerse: React.PropTypes.object.isRequired,
@@ -217,7 +261,7 @@ export default Relay.createContainer(NoteUpdater, {
       }`,
     note: () => Relay.QL`fragment on Note {
       ${NoteUpdateMutation.getFragment('note')}
-      ${NoteDeleteMutation.getFragment('note')}
+      ${NoteDestroyMutation.getFragment('note')}
       id
       type
       body

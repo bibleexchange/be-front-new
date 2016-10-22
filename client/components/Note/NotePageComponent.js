@@ -10,8 +10,8 @@ class NotePageComponent extends React.Component {
     return (
       	<div className="WidgetContainer">
               <div className="Widget">
-                <NoteOptions note={this.props.viewer.note} viewer={this.props.viewer} />
-                <NoteViewer note={this.props.viewer.note} viewer={this.props.viewer} />
+                <NoteOptions note={this.props.viewer.notes.edges[0].node} viewer={this.props.viewer} />
+                <NoteViewer note={this.props.viewer.notes.edges[0].node} viewer={this.props.viewer} />
               </div>
        	</div>
     )
@@ -28,12 +28,21 @@ export default Relay.createContainer(NotePageComponent, {
   },
   fragments: {
       viewer: () => Relay.QL`fragment on Viewer {
+        user {
+          authenticated
+        }
         ${NoteViewer.getFragment('viewer')}
         ${NoteOptions.getFragment('viewer')}
-        note (id:$noteId){
-          ${NoteViewer.getFragment('note')}
-          ${NoteOptions.getFragment('note')}
-      	}
+        notes(first:1, id:$noteId){
+          edges{
+            node{
+              ${NoteViewer.getFragment('note')}
+              ${NoteOptions.getFragment('note')}
+            }
+          }
+
+        }
       }`,
+
     },
 });

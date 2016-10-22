@@ -5,9 +5,8 @@ class DCRecordingNoteComponent extends React.Component {
 
   render() {
   return (
-	<div>
+	<div className="recording">
     <p>{this.props.recording.text}</p>
-    <p>[DC Recording]</p>
 	</div>
     )
   }

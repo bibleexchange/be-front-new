@@ -6,11 +6,10 @@ import NoteUpdater from '../Note/NoteUpdater';
 class NoteEditorComponent extends React.Component {
 
   render() {
-
     return (
       <div className="WidgetContainer">
             <div className="Widget">
-              <NoteUpdater viewer={this.props.viewer} bibleVerse={this.props.viewer.bibleVerse} note={this.props.viewer.note}/>
+              <NoteUpdater viewer={this.props.viewer} bibleVerse={this.props.viewer.bibleVerses.edges[0].node} note={this.props.viewer.notes.edges[0].node}/>
             </div>
       </div>
     )
@@ -38,19 +37,31 @@ export default Relay.createContainer(NoteEditorComponent, {
       fragment on Viewer  {
         user{authenticated}
         ${NoteUpdater.getFragment('viewer')}
-        bibleVerse(id:$bibleVerseId){
-          ${NoteUpdater.getFragment('bibleVerse')}
-        }
-        note(id:$noteId){
-          ${NoteUpdater.getFragment('note')}
-          id
-          type
-          author{
-            name
+
+        bibleVerses(first:1, id:$bibleVerseId){
+          edges{
+            node{
+              ${NoteUpdater.getFragment('bibleVerse')}
+            }
           }
-          body
-          tags_string
+
         }
+
+        notes(first:1, id:$noteId){
+          edges{
+            node{
+              ${NoteUpdater.getFragment('note')}
+              id
+              type
+              author{
+                name
+              }
+              body
+              tags_string
+            }
+          }
+        }
+
      }`
   },
 

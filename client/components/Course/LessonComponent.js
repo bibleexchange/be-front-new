@@ -1,66 +1,68 @@
 /* eslint-disable global-require */
-import React from 'react';
-import { Link } from 'react-router';
-import Relay from 'react-relay';
-import Navigation from './Navigation';
-import BibleWidget from '../Bible/WidgetComponent';
-import BibleVerse from '../Bible/BibleVerse';
-import NoteViewer from '../Note/NoteViewer';
-import marked from 'marked';
+import React from 'react'
+import { Link } from 'react-router'
+import Relay from 'react-relay'
+import NoteViewer from '../Note/NoteViewer'
 
-import './Lesson.scss';
+import './Lesson.scss'
 
 class LessonComponent extends React.Component {
   render() {
 
-    let nextButton = null;
+    let nextButton = null
+    let viewer = this.props.viewer
 
-    if(this.props.lesson.notes.edges.length < this.props.lesson.notesCount){
-      nextButton = <button onClick={this.handleNoteLoad.bind(this)}>Get {this.props.lesson.notes.edges.length + 1} of { this.props.lesson.notesCount}</button>;
+    if(this.props.relay.variables.lessonPageSize < this.props.lesson.stepsCount){
+      nextButton = <button style={{width:"100%"}} onClick={this.handleNoteLoad.bind(this)}>Load Step #{this.props.relay.variables.lessonPageSize+1} of { this.props.lesson.stepsCount}</button>
     }else{
-      nextButton = <div dangerouslySetInnerHTML={{__html: "<center>THE END</center>"}} />;
+      nextButton = <div dangerouslySetInnerHTML={{__html: "<center>THE END</center>"}} />
     }
 
       return (
         <div style={{padding:"15px"}}>
-          {this.props.lesson.notes.edges.map(function(note){
-            return <NoteViewer key={note.node.id} note={note.node.note} />;
+          {this.props.lesson.steps.edges.map(function(step){
+            return <NoteViewer key={step.node.id} note={step.node.note} viewer={viewer} />
           })}
 
           {nextButton}
 
         </div>
-    );
+    )
   }
 
   handleNoteLoad() {
-    // Increments the number of stories being rendered by 10.
     this.props.relay.setVariables({
-      pageSize: this.props.relay.variables.pageSize + 1
-    });
+      lessonPageSize: this.props.relay.variables.lessonPageSize + 1
+    })
   }
 
 }
 
 LessonComponent.propTypes = {
   lesson: React.PropTypes.object.isRequired,
-};
+}
 
 export default Relay.createContainer(LessonComponent, {
   initialVariables: {
-    pageSize: 1,
+    lessonPageSize: 1,
     opaqueCursor: "opaqueCursor",
   },
   fragments: {
+      viewer: () => Relay.QL`fragment on Viewer {
+        ${NoteViewer.getFragment('viewer')}
+      }`,
       lesson: () => Relay.QL`fragment on Lesson {
         id
         order_by
         title
         summary
-        notesCount
+        stepsCount
         next{id, title}
         previous{id, title}
-        notes(first:$pageSize){
+        steps(first:$lessonPageSize){
+          pageInfo{
+            hasNextPage
+          }
           edges {
             cursor
             node {
@@ -69,6 +71,7 @@ export default Relay.createContainer(LessonComponent, {
                 id
               }
               note {
+                id
                 ${NoteViewer.getFragment('note')}
               }
               previous {
@@ -79,4 +82,4 @@ export default Relay.createContainer(LessonComponent, {
         }
       }`,
     },
-});
+})

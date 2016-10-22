@@ -7,14 +7,7 @@ import './Footer.scss';
 class Footer extends React.Component {
 
   render() {
-
-	if(this.props.loggedIn & this.props.user !== null){
-		var user = this.props.user;
-		var usingAs = <a href={user.email}> {user.name}</a>;
-	}else {
-		var user = {email:"guest", name:"guest"};
-		var usingAs = "a guest";
-	}
+		let usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>;
 
     return (
 	   <center>Using Bible exchange as {usingAs}</center>

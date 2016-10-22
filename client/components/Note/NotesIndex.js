@@ -3,8 +3,6 @@ import Relay from 'react-relay';
 import { Link } from 'react-router';
 import NotesWidget from './NotesWidget';
 
-import '../Bible/NotesWidget.scss';
-
 class NotesIndex extends React.Component {
 
   componentWillMount(){
@@ -16,7 +14,7 @@ class NotesIndex extends React.Component {
     }else if(filterBy == undefined ){
       filterBy = "";
     }
-    
+
     localStorage.setItem('notes-filter',filterBy);
 
   	this.state = {

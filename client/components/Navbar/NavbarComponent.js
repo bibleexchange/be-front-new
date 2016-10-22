@@ -1,39 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router';
-import './Navbar.scss';
-import BeLogo from '../Svg/BeLogo';
-import Relay from 'react-relay';
-import UserLoggedOut from './UserLoggedOut';
-import UserLoggedIn from './UserLoggedIn';
+import React from 'react'
+import { Link } from 'react-router'
+import './Navbar.scss'
+import BeLogo from '../Svg/BeLogo'
+import Relay from 'react-relay'
+import UserLoggedOut from './UserLoggedOut'
+import UserLoggedIn from './UserLoggedIn'
 
 class Navbar extends React.Component {
 
   componentWillMount(){
-    this.state = {
-      message : ''
-    };
+    this.state = {}
   }
 
   render() {
 
-	let user = this.props.user;
-	let url = this.props.location.pathname;
-	let inOrOut = 'loading...';
-	console.log('deciding session stuff based on: 1) User is Loggedin--'+ this.props.loggedIn, '& 2) User is online--'+  this.props.online);
+	let url = this.props.location.pathname
+	let inOrOut = 'loading...'
+  let loggedIn = this.props.user.authenticated
 
-	if(this.props.loggedIn === true) {
+	console.log('deciding session stuff based on: 1) User is Loggedin--'+ loggedIn, '& 2) User is online--'+  this.props.online)
+
+	if(loggedIn === true) {
 	  inOrOut = <UserLoggedIn
-      loggedIn={this.props.loggedIn}
+      loggedIn={loggedIn}
       handleLogout={this.props.handleLogout}
       message={this.state.message}
-      url={url} user={user}
+      url={url} user={this.props.user}
       handleBookmark={this.props.handleBookmark}
       online={this.props.online}
       navs={this.props.navs}
-      />;
+      />
 	}else {
 	  inOrOut = <UserLoggedOut
-      loggedIn={this.props.loggedIn}
+      loggedIn={loggedIn}
       handleLogin={this.props.handleLogin}
       handleSignUp={this.props.handleSignUp}
       message={this.state.message}
@@ -45,7 +44,7 @@ class Navbar extends React.Component {
       handleEditSignUpPasswordConfirm={this.props.handleEditSignUpPasswordConfirm}
       online={this.props.online}
       signup={this.props.signup}
-      />;
+      />
 	}
 
     return (
@@ -61,7 +60,7 @@ class Navbar extends React.Component {
 					{inOrOut}
         </nav>
 		 	</header>
-    );
+    )
   }
 
 }
@@ -69,7 +68,7 @@ class Navbar extends React.Component {
 Navbar.propTypes = {
     user: React.PropTypes.object.isRequired,
 	location: React.PropTypes.object.isRequired,
-  };
+  }
 
 export default Relay.createContainer(Navbar, {
   initialVariables: {
@@ -88,4 +87,4 @@ export default Relay.createContainer(Navbar, {
       }
     `,
   },
-});
+})

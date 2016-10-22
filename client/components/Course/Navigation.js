@@ -1,56 +1,7 @@
-import React from 'react';
-import { Link } from "react-router";
-import Relay from 'react-relay';
-
-class Lesson extends React.Component {
-  render() {
-	   return (<Link to={this.props.baseUrl} onClick={this.props.closeAll}>{this.props.lesson.title}</Link>);
-  }
-}
-
-class LessonsList extends React.Component {
-
-  render() {
-  let baseUrl = this.props.baseUrl;
-	const modalStyle = {};
-
-	if(!this.props.shouldDisplay){
-	 modalStyle.display = 'none';
-	}
-
-	const dialogStyle = {
-	  position: 'relative',
-	  border: '1px solid #e5e5e5',
-	  backgroundColor: 'white',
-	  boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-	  padding: 20,
-	  zIndex:1050,
-	  marginLeft:"10%",
-	  marginRight:"10%",
-	  marginTop:"70px"
-	};
-
-	const closeAll = this.props.close;
-
-    return (<div id="lessons-modal" style={modalStyle}>
-		  <div style={dialogStyle} >
-
-			<button onClick={this.props.toggleModal}>
-			  <span>&times;</span>
-			</button>
-
-			<h4>Choose a Lesson</h4>
-
-      <ol>
-  			{this.props.course.lessons.edges.map(function(lesson) {
-            return <li key={lesson.node.id}><h2 ><Lesson lesson={lesson.node} closeAll={closeAll} baseUrl={baseUrl+"/lesson/"+lesson.node.id}/></h2></li>;
-  			})}
-      </ol>
-		    </div>
-		</div>)
-  }
-
-}
+import React from 'react'
+import { Link } from "react-router"
+import Relay from 'react-relay'
+import LessonsList from './LessonsList'
 
 class Navigation extends React.Component {
   componentWillMount(){
@@ -102,6 +53,8 @@ class Navigation extends React.Component {
     return (<div>
 		<div className="orangeBG" style={{marginBottom:'25p', textAlign:'center'}}>
 
+      <h1><Link to={"/course/"+this.props.course.id}></Link></h1>
+
 			{this.props.course.title}: Lesson #{this.props.lesson.order_by}
 
 			<button onClick={this.toggleModal.bind(this)} style={selectorButtonStyle}>
@@ -146,7 +99,7 @@ export default Relay.createContainer(Navigation, {
       			  order_by
       			  summary
               title
-              notes(first:100){
+              steps(first:100){
                 edges{
                   cursor
                   node{

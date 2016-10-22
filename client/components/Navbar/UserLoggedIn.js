@@ -1,30 +1,36 @@
-import React from 'react';
-import Relay from 'react-relay';
-import BookMarksWidget from './BookMarksWidget';
+import React from 'react'
+import Relay from 'react-relay'
+import BookMarksWidget from './BookMarksWidget'
 
 class UserLoggedIn extends React.Component {
 
   componentWillMount(){
     this.state = {
       bookmarks:false
-    };
+    }
   }
 
   render() {
-	let user = this.props.user;
+
+  let name = ''
+
+  if(this.props.user !== null){
+    name = this.props.user.name
+  }
+
   let bookmarksStyle = {
     display:"none"
-  };
+  }
 
   if(this.state.bookmarks){
-    bookmarksStyle.display = "block";
+    bookmarksStyle.display = "block"
   }
 
     return (
     <ul>
 		<li>
 		  <button onClick={this.props.handleLogout}>
-			{user.name}	(Logout)
+			{name}	(Logout)
 		  </button>
 		</li>
 		<li>
@@ -39,18 +45,18 @@ class UserLoggedIn extends React.Component {
       </div>
 		</li>
 	 </ul>
-    );
+    )
   }
 
   toggleBookmark(){
-    this.setState({bookmarks: !this.state.bookmarks});
+    this.setState({bookmarks: !this.state.bookmarks})
   }
 
 }
 
 UserLoggedIn.propTypes = {
     user: React.PropTypes.object.isRequired
-  };
+  }
 
 export default Relay.createContainer(UserLoggedIn, {
   initialVariables: {
@@ -67,4 +73,4 @@ export default Relay.createContainer(UserLoggedIn, {
       }
     `,
   },
-});
+})

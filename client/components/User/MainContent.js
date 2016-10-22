@@ -38,7 +38,7 @@ class MainContent extends React.Component {
     let editor = <NoLessonSelected />;
 
     if(this.props.children !== null){
-      editor = React.cloneElement(this.props.children, { note: this.props.note });
+      editor = React.cloneElement(this.props.children, { note: this.props.note, viewer: this.props.viewer });
     }
 
     return (
@@ -56,8 +56,12 @@ MainContent.contextTypes = {
 
 export default Relay.createContainer(MainContent, {
   fragments: {
+    viewer: () => Relay.QL`fragment on Viewer {
+      ${LessonEditor.getFragment('viewer')}
+    }`,
       note: () => Relay.QL`fragment on Note {
           id
+          tags
           author {
             name
           }

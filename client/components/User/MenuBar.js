@@ -12,8 +12,6 @@ class MenuBar extends React.Component {
     let toggleMainStyle = {display:"none"};
 
     let toggleLessonNoteMessage = '';
-//  sideBarState={this.state.sideBarState}
-//  noteDrawerState=
 
     if(this.props.sideBarState && this.props.noteDrawerState){
       toggleLessonNoteMessage = String.fromCharCode( "9776" ) + " Lessons";

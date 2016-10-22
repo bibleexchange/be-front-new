@@ -1,21 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router';
-import Relay from 'react-relay';
-import NoteCreator from '../Note/NoteCreator';
+import React from 'react'
+import { Link } from 'react-router'
+import Relay from 'react-relay'
+import NoteCreator from '../Note/NoteCreator'
 
 class BibleVerseComponent extends React.Component {
 
   componentWillMount(){
     this.state = {
-      noteStatus : false
-    };
+      noteStatus: false
+    }
   }
 
   render() {
-    let noteCreator = null;
+    let noteCreator = null
 
     if(this.state.noteStatus){
-      noteCreator = <NoteCreator viewer={this.props.viewer} bibleVerse={this.props.bibleVerse} />;
+      noteCreator = <NoteCreator viewer={this.props.viewer} bibleVerse={this.props.bibleVerse} />
     }
 
     return (
@@ -41,12 +41,12 @@ class BibleVerseComponent extends React.Component {
 
   clickVerseBody(e){
     if(this.props.viewer.user.authenticated === "true"){
-      this.setState({noteStatus: !this.state.noteStatus});
+      this.setState({noteStatus: !this.state.noteStatus})
     }
   }
 
   clearVerseForm(e){
-    this.setState({noteStatus: false});
+    this.setState({noteStatus: false})
   }
 
 }
@@ -70,4 +70,4 @@ export default Relay.createContainer(BibleVerseComponent, {
      }`
   },
 
-});
+})

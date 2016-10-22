@@ -1,10 +1,7 @@
 module.exports = {
-  login() {
-    if(localStorage.be_token){
+  login(token) {
+    	localStorage.setItem("be_token", token)
       setTimeout(this.onChange(true),10000);
-    }else{
-      this.onChange(false)
-    }
   },
 
   getToken() {
@@ -12,7 +9,6 @@ module.exports = {
   },
 
   logout() {
-    console.log('Logging user out...');
     delete localStorage.be_token
     this.onChange(false)
   },

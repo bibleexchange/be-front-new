@@ -30,7 +30,7 @@ class IndexComponent extends React.Component {
    let edit = null;
 
    if(this.props.viewer.course !== null){
-    course = this.props.viewer.course;
+    course = this.props.viewer.courses.edges[0].node;
     baseUrl = '/course/'+course.id;
     lessons = course.lessons.edges;
    }
@@ -70,36 +70,52 @@ export default Relay.createContainer(IndexComponent, {
         user{
           authenticated
         }
-        course(id:$courseId){
-          id
-          title
-          lessons(first:100){
-            edges{
-              cursor
-              node{
-                id
-                order_by
-                summary
-                notesCount
-                notes(first:100){
-                  edges{
-                    cursor
-                    node{
-                      id
-                      order_by
-                      note{
-                        output {
+        courses(first:1,id:$courseId){
+          totalCount
+          totalPagesCount
+          currentPage
+          perPage
+
+          pageInfo{
+            hasNextPage
+            hasPreviousPage
+          }
+
+          edges{
+            cursor
+            node{
+              id
+              title
+              lessons(first:100){
+                edges{
+                  cursor
+                  node{
+                    id
+                    order_by
+                    summary
+                    stepsCount
+                    steps(first:100){
+                      edges{
+                        cursor
+                        node{
                           id
-                          type
-                          api_request
-                          body
+                          order_by
+                          note{
+                            output {
+                              id
+                              type
+                              api_request
+                              body
+                            }
+                          }
                         }
                       }
                     }
                   }
                 }
-              }
             }
+          }
+
           }
         }
       }`,
