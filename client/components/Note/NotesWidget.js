@@ -87,9 +87,8 @@ class NotesWidget extends React.Component {
 
        return (
     		<div id="notes-widget">
-          <h3 className="note-count">{notesTotalCount} Notes</h3>
 
-          { this.decide(this) }
+          { this.decide(this, notesTotalCount) }
 
           {notes.map((n)=>{
              return <NoteThumbnail tags={n.node.tags} key={n.node.id} note={n.node} selectNote={selectNote}/>;
@@ -101,20 +100,21 @@ class NotesWidget extends React.Component {
     )
   }
 
-  decide(that){
+  decide(that,notesTotalCount){
 
         let nextButtonText = '_ of _';
         let nextPageDisabled = true;
 
         if(that.props.viewer.notes !== undefined && that.props.viewer.notes.pageInfo.hasNextPage){
-          nextPageDisabled = false;
-          nextButtonText = 'Page ' + that.state.notesCurrentPage + ' of ' + that.props.viewer.notes.totalPagesCount + ' (' + that.props.viewer.notes.perPage + ' more )';
+          nextPageDisabled = false
+          nextButtonText = 'Page ' + that.state.notesCurrentPage + ' of ' + that.props.viewer.notes.totalPagesCount + ' ( + )';
         }else if(that.props.viewer.notes !== undefined){
           nextButtonText = that.state.notesCurrentPage + ' of ' + that.props.viewer.notes.totalPagesCount;
         }
 
       if(that.state.status === null){
            return (<div id="search">
+                       <h3 className="note-count">{notesTotalCount} Notes</h3>
                        <Link to="" className="clearFilter" onClick={that.handleClearFilter.bind(that)} >&nbsp; &times; &nbsp;</Link>
                        <input type="text" onKeyUp={that.runScriptOnPressEnter.bind(this)} onChange={that.handleEditFilter.bind(that)} onBlur={that.applyFilter.bind(that)} placeholder="  filter" value={that.state.filterNotesBy} />
                        <button disabled={nextPageDisabled} onClick={that.handleNextPage.bind(that)}>{nextButtonText}</button>

@@ -16,7 +16,12 @@ class Navbar extends React.Component {
 
 	let url = this.props.location.pathname
 	let inOrOut = 'loading...'
-  let loggedIn = this.props.user.authenticated
+  let loggedIn = false
+
+  if(this.props.user !== null){
+    loggedIn = this.props.user.authenticated
+  }
+
 
 	console.log('deciding session stuff based on: 1) User is Loggedin--'+ loggedIn, '& 2) User is online--'+  this.props.online)
 

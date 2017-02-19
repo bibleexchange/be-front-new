@@ -46,9 +46,10 @@ class NotePreview extends React.Component {
 
   	return (
   		<div className="note-preview" style={{margin:"15px"}}>
+
+      <button id="delete" >&#10008; CREATE FUNCTION TO DISMISS/CLOSE PREVIEW</button>
         <Link to={"/notes/"+this.props.note.id} style={{width:"100%", height:"25px", display:"block", textAlign:"center", color:"white", backgroundColor:"rgba(0,0,0,.2)"}}>GO</Link>
   		  {component}
-
   		</div>
   		);
 	}

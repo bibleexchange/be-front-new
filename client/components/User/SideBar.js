@@ -47,7 +47,7 @@ class LessonsList extends React.Component {
     return (
       <ul>
         {course.lessons.edges.map(function(lesson){
-          return <Link to={"/user/course/"+course.id+"/edit/"+lesson.node.id} key={lesson.node.id}><li><LessonThumbnail lesson={lesson.node}/></li></Link>
+          return <Link to={"/course/"+course.id+"/edit/"+lesson.node.id} key={lesson.node.id}><li><LessonThumbnail lesson={lesson.node}/></li></Link>
         })}
         <li>
           <NewLessonForm courseId={course.id} orderBy={course.lessons.edges.length+1}/>

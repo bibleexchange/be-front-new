@@ -32,7 +32,7 @@
         margin:15px;
         clear:both;
 
-          .note {
+          .note, .new-note {
             background-color:white;
             width:45%;
             height:auto;
@@ -45,11 +45,6 @@
               width:100%;
             }
 
-            #preview {
-              overflow: hidden;
-              max-height: 300px;
-            }
-
             #delete {
               border: solid 1px red;
               float:right;
@@ -58,6 +53,10 @@
               margin:5px;
             }
 
+          }
+
+          .new-note {
+            width:97%;
           }
 
       }

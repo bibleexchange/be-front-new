@@ -7,6 +7,7 @@ import DCRecording from '../Note/Thumbnail/DCRecording';
 import BibleVerse from '../Note/Thumbnail/BibleVerse';
 
 import marked from 'marked';
+import './NoteThumbnail.scss';
 
 class NoteThumbnail extends React.Component {
 
@@ -65,9 +66,16 @@ class NoteThumbnail extends React.Component {
         component = <div><p><Link to={"/notes/"+this.props.note.id}> {this.props.note.id} {this.props.note.output.type}</Link></p><p>{this.props.note.tags.map(function(t){return " #"+t})}</p><p><Link to={"/users/" + this.props.note.author.id}>{this.props.note.author.name}</Link></p></div>;
     }
 
+    let selectButton = null
+    let viewWidth = " full"
+
+    if(this.props.selectNote !== null){
+      selectButton = <button id={note.id} data-note={JSON.stringify(note)} className="select-note" onClick={this.props.selectNote}>select</button>;
+      viewWidth = null
+    }
+
   	return (
   		<div id={note.id} className="note-thumbnail" draggable="true" >
-        <button id={note.id} className="select-note" onClick={this.props.selectNote}>&nbsp;</button>
         <div className="output">{component}</div>
         <button onClick={this.toggleTags.bind(this)}> tags...</button>
         <p style={tagsStyle}>{tags.map(function(t,key){
@@ -77,8 +85,8 @@ class NoteThumbnail extends React.Component {
           }
         }
         )}</p>
-
-        <Link to={"/notes/"+note.id} className="view-it">view</Link>
+        { selectButton }
+        <Link to={"/notes/"+note.id} className={"view-it"+viewWidth}>view</Link>
   		</div>
   		);
 	}

@@ -27,7 +27,8 @@ class NewLessonNoteForm extends React.Component {
   render() {
 
       return (
-        <div className="note">
+        <div className="new-note">
+          <button id="delete" onClick={this.props.clearNote}>&#10008;</button>
           <h2>Add this Note?</h2>
 
 

@@ -7,10 +7,16 @@ import './Footer.scss';
 class Footer extends React.Component {
 
   render() {
-		let usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>;
+    let usingAs = '';
+
+    if(this.props.user !== null){
+      usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>
+    }else{
+      usingAs = 'Guest'
+    }
 
     return (
-	   <center>Using Bible exchange as {usingAs}</center>
+	   <center> Using Bible exchange as {usingAs}</center>
     );
   }
 }

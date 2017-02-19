@@ -9,10 +9,6 @@ import Route from './Route';
 import { browserHistory, applyRouterMiddleware, Router } from 'react-router';
 import useRelay from 'react-router-relay';
 
-//register service worker
-//import ServiceWorker from './service-worker-load';
-//ServiceWorker.register();
-
 //send to dom
 const mountNode = document.getElementById('root');
 

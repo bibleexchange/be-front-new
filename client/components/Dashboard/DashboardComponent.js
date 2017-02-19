@@ -7,6 +7,7 @@ import MagnifyingGlass from '../Svg/MagnifyingGlass'
 class Search extends React.Component {
 
   render() {
+    let that = "p"
     return (
       <form id="main-search" onSubmit={this.props.searchIt} >
         <input id="search-text" type="text" name="search" placeholder="search notes..." onChange={this.props.handleUpdateSearch} />

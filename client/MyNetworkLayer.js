@@ -110,7 +110,7 @@ export default class NetworkLayer {
 			  	request.resolve({ response: results.data })
 		    }
 		 }).catch(function(error) {
-		    console.log('Request failed Stephen. You better fix that problem pronto! (LINE #105)', error)
+		    console.log('Request failed Stephen. You better fix that problem pronto! (LINE #113)', error)
 				let data = {data:{viewer:{error:{message:"Cannot connect with server!",code:500}}}};
 				return new Promise(function(resolve, reject) {return resolve(data)});
 		  })

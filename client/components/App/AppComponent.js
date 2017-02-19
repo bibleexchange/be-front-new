@@ -4,7 +4,7 @@ import MainNavigation from '../Navbar/NavbarComponent'
 import Footer from './FooterComponent'
 import Relay from 'react-relay'
 import auth from './auth'
-
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import LoginUserMutation from '../../mutations/LoginUserMutation'
 import SignUpUserMutation from '../../mutations/SignUpUserMutation'
 
@@ -122,9 +122,17 @@ class App extends React.Component {
               navs={navs}
               />
 
-          <main>
-            {children}
-          </main>
+          <ReactCSSTransitionGroup
+               component="main"
+               transitionName="example"
+               transitionEnterTimeout={500}
+               transitionLeaveTimeout={500}
+             >
+             {React.cloneElement(children, {
+               key: this.props.location.pathname
+             })}
+          </ReactCSSTransitionGroup>
+
           {errorMessage}
           <footer id="footer" className="push"><Footer user={user}/></footer>
     	</div>

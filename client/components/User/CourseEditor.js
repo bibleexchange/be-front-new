@@ -1,20 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router';
-import Relay from 'react-relay';
-import CourseUpdateMutation from './CourseUpdateMutation';
+import React from 'react'
+import { Link } from 'react-router'
+import Relay from 'react-relay'
+import CourseUpdateMutation from './CourseUpdateMutation'
 import auth from '../App/auth'
 
-import MenuBar from './MenuBar';
-import SideBar from './SideBar';
-import MainContent from './MainContent';
-import Status from './StatusComponent';
+import MenuBar from './MenuBar'
+import SideBar from './SideBar'
+import MainContent from './MainContent'
+import Status from './StatusComponent'
 
-import './CourseEditor.scss';
+import './CourseEditor.scss'
 
 class CourseEditor extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
      loggedIn: auth.loggedIn(),
      online: navigator.onLine,
@@ -22,7 +22,7 @@ class CourseEditor extends React.Component {
      status: <Status type="done"/>,
      sideBarState: true,
      noteDrawerState: false
-    };
+    }
 }
 
   componentWillMount(){
@@ -32,18 +32,21 @@ class CourseEditor extends React.Component {
 componentWillReceiveProps(newProps){
   this.setState({
     status: <Status type="done"/>,
-  });
+  })
 
   if(newProps !== this.props){
-    this.props = newProps;
+    this.props = newProps
   }
 
 }
 
   render() {
 
-    let newLessonForm={display:"none"};
-    if(this.state.newLessonState){newLessonForm.display = "block";}
+    let newLessonForm={display:"none"}
+    if(this.state.newLessonState){newLessonForm.display = "block"}
+    let selectedNote = null
+    let parentUrl = "/course/"+this.state.course.id+"/edit"
+    if(this.props.viewer.notes.edges[0] !== undefined){selectedNote = this.props.viewer.notes.edges[0].node}
 
     return (
           <div id="course-editor">
@@ -67,10 +70,10 @@ componentWillReceiveProps(newProps){
               viewer={this.props.viewer}
             />
 
-            <MainContent children={this.props.children} note={this.props.viewer.note} viewer={this.props.viewer}/>
+            <MainContent children={this.props.children} note={selectedNote} viewer={this.props.viewer} parentUrl={parentUrl} clearNote={this.handleClearNote.bind(this)}/>
 
         </div>
-    );
+    )
   }
 
   handleEditTitle(e){
@@ -78,41 +81,47 @@ componentWillReceiveProps(newProps){
     this.setState({
     	course:{title:e.target.value},
     	status: <Status type="changes-not-saved"/>
-    	});
+    	})
   }
 
   handleUpdateTitle(){
-    console.log('off focus save', this.state.course.title, this.props.viewer.course.id);
-    this.setState({status: <Status type="saving"/>});
+    console.log('off focus save', this.state.course.title, this.props.viewer.course.id)
+    this.setState({status: <Status type="saving"/>})
 
     Relay.Store.commitUpdate(new CourseUpdateMutation({
     	title: this.state.course.title,
       course: this.props.viewer.course
-    	}));
+    	}))
 
   }
 
   toggleSideBar(){
-   this.setState({sideBarState: !this.state.sideBarState});
+   this.setState({sideBarState: !this.state.sideBarState})
   }
 
   toggleNoteDrawer(){
-   this.setState({noteDrawerState: !this.state.noteDrawerState});
+   this.setState({noteDrawerState: !this.state.noteDrawerState})
   }
 
   selectNote(e){
-    console.log('selecting note: ', e.target);
+    console.log('selecting note: ', e.target)
    this.props.relay.setVariables({
      noteId: e.target.id
-   });
+   })
 
   }
+
+handleClearNote(){
+  this.props.relay.setVariables({
+    noteId: ""
+  })
+}
 
 }
 
 CourseEditor.contextTypes = {
    router: React.PropTypes.object.isRequired
- };
+ }
 
 CourseEditor.defaultProps = {
 	course:{
@@ -122,12 +131,12 @@ CourseEditor.defaultProps = {
 	  steps: [],
     lessonId: "1"
 	}
-};
+}
 
 CourseEditor.propTypes = {
   viewer: React.PropTypes.object.isRequired,
   relay: React.PropTypes.object.isRequired
-};
+}
 //
 export default Relay.createContainer(CourseEditor, {
   initialVariables: {
@@ -139,7 +148,7 @@ export default Relay.createContainer(CourseEditor, {
   },
   prepareVariables: prevVariables => {
 
-    let lid = prevVariables.lessonId;
+    let lid = prevVariables.lessonId
 
     if(lid === undefined){
       lid = {lessonId:"aasdlfkasjdflakdsjf"}
@@ -148,7 +157,7 @@ export default Relay.createContainer(CourseEditor, {
     return {
       ...prevVariables,
       lid
-    };
+    }
   },
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
@@ -185,7 +194,7 @@ export default Relay.createContainer(CourseEditor, {
       }
     }
 
-    notes(first:$pageSize){
+    notes(first:$pageSize, id:$noteId){
       pageInfo{
         hasNextPage
         hasPreviousPage
@@ -203,4 +212,4 @@ export default Relay.createContainer(CourseEditor, {
 
   }`
  },
-});
+})

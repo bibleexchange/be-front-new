@@ -16,6 +16,15 @@
       padding:0;
     white-space: normal;
       height:175px;
+      overflow-y:hidden;
+
+      .note-count{
+        color:gray;
+      }
+
+      #search{
+        float:left;
+      }
 
     }
 

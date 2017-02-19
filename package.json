@@ -8,14 +8,14 @@
     "update": "",
     "deploy": "NODE_ENV=production webpack --config webpack.production.config.js && NODE_ENV=production babel-node server/index.js",
     "lint": "eslint --ignore-path .gitignore client server",
-     "build:webpack": "NODE_ENV=production webpack --progress --colors --config webpack.production.config.js",
-     "build": "npm run clean && npm run build:webpack",
-     "clean": "rimraf dist"
+    "build:webpack": "NODE_ENV=production webpack --progress --colors --config webpack.production.config.js",
+    "build": "npm run clean && npm run build:webpack",
+    "clean": "rimraf dist"
   },
   "pre-commit": "lint",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lvarayut/relay-fullstack.git"
+    "url": "git+https://github.com/bibleexchange/bibleexchange.git"
   },
   "keywords": [
     "react",
@@ -27,17 +27,14 @@
     "jsx",
     "webpack",
     "babel",
-    "material design lite",
-    "postcss",
-    "scaffolding",
-    "fullstack"
+    "postcss"
   ],
   "author": "Varayut Lerdkanlayanawat",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lvarayut/relay-fullstack/issues"
+    "url": "https://github.com/bibleexchange/bibleexchange/issues"
   },
-  "homepage": "https://github.com/lvarayut/relay-fullstack",
+  "homepage": "https://github.com/bibleexchange/bibleexchange",
   "devDependencies": {
     "apollo-server": "^0.1.3",
     "body-parser": "^1.15.2",
@@ -90,6 +87,7 @@
     "postcss-loader": "^0.9.1",
     "precss": "^1.4.0",
     "react": "^15.3.1",
+    "react-addons-css-transition-group": "^15.3.2",
     "react-apollo": "^0.5.6",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.0.2",

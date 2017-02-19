@@ -7,7 +7,7 @@ class BibleVerseComponent extends React.Component {
 
   componentWillMount(){
     this.state = {
-      noteStatus: false
+      noteStatus: true
     }
   }
 

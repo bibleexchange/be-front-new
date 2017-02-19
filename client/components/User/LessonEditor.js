@@ -56,11 +56,29 @@ class LessonEditor extends React.Component {
   render() {
 
     let newNote = null;
-    let lesson = this.props.viewer.lessons[0].node;
-    let note = this.props.viewer.notes.edges[0].node;
+    let lesson = null;
+    let note = null;
+    let stepsCount = 0;
+    let lessonSteps = [];
+    let orderBy = 1
+
+    if(this.props.viewer.lessons.edges[0] !== undefined){
+      lesson = this.props.viewer.lessons.edges[0].node;
+      lessonSteps = lesson.steps.edges;
+      stepsCount = lesson.stepsCount;
+
+      if(stepsCount >= 1){
+        orderBy = stepsCount+1
+      }
+
+    }
+
+    if(this.props.note !== undefined){
+      note = this.props.note
+    }
 
     if(note !== null && note.id !== undefined){
-      newNote = <NewLessonNoteForm step={{}} note={note} lesson={lesson} orderBy={lesson.notesCount+1} />;
+      newNote = <NewLessonNoteForm step={{}} note={note} lesson={lesson} orderBy={orderBy} clearNote={this.props.clearNote}/>;
     }
 
       return (
@@ -73,20 +91,19 @@ class LessonEditor extends React.Component {
             <TextInput id="lesson-summary" label="summary: " name="summary" value={this.state.lesson.summary} handleEdit={this.handleEdit.bind(this)}/>
 
             <div id="notes-count">
-              {lesson.notesCount} notes |
+              {stepsCount} notes |
               <input type="submit" id="save" value="save" onClick={this.handleUpdate.bind(this)} /> {this.state.status}
             </div>
 
           </div>
 
           <div id="notes">
-            {lesson.notes.edges.map(function(bridge){
+
+            {newNote}
+
+            {lessonSteps.map(function(bridge){
               return <StepEditor key={bridge.node.id} step={bridge.node} />;
             })}
-          </div>
-
-          <div id="bottom-menu">
-          {newNote}
           </div>
 
         </div>
@@ -117,7 +134,7 @@ class LessonEditor extends React.Component {
   }
 
   goBackToCourse(){
-    this.context.router.push("/user/course/"+this.props.viewer.course.id+"/edit");
+    this.context.router.push(this.props.parentUrl)
   }
 
 }

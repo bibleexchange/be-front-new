@@ -1,0 +1,60 @@
+.note-thumbnail {
+  border:none;
+  border-bottom: solid 1px gray;
+  border-top: solid 1px gray;
+  padding:0;
+  width:100%;
+  display:block;
+  background: none;
+  position:relative;
+  margin:0;
+  overflow: hidden;
+  height:100%;
+  margin-bottom:30px;
+  padding:0;
+  background-color:rgba(255,255,255,0.7);
+
+  button.select-note {
+    position:relative;
+    display: inline-block;
+    width:50%;
+    height:25px;
+    background: rgba(255,255,255, 0.1);
+    z-index: 1000;
+    border:none;
+  }
+
+  button {
+    display: none;
+  }
+
+  .output {
+    height:140px;
+    overflow: hidden;
+    h1, h2, h3, h4, h5, h6, p, blockquote {font-size: 1em;}
+
+    div {
+      height:140px;
+      overflow: hidden;
+      margin:0;
+      padding:0;
+    }
+
+}
+
+a.view-it {
+  position:relative;
+  width:50%;
+  height:25px;
+  display:inline-block;
+  text-align:center;
+  color:black;
+  background-color:rgba(0,0,0,.1);
+  text-decoration: none;
+}
+
+  a.view-it.full {
+    width:100%;
+  }
+
+}

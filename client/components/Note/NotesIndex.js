@@ -39,9 +39,11 @@ class NotesIndex extends React.Component {
 
   }
 
-	_handleLoadMoreNotes(){
-		console.log('loading data...');
-	}
+  handleSelectNote(e){
+    let noteString = e.target.dataset.note;
+    localStorage.setItem('selected-note', noteString);
+
+  }
 
 }
 

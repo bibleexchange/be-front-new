@@ -36,9 +36,8 @@ class MainContent extends React.Component {
 
   render() {
     let editor = <NoLessonSelected />;
-
     if(this.props.children !== null){
-      editor = React.cloneElement(this.props.children, { note: this.props.note, viewer: this.props.viewer });
+      editor = React.cloneElement(this.props.children, { note: this.props.note, viewer: this.props.viewer, parentUrl:this.props.parentUrl, clearNote: this.props.clearNote });
     }
 
     return (

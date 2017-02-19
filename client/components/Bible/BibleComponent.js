@@ -75,6 +75,7 @@ class Bible extends React.Component {
 		<div id="bible">
 
     <div className="WidgetContainer" >
+
   		  <div className="Widget" style={bibleStyle}>
 
         {bibles.map(function(bible){
@@ -97,6 +98,7 @@ class Bible extends React.Component {
       		    selectNote={null}
               tags={true}/>
   			  </div>
+
   	 </div>
 
      <ToggleBible title={buttonTitle} handleToggleBible={this.handleToggleBible.bind(this)}/>
