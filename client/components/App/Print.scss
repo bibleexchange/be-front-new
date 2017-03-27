@@ -1,7 +1,13 @@
 //Print Stuff here
 @media print {
-	
-	body.textbook{background-color:#fff;color:#333;margin:0;padding:0}
+
+	#MainNavbar, #BrandNav svg, header, footer, nav, .noPrint,#sidebar,#progress,#table_progress,img#header,iframe.video,footer,video,div#sideBar,.navbar,video,#sidebar,#progress,#table_progress,img#header,iframe, #doc-select,.page-header,.well, #pageTop,img#passTest{
+		display:none;
+	}
+
+	table,tr,img{page-break-inside:avoid}
+
+	.textbook{background-color:#fff;color:#333;margin:0;padding:0}
 	form{display:none!important}
 	.textbook div#main{float:left;margin:0; padding-right:1in;width:700px; border:none;margin-top:0;padding-left:1in;padding-top:0;width:8in}
 	.textbook div#main h1{margin-bottom:1em; margin-top:1.5em; padding-top:0; break-before:always}
@@ -23,19 +29,13 @@
 	.label{border:1px solid #000}
 	.table{border-collapse:collapse!important}
 	.table-bordered th,.table-bordered td{border:1px solid #ddd!important}
-	div.header span.school{font-size:1.25em;margin-top:18px}
+	.header span.school{font-size:1.25em;margin-top:18px}
 	#title{border-style:double;border-width:.05in;height:9in;margin:0;overflow:hidden;width:8.5in}
 	#title h2{margin-bottom:6in}
-	.noPrint,#sidebar,#progress,#table_progress,img#header,iframe.video,footer,video,div#sideBar,.navbar,video,#sidebar,#progress,#table_progress,img#header,iframe, #doc-select,.page-header,.well, #pageTop,img#passTest{display:none}
-	table,tr,img{page-break-inside:avoid}
-	.textbook div#title h4,.textbook #title h3,#title h4,#title h3{padding-right:.25in}
-	.textbook div#title h1,.textbook #title h2,#title h1,#title h2{padding-left:.25in}
-	.textbook #ot-map,#ot-map{-ms-transform:rotate(90deg);-webkit-transform:rotate(90deg);margin-bottom:300px;position:relative;right:-90px;top:-150px;transform:rotate(90deg);width:70%}
 	blockquote,pre,blockquote{border:1px solid #999;page-break-inside:avoid}
-	.hidden-print,tr.hidden-print,th.hidden-print,td.hidden-print{display:none!important}
+
 	h1, .page-break{ page-break-before: always}
+
 	.emb-outline h1, #footnotes h1{ page-break-before: avoid}
-	
-	#admin td,p {font-size:80%;}
-	nav {display:none}
+
 }

@@ -9,11 +9,11 @@ class LessonListComponent extends React.Component {
     const baseUrl = this.props.baseUrl;
     return (
               <div>
-                <h2><Link to={this.props.baseUrl+"/lesson/"+this.props.lesson.id}>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</Link></h2>
+                <h2><Link to={this.props.baseUrl + '/lesson/' + this.props.lesson.id}>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</Link></h2>
                 <h3>{this.props.lesson.title}</h3>
-                  <p style={{textAlign:"center"}}>{this.props.lesson.summary}</p>
-                {this.props.lesson.notes.edges.map(function(note){
-                  return <NoteViewer key={note.node.id} note={note.node.note} baseUrl={baseUrl}/>;
+                  <p style={{ textAlign: 'center' }}>{this.props.lesson.summary}</p>
+                {this.props.lesson.notes.edges.map(function (note) {
+                  return <NoteViewer key={note.node.id} note={note.node.note} baseUrl={baseUrl} />;
                 })}
 
               </div>
@@ -29,10 +29,10 @@ LessonListComponent.propTypes = {
 
 export default Relay.createContainer(LessonListComponent, {
   initialVariables: {
-  	courseId: "1",
+  	                                                                                                    courseId: '1',
   },
   fragments: {
-      lesson: () => Relay.QL`
+    lesson: () => Relay.QL`
         fragment on Lesson {
           id
           order_by
@@ -69,5 +69,5 @@ export default Relay.createContainer(LessonListComponent, {
             }
           }
       }`,
-    },
+  },
 });

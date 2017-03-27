@@ -7,11 +7,11 @@ import chalk from 'chalk';
 import webpackConfig from '../webpack.config';
 import config from './config/environment';
 
-  // Launch Relay by using webpack.config.js
-  const relayServer = new WebpackDevServer(webpack(webpackConfig), {
+// Launch Relay by using webpack.config.js
+const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',
     proxy: {
-//      '/login': `http://127.0.0.1:${config.graphql.port}`,
+//'/login': `http://127.0.0.1:${config.graphql.port}`,
     },
     stats: {
       colors: true
@@ -20,6 +20,6 @@ import config from './config/environment';
     historyApiFallback: true
   });
 
-  // Serve static resources
-  relayServer.use('/', express.static(path.join(__dirname, '../build')));
-  relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));
+// Serve static resources
+relayServer.use('/', express.static(path.join(__dirname, '../build')));
+relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));

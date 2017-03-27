@@ -3,17 +3,58 @@ import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
 
-//import './Course.scss';
-
-class LessonComponent extends React.Component {
+class Step extends React.Component {
 
   render() {
     const baseUrl = this.props.baseUrl;
+
+    return (
+          <h5><Link to={baseUrl + '/' + this.props.id}>LESSON {this.props.id} {this.props.step.title}</Link></h5>
+    );
+  }
+
+}
+
+class StepsList extends React.Component {
+
+  render() {
+    let baseUrl = this.props.baseUrl;
+
     return (
               <div>
-                <center><h2><Link to={this.props.baseUrl+"/lesson/"+this.props.lesson.id}>LESSON: {this.props.lesson.order_by} ({this.props.lesson.notesCount} Notes)</Link></h2></center>
-                <h3>{this.props.lesson.title}</h3>
-                <p style={{textAlign:"center"}}>{this.props.lesson.summary}</p>
+                {this.props.steps.map(function (step, key) {
+                  key = key + 1;
+                  return <Step key={key} baseUrl={baseUrl} id={key} step={step} />;
+                })}
+              </div>
+    );
+  }
+
+}
+
+class Section extends React.Component {
+
+  render() {
+    return (
+              <div>
+                {this.props.section.title}
+                <StepsList steps={this.props.section.steps} baseUrl={this.props.baseUrl + '/' + this.props.section.id} />
+              </div>
+    );
+  }
+
+}
+
+class SectionsList extends React.Component {
+
+  render() {
+    let baseUrl = this.props.baseUrl;
+
+    return (
+              <div>
+                {this.props.sections.map(function (section, key) {
+                  return <h2 key={key} ><Section section={section} baseUrl={baseUrl} /></h2>;
+                })}
               </div>
     );
   }
@@ -22,34 +63,50 @@ class LessonComponent extends React.Component {
 
 class IndexComponent extends React.Component {
 
+  componentWillMount() {
+    // let filterBy = localStorage.getItem('notes-filter')
+    // localStorage.setItem('notes-filter',filterBy)
+
+    this.state = {
+      lesson: 1
+    };
+  }
+
   render() {
+    let baseUrl = '/course/';
+    let course = { title: 'Course Could not Be Loaded!' };
+    let sections = [];
+    let edit = null;
+    let data = { sections: [], title: '' };
 
-   let baseUrl = '/course/';
-   let course = {title:"Course Could not Be Loaded!"};
-   let lessons = [];
-   let edit = null;
+    if (this.props.viewer.course !== null) {
+      course = this.props.viewer.course;
+      let data1 = JSON.parse(course.everything);
+      baseUrl = '/course/' + course.id;
+      if (data1 !== null) {
+        sections = data.sections;
+        data = data1;
+      }
+    }
 
-   if(this.props.viewer.course !== null){
-    course = this.props.viewer.courses.edges[0].node;
-    baseUrl = '/course/'+course.id;
-    lessons = course.lessons.edges;
-   }
-
-   if(this.props.viewer.user.authenticated == "true"){
-     edit = <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup>;
-   }
+    if (this.props.viewer.user.authenticated == 'true') {
+     // edit = <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup>;
+    }
+if(data.image === ""){
+  data.image = this.props.viewer.course.image
+}
 
     return (
-        <div className="WidgetContainer">
-              <div className="Widget">
+        <div className='WidgetContainer'>
+              <div className='Widget'>
+                <center><h1>{data.title} {edit}</h1></center>
 
-                <center><h1>{course.title} {edit}</h1></center>
+                <ul id='buttons-nav'>
+                  <li><Link to={'/course/' + course.id + '/print'} target="_blank">PRINT COURSE</Link></li>
+                </ul>
 
-                {lessons.map(function(lesson){
-                  return <LessonComponent key={lesson.node.id} lesson={lesson.node} baseUrl={baseUrl}/>;
-                })}
-
-                <center><Link to={"/course/"+course.id+"/print"}>print this</Link></center>
+                <img src={data.image} id='course-cover' />
+                <SectionsList sections={data.sections} baseUrl={baseUrl} />
               </div>
         </div>
     );
@@ -63,61 +120,18 @@ IndexComponent.propTypes = {
 
 export default Relay.createContainer(IndexComponent, {
   initialVariables: {
-  	courseId: "1",
+  	                                                                                                    courseId: '1',
   },
   fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
+    viewer: () => Relay.QL`fragment on Viewer {
         user{
           authenticated
         }
-        courses(first:1,id:$courseId){
-          totalCount
-          totalPagesCount
-          currentPage
-          perPage
-
-          pageInfo{
-            hasNextPage
-            hasPreviousPage
-          }
-
-          edges{
-            cursor
-            node{
+        course(id:$courseId){
               id
-              title
-              lessons(first:100){
-                edges{
-                  cursor
-                  node{
-                    id
-                    order_by
-                    summary
-                    stepsCount
-                    steps(first:100){
-                      edges{
-                        cursor
-                        node{
-                          id
-                          order_by
-                          note{
-                            output {
-                              id
-                              type
-                              api_request
-                              body
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-            }
-          }
-
-          }
-        }
+              image
+              everything
+              }
       }`,
-    },
+  },
 });

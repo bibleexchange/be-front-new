@@ -3,22 +3,21 @@ import Relay from 'react-relay';
 export default class NoteDestroyMutation extends Relay.Mutation {
 
   static fragments = {
-   note: () => Relay.QL`fragment on Note {id}`,
+    note: () => Relay.QL`fragment on Note {id}`,
   };
 
-  getMutation(){
-	  return Relay.QL`mutation NoteDestroy {noteDestroy}`;
+  getMutation() {
+	                                                                                                                                                                                                          return Relay.QL`mutation NoteDestroy {noteDestroy}`;
   }
 
-  getVariables(){
-
-	return {
-	      id:this.props.note.id
+  getVariables() {
+	                                                                                                                                                                                                        return {
+	                                                                                                          id: this.props.note.id
 	    };
   }
 
-  getFatQuery(){
-	  return Relay.QL`fragment on NoteDestroyPayload {
+  getFatQuery() {
+	                                                                                                                                                                                                          return Relay.QL`fragment on NoteDestroyPayload {
       destroyedNoteID
     }`;
   }
@@ -35,7 +34,7 @@ export default class NoteDestroyMutation extends Relay.Mutation {
     }];
   }
 
-  getOptimisticResponse(){
-	  return {note : null};
+  getOptimisticResponse() {
+	                                                                                                                                                                                                          return { note: null };
   }
 }

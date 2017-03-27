@@ -1,5 +1,1 @@
-export default {
-	slugIt: function(string){
-		return string.toLowerCase().split(' ').join('')
-	}
-};
+export default {slugIt(string) {return string.toLowerCase().split(' ').join('');}};

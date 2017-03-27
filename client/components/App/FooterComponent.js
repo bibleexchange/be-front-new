@@ -9,10 +9,10 @@ class Footer extends React.Component {
   render() {
     let usingAs = '';
 
-    if(this.props.user !== null){
-      usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>
-    }else{
-      usingAs = 'Guest'
+    if (this.props.user !== null) {
+      usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>;
+    } else {
+      usingAs = 'Guest';
     }
 
     return (
@@ -22,12 +22,12 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-    user: React.PropTypes.object.isRequired,
-  };
+  user: React.PropTypes.object.isRequired,
+};
 
 export default Relay.createContainer(Footer, {
   initialVariables: {
-	slug:''
+	                                                                                                                                                                                                        slug: ''
   },
   fragments: {
     user: () => Relay.QL`

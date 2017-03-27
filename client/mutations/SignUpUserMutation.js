@@ -44,17 +44,17 @@ export default class SignUpUserMutation extends Relay.Mutation {
   }
 
   getVariables() {
-	return { email: this.props.input.email, password: this.props.input.password };
+	                                                                                                                                                                                                        return { email: this.props.input.email, password: this.props.input.password };
   }
 
   getOptimisticResponse() {
-     return {
-	user: {         
-         id: this.props.user.id,
-         email: this.props.input.email,
-	 authenticated: false
+    return {
+	                                                                                                                                                                                                                                                                                                             user: {
+  id: this.props.user.id,
+  email: this.props.input.email,
+	                                                                                                     authenticated: false
 	}
-     };
-   }
+    };
+  }
 
 }

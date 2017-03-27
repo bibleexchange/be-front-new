@@ -5,44 +5,24 @@ import NotesWidget from './NotesWidget';
 
 class NotesIndex extends React.Component {
 
-  componentWillMount(){
-
-    let filterBy = this.props.params.filterBy;
-
-    if(filterBy == undefined && localStorage.getItem('notes-filter') !== null){
-      filterBy = localStorage.getItem('notes-filter');
-    }else if(filterBy == undefined ){
-      filterBy = "";
-    }
-
-    localStorage.setItem('notes-filter',filterBy);
-
-  	this.state = {
-  	  filterBy:filterBy
-  	};
-  }
-
   render() {
-
     return (
-      	<div id="bible" className="WidgetContainer">
-              <div className="Widget">
+      	<div id='bible' className='WidgetContainer'>
+              <div className='Widget'>
                 <NotesWidget
-                  filter={this.state.filterBy}
+                  filter={this.props.params.filter}
                   viewer={this.props.viewer}
                   selectNote={null}
-                  tags={true}
-                   />
+                  tags
+                />
               </div>
        	</div>
     );
-
   }
 
-  handleSelectNote(e){
+  handleSelectNote(e) {
     let noteString = e.target.dataset.note;
     localStorage.setItem('selected-note', noteString);
-
   }
 
 }
@@ -54,10 +34,10 @@ NotesIndex.propTypes = {
 export default Relay.createContainer(NotesIndex, {
   initialVariables: {
     after: null,
-  	pageSize: 5,
+    pageSize: 5
   },
   fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
+    viewer: () => Relay.QL`fragment on Viewer {
          ${NotesWidget.getFragment('viewer')}
        }`,
   }

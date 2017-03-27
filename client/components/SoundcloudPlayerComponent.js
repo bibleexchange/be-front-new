@@ -25,7 +25,7 @@ class Player extends Component {
     render() {
         let { track, currentTime, duration } = this.props;
 		let user = track.user;
-		
+
         return (
             <div><div className333="p2 border navy mt1 mb3 flex flex-center rounded">
                 <PlayButton className="flex-none h4 mr2 button white button-big button-outline button-grow bg-orange circle" {...this.props} />
@@ -43,7 +43,7 @@ class Player extends Component {
 
         );
     }
-	
+
 }
 
 class ProgressSoundPlayer extends Component {
@@ -54,11 +54,11 @@ class ProgressSoundPlayer extends Component {
             </SoundPlayerContainer>
         );
     }
-	
+
 	iframe(){
 		return <iframe width="100%" height="166" scrolling="no" frameborder="no" src={"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/"+this.props.file+"&amp;color=0066cc&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false"}></iframe>;
 	}
-	
+
 }
 
 ProgressSoundPlayer.propTypes = {
@@ -72,10 +72,10 @@ Player.defaultProps = { track: {user:{}} };
 
 
 class Blank extends React.Component {
-    render() {
-        return (<div/>);
-    }
-	
+  render() {
+    return (<div />);
+  }
+
 }
 
 module.exports = Blank;

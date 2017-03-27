@@ -1,0 +1,24 @@
+ul#buttons-nav {
+  background-color: white;
+  width:100%;
+  margin:0;
+  padding:0;
+  text-align: center;
+
+  li {
+    display:inline-block;
+    width:20%;
+    border:solid 1px gray;
+    margin:1%;
+    font-size: 115%;
+
+    a { display: inline-block; width:100%; text-decoration: none; color:inherit;}
+    button {font-size: 105%; display: inline-block; width:100%; margin:0; height:100%; line-height: 100%;}
+
+  }
+
+  li#back {
+    border:none;
+  }
+
+}

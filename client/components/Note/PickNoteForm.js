@@ -6,29 +6,28 @@ import BibleVerseForm from './Forms/BibleVerseForm';
 import TextForm from './Forms/TextForm';
 import CourseForm from './Forms/CourseForm';
 import MarkdownForm from './Forms/MarkdownForm';
-import RecordingForm  from './Forms/RecordingForm';
+import RecordingForm from './Forms/RecordingForm';
 
 class PickNoteForm extends React.Component {
   render() {
-
     let form = null;
 
-    switch(this.props.type){
+    switch (this.props.type) {
 
       case N.GITHUB:
         form = <GithubForm handleInputChanges={this.props.handleInputChanges} inputs={this.props.inputs} />;
         break;
 
       case N.BIBLE_VERSE:
-        form = <BibleVerseForm handleInputChanges={this.props.handleInputChanges}  inputs={this.props.inputs} />;
+        form = <BibleVerseForm handleInputChanges={this.props.handleInputChanges} inputs={this.props.inputs} />;
         break;
 
       case N.STRING:
-        form = <TextForm handleInputChanges={this.props.handleInputChanges}  inputs={this.props.inputs} />;
+        form = <TextForm handleInputChanges={this.props.handleInputChanges} inputs={this.props.inputs} />;
         break;
 
       case N.MARKDOWN:
-        form =  <MarkdownForm handleInputChanges={this.props.handleInputChanges} inputs={this.props.inputs}/>;
+        form = <MarkdownForm handleInputChanges={this.props.handleInputChanges} inputs={this.props.inputs} />;
         break;
 
       case N.DC_RECORDING:

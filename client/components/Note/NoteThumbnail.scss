@@ -1,17 +1,17 @@
 .note-thumbnail {
-  border:none;
-  border-bottom: solid 1px gray;
-  border-top: solid 1px gray;
+  border:solid 1px gray;
+  border-bottom: 3px solid #317FB6;
+  box-shadow: 10px 10px 5px #888888;
+
   padding:0;
-  width:100%;
+  width:90%;
   display:block;
   background: none;
   position:relative;
-  margin:0;
   overflow: hidden;
   height:100%;
-  margin-bottom:30px;
-  padding:0;
+  margin-top:5%;
+  margin-left:5%;
   background-color:rgba(255,255,255,0.7);
 
   button.select-note {

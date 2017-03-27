@@ -1,13 +1,31 @@
 @import "../variables.scss";
 
+#course-cover {
+  width:80%;
+  margin:10%;
+}
+
 #print {
 background-color:white;
+
 }
 
 #lessons-modal {
 
   h2 {
     padding:0;
+  }
+
+}
+
+:lang(swa) {display: none;}
+
+
+@media screen and (min-width: 480px) {
+
+  #course-cover {
+    width:300px;
+    float:right;
   }
 
 }

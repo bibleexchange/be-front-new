@@ -1,60 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import ExternalLink from './Output/ExternalLinkNote';
-import Recording from './Output/RecordingNote';
-import BibleVerse from './Output/BibleVerse';
-import DCRecording from './Output/DCRecording';
-import marked from 'marked';
-import N from '../../NoteTypes';
+import NoteTest from './NoteTest';
 
 class NoteViewer extends React.Component {
   render() {
-
     let component = null;
     let note = this.props.note;
 
-if(note !== null && note !== ""){
-    switch(note.output.type){
-
-      case N.GITHUB:
-        component = <div dangerouslySetInnerHTML={{__html: this.props.note.note.output.body}} ></div>;
-        break;
-
-      case N.BIBLE_VERSE:
-        let verse = JSON.parse(note.output.body);
-        component = <BibleVerse bibleVerse={verse} request={note.api_request} />;
-        break;
-
-      case N.STRING:
-        component = <div dangerouslySetInnerHTML={{__html: note.output.body}} ></div>;
-        break;
-
-      case N.MARKDOWN:
-        component = <div dangerouslySetInnerHTML={{__html: marked(note.output.body)}} ></div>;
-        break;
-
-      case N.DC_RECORDING:
-          let recording = JSON.parse(note.output.body);
-          if(note.output.api_request === false){recording.body = JSON.parse(recording.body);}
-
-          component = <DCRecording recording={recording} request={note.output.api_request} note={note} viewer={this.props.viewer}/>;
-
-        break;
-
-      default:
-        component = note.output.body;
-
+    if (note !== null && note !== '') {
+      component = <NoteTest type={note.output.type} note={note} api_request={note.api_request} />;
+    } else {
+      component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
     }
-}else{
-  component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
-}
     return (
-        <div style={{padding:"10px", wordWrap: "break-word"}}>
+        <div style={{ padding: '10px', wordWrap: 'break-word' }}>
           {component}
         </div>
     );
   }
+
 }
 
 NoteViewer.propTypes = {
@@ -63,17 +28,15 @@ NoteViewer.propTypes = {
 
 export default Relay.createContainer(NoteViewer, {
   initialVariables: {
-  	noteId: "55555",
+  	                                                                                                    noteId: '55555',
   },
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
-      ${DCRecording.getFragment('viewer')}
       user {
         authenticated
       }
     }`,
     note: () => Relay.QL`fragment on Note {
-        ${DCRecording.getFragment('note')}
       id
       tags
     	author{
@@ -93,5 +56,5 @@ export default Relay.createContainer(NoteViewer, {
         body
       }
     }`,
-    },
+  },
 });

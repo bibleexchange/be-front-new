@@ -1,18 +1,18 @@
 import React from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
-import auth from '../App/auth'
+import auth from '../App/auth';
 
 class NoteCreatorPage extends React.Component {
 
   render() {
     return (
-      	<div className="WidgetContainer">
-              <div className="Widget">
+      	<div className='WidgetContainer'>
+              <div className='Widget'>
 
               </div>
        	</div>
-    )
+    );
   }
 }
 
@@ -22,10 +22,10 @@ NoteCreatorPage.propTypes = {
 
 export default Relay.createContainer(NoteCreatorPage, {
   initialVariables: {
-  	userId: "55555",
+  	                                                                                                    userId: '55555',
   },
   fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
+    viewer: () => Relay.QL`fragment on Viewer {
         user {
           id
           authenticated
@@ -49,5 +49,5 @@ export default Relay.createContainer(NoteCreatorPage, {
         }
       }`,
 
-    },
+  },
 });

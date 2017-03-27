@@ -2,42 +2,95 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import LessonComponent from './LessonListComponent';
+import Lesson from './LessonComponent';
 
 import './CoursePrint.scss';
 
-class CoursePrintComponent extends React.Component {
+class SectionListed extends React.Component {
 
   render() {
+    return (
 
-   let baseUrl = '/course/';
-   let course = {title:"Course Could not Be Loaded!"};
-   let lessons = [];
+        <ol><h3>{this.props.section.title}</h3>
+        {this.props.section.steps.map(function (step,key) {
+          return <li key={key} >{step.title}</li>;
+        })}
+        </ol>
+    );
+  }
 
-   if(this.props.viewer.courses !== null){
-	course = this.props.viewer.courses.edges[0].node;
-	baseUrl = '/course/'+course.id;
-	lessons = course.lessons.edges;
-   }
+}
 
- return (
+class Section extends React.Component {
 
-        <div id="print">
+  render() {
+    return (
+
+        <div>
+        {this.props.section.steps.map(function (step,key) {
+          return <div key={key} > <Lesson lesson={step} /></div>;
+        })}
+        </div>
+    );
+  }
+
+}
+
+class SectionsOutline extends React.Component {
+
+  render() {
+    return (
+
+        <ol>
+        {this.props.sections.map(function (section,key) {
+          return <li key={key} ><SectionListed section={section} /></li>;
+        })}
+        </ol>
+    );
+  }
+
+}
+
+class Sections extends React.Component {
+
+  render() {
+    return (
+
+        <div>
+        {this.props.sections.map(function (section,key) {
+          return <div key={key} ><Section section={section} /></div>;
+        })}
+        </div>
+    );
+  }
+
+}
+
+class CoursePrintComponent extends React.Component {
+
+  componentDidMount(){
+    window.print(); 
+  }
+
+  render() {
+    let baseUrl = '/course/';
+    let course = JSON.parse(this.props.viewer.course.everything);
+
+    return (
+
+        <div id='print'>
                 <h1><center>{course.title}</center></h1>
+
+                <p>Notes written and edited by: {course.author}</p>
+
+                <p>{course.description}</p>
 
                 <h2>Table of Contents</h2>
 
-                <ul>
-                {lessons.map(function(lesson){
-                  return <li key={lesson.node.id} ><a href={"/course/"+course.id+"/print#lesson_"+lesson.node.order_by}>{lesson.node.title}</a><p>{lesson.node.summary}</p></li>;
-                })}
-                </ul>
+                <SectionsOutline sections={course.sections}/>
 
-                <ul>
-                {lessons.map(function(lesson){
-                  return <li id={"lesson_"+lesson.node.order_by} key={lesson.node.id} ><LessonComponent lesson={lesson.node} baseUrl={baseUrl}/></li>;
-                })}
-                </ul>
+                <Sections sections={course.sections}/>
+
         </div>
     );
   }
@@ -50,30 +103,14 @@ CoursePrintComponent.propTypes = {
 
 export default Relay.createContainer(CoursePrintComponent, {
   initialVariables: {
-  	courseId: "1",
+  	courseId: '1',
   },
   fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
-        courses(first:1, id:$courseId){
-          edges{
-            node{
-              id
-              title
-              lessons(first:100){
-                edges{
-                  cursor
-                  node{
-                    id
-                    order_by
-                    title
-                    summary
-                    ${LessonComponent.getFragment('lesson')}
-                    }
-                  }
-                }
-            }
-          }
+    viewer: () => Relay.QL`fragment on Viewer {
+        course(id:$courseId){
+          id
+          everything
           }
       }`,
-    },
+  },
 });

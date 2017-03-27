@@ -1,18 +1,18 @@
-import React from 'react'
+import React from 'react';
 
 import './Modal.scss';
 
 export default class ModalComponent extends React.Component {
 
   render() {
-	const modalStyle = {}
+	                                                                                                                                                                                                        const modalStyle = {};
 
-	if(!this.props.shouldDisplay){
-	 modalStyle.display = 'none';
+	                                                                                                                                                                                                        if (!this.props.shouldDisplay) {
+	                                                                                                     modalStyle.display = 'none';
 	}
 
-    return (<div id="modal" style={modalStyle} >
-		  <div id="dialog" >
+    return (<div id='modal' style={modalStyle} >
+		  <div id='dialog' >
 
 			<button onClick={this.props.close}>
 			  <span>&times;</span>
@@ -21,7 +21,7 @@ export default class ModalComponent extends React.Component {
         {this.props.component}
 
 		    </div>
-		</div>)
+		</div>);
   }
 
 }

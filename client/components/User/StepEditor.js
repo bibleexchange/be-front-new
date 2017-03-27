@@ -15,73 +15,71 @@ class StepEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     step: {
-       id: this.props.step.id,
-       lesson_id: this.props.step.lesson_id,
-       note_id: this.props.step.note_id,
-       order_by: this.props.step.order_by
-     },
-     status: <Status type="done"/>,
-     preview: false
-   };
-}
+      step: {
+        id: this.props.step.id,
+        lesson_id: this.props.step.lesson_id,
+        note_id: this.props.step.note_id,
+        order_by: this.props.step.order_by
+      },
+      status: <Status type='done' />,
+      preview: false
+    };
+  }
 
-  componentWillReceiveProps(newProps){
+  componentWillReceiveProps(newProps) {
     this.setState({
-      status: <Status type="done"/>,
+      status: <Status type='done' />,
     });
   }
 
   render() {
+    let previewStyle = { display: 'none' };
 
-    let previewStyle = {display:"none"};
-
-    if(this.state.preview){
-      previewStyle.display = "block";
+    if (this.state.preview) {
+      previewStyle.display = 'block';
     }
 
-    let preview = "Something wrong with connecting with this note.";
+    let preview = 'Something wrong with connecting with this note.';
 
-    if(this.props.step.note !== undefined){
-      preview = <div><button onClick={this.togglePreview.bind(this)} >preview {this.props.step.note.type}</button>
-        <div id="preview" style={previewStyle}>
+    if (this.props.step.note !== undefined) {
+      preview = (<div><button onClick={this.togglePreview.bind(this)} >preview {this.props.step.note.type}</button>
+        <div id='preview' style={previewStyle}>
           <NotePreview note={this.props.step.note} />
-        </div></div>;
-    }else{
-      preview = "Something wrong with connecting with this note.";
+        </div></div>);
+    } else {
+      preview = 'Something wrong with connecting with this note.';
     }
 
-      return (
-        <div className="note">
-          <button id="delete" onClick={this.handleDestroy.bind(this)}>&#10008;</button>
+    return (
+        <div className='note'>
+          <button id='delete' onClick={this.handleDestroy.bind(this)}>&#10008;</button>
           {this.state.status}
 
-          <TextInput label="lesson" name="lesson_id" value={this.state.step.lesson_id} handleEdit={this.handleEdit.bind(this)}/>
-          <TextInput label="note" name="note_id" value={this.state.step.note_id} handleEdit={this.handleEdit.bind(this)} />
-          <TextInput label="order" name="order_by" value={this.state.step.order_by} handleEdit={this.handleEdit.bind(this)} />
+          <TextInput label='lesson' name='lesson_id' value={this.state.step.lesson_id} handleEdit={this.handleEdit.bind(this)} />
+          <TextInput label='note' name='note_id' value={this.state.step.note_id} handleEdit={this.handleEdit.bind(this)} />
+          <TextInput label='order' name='order_by' value={this.state.step.order_by} handleEdit={this.handleEdit.bind(this)} />
 
-          <input type="submit" value={"save"} onClick={this.handleUpdate.bind(this)}/>
+          <input type='submit' value={"save"} onClick={this.handleUpdate.bind(this)} />
           {preview}
         </div>
     );
   }
 
-  handleEdit(e){
-
+  handleEdit(e) {
     let p = e.target.name;
 
     let n = this.state.note;
     n[p] = e.target.value;
 
     this.setState({
-    	step:n,
-    	status: <Status type="changes-not-saved"/>
+    	                                                                                                    step: n,
+    	                                                                                                    status: <Status type='changes-not-saved' />
     	});
   }
 
-  handleUpdate(e){
+  handleUpdate(e) {
     console.log('Saving...', this.state.step);
-    this.setState({status: <Status type="saving"/>});
+    this.setState({ status: <Status type='saving' /> });
 
     Relay.Store.commitUpdate(new StepUpdateMutation({
       noteChanged: this.state.step,
@@ -89,19 +87,18 @@ class StepEditor extends React.Component {
     }));
   }
 
-  handleDestroy(e){
+  handleDestroy(e) {
     console.log('Destroying Step...');
-    this.setState({status: <Status type="saving"/>});
+    this.setState({ status: <Status type='saving' /> });
 
     Relay.Store.commitUpdate(new StepDestroyMutation({
       step: this.props.step
     }));
-
   }
 
-togglePreview(){
-  this.setState({preview:!this.state.preview});
-}
+  togglePreview() {
+    this.setState({ preview: !this.state.preview });
+  }
 
 }
 
@@ -114,7 +111,7 @@ export default Relay.createContainer(StepEditor, {
     null
   },
   fragments: {
-      step: () => Relay.QL`fragment on Step {
+    step: () => Relay.QL`fragment on Step {
 	      ${StepUpdateMutation.getFragment('step')}
         ${StepDestroyMutation.getFragment('step')}
         id
@@ -137,5 +134,5 @@ export default Relay.createContainer(StepEditor, {
           }
       	}
       }`,
-    },
+  },
 });

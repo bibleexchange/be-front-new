@@ -18,18 +18,26 @@ module.exports = {
     vendor: ['react', 'react-dom', 'react-mdl', 'react-relay', 'react-router', 'react-router-relay']
   },
   output: {
-      publicPath: 'http://127.0.0.1:3000/',
+    publicPath: 'http://127.0.0.1:3000/',
     path: path.join(__dirname, 'build'),
     filename: '[name].js'
   },
   devtool: 'eval',
+
   module: {
     loaders: [
-	{
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
-    }, {
+      {
+      test: /\.js$/,
+      enforce: 'pre',
+      loader: 'eslint-loader',
+      options: {
+        emitWarning: true
+      }
+    },{
+          test: /\.jsx?$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/
+        },{
       test: /\.css$/,
       loaders: ['style', 'css']
     }, {
@@ -55,7 +63,7 @@ module.exports = {
       loader: 'json-loader'
     }
 	]
-  }, 
+  },
   postcss: function() {
     return [precss, autoprefixer];
   },

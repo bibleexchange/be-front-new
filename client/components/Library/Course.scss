@@ -1,0 +1,122 @@
+@import "../variables.scss";
+
+#course-widget {
+
+width:100%;
+
+#search{
+
+  width:100%;
+  display:block;
+  overflow: hidden;
+  height:100%;
+  margin:0;
+  border: none;
+
+.course-count{
+  text-align: right;
+  margin:15px;
+  font-style: italic;
+}
+
+  .clearFilter {
+    text-align: center;
+    width:auto;
+    display: block;
+    padding-top: 5px;
+    height:30px;
+  }
+
+  input {
+    width:100%;
+    margin:0;
+    height:60px;
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+  button {
+    width:100%;
+    height:40px;
+    display: block;
+    clear: both;
+  }
+
+  a {
+    text-align: center;
+    width:100%;
+    display: block;
+    font-size: 1.3em;
+    padding-top: 5px;
+  }
+
+
+
+
+}
+
+
+#cards {
+
+width:100%;
+padding:0;
+
+  #card:active{
+    box-shadow: unset;
+    border: 1px solid gray;
+  }
+
+  #card{
+    text-decoration: none;
+    list-style: none;
+    margin:15%;
+    background-color: white;
+
+    width:70%;
+    overflow: hidden;
+    border-bottom: 3px solid #317FB6;
+    display:block;
+    margin-bottom:15px;
+    box-shadow: 10px 10px 5px #888888;
+
+    a {text-decoration: none; color:inherit;}
+
+    img {
+      width:100%;
+      filter: opacity(90%);
+    }
+
+    .divider {
+      display:block;
+      background-color: #317FB6;
+      height:12px;
+    }
+
+    h1 {
+      padding:0;
+      margin:0;
+      text-align: center;
+    }
+  }
+
+
+}
+
+}
+
+@media screen and (min-width: 480px) {
+
+  #course-widget {
+#cards{
+
+  #card{
+    margin:0;
+    margin-left:4%;
+    margin-bottom:30px;
+    width:220px;
+    float:left;
+    height:410px;
+  }
+}
+}
+}

@@ -5,26 +5,25 @@ import './Login.scss';
 class SignUpComponent extends React.Component {
 
   render() {
+    let loginFormStyle = { display: 'none' };
 
-    let loginFormStyle = {display:"none"};
-
-    if(this.props.status){
-      loginFormStyle.display = "block";
+    if (this.props.status) {
+      loginFormStyle.display = 'block';
     }
 
-    let messageStyle = {color:"red", height:"20px"};
-    if(this.props.signup.message === "passwords match :)"){messageStyle.color ="green";}
+    let messageStyle = { color: 'red', height: '20px' };
+    if (this.props.signup.message === 'passwords match :)') { messageStyle.color = 'green'; }
     return (
-        <div id="login-form" style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
+        <div id='login-form' style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
           {this.props.signup.message}
 
             <form >
-                <input value={this.props.signup.email} type="text" onChange={this.props.handleEditSignUpEmail} placeholder='email' ref="email" />
-                <input value={this.props.signup.password} type="password" onChange={this.props.handleEditSignUpPassword} placeholder='password' ref="password" />
-                <input id="message" style={messageStyle} value={this.props.signup.message} type="text" disabled="disabled" />
-                <input value={this.props.signup.password_confirmation} type="password" onChange={this.props.handleEditSignUpPasswordConfirm} placeholder='password confirmation' ref="password_confirmation" />
+                <input value={this.props.signup.email} type='text' onChange={this.props.handleEditSignUpEmail} placeholder='email' ref='email' />
+                <input value={this.props.signup.password} type='password' onChange={this.props.handleEditSignUpPassword} placeholder='password' ref='password' />
+                <input id='message' style={messageStyle} value={this.props.signup.message} type='text' disabled='disabled' />
+                <input value={this.props.signup.password_confirmation} type='password' onChange={this.props.handleEditSignUpPasswordConfirm} placeholder='password confirmation' ref='password_confirmation' />
                 <hr />
-                <input type="button" value="Sign Up" onClick={this.props.handleSignUp}/>
+                <input type='button' value='Sign Up' onClick={this.props.handleSignUp} />
             </form>
         </div>
     );
