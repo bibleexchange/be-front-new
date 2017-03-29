@@ -4,17 +4,7 @@ import { Link } from 'react-router';
 import SearchBox from '../ListWidget/SearchBox'
 import './AudioWidget.scss';
 
-class SoundCloudPlayer extends React.Component {
-
-  render() {
-      let srcString = 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + this.props.id + '&amp;auto_play=true&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;visual=false';
-      return (<iframe key={this.props.id} width='100%' height='130px' scrolling='no' frameBorder='no' src={srcString}></iframe>)
-  }
-
-}
-
 class SoundCloudCard extends React.Component {
-
 
   render() {
     let t = this.props.track
@@ -73,15 +63,11 @@ class AudioWidget extends React.Component {
 
     let none = <h2>No audio matches your search!</h2>;
     let totalCount = null;
-    let handlePlayAudio = this.handlePlayAudio.bind(this)
+    let handlePlayAudio = this.props.handlePlayAudio
     let player = null
 
     if (this.state.tracks.length >= 1) {
       none = null;
-    }
-
-    if(this.state.playStatus){
-      player = <div><SoundCloudPlayer id={this.state.currentSoundId} /><button onClick={this.handleCloseAudio.bind(this)}>close</button></div>
     }
 
     let items = {
@@ -125,33 +111,6 @@ class AudioWidget extends React.Component {
     );
   }
 
-  handleGetAudio(){
-
-    let setState = this.setState.bind(this)
-
-    SC.initialize({
-      client_id: '2dc887a365f4c737b309f890a7ea8584',
-      redirect_uri: 'https://bible.exchange/api/soundcloud'
-    });
-
-    var page_size = this.state.perPage;
-
-    let url = 'tracks'//'/users/130712524/tracks'
-    let offset = this.state.offset
-    let filter = this.state.filter
-
-    SC.get(url, {
-      limit: page_size, linked_partitioning: 1, offset: offset, q:"bible_exchange", tags: filter
-    }).then(function(tracks) {
-      setState({
-        tracks: tracks.collection,
-        next: tracks.next_href,
-        status: null
-      })
-    });
-
-  }
-
   handleEditFilter(event) {
     this.setState({ filter: event.target.value });
   }
@@ -191,12 +150,31 @@ class AudioWidget extends React.Component {
     }
   }
 
-  handlePlayAudio(e){
-    this.setState({playStatus: true, currentSoundId: e.target.dataset.id})
-  }
+  handleGetAudio(){
 
-  handleCloseAudio(){
-    this.setState({playStatus: false, currentSoundId: null})
+    let setState = this.setState.bind(this)
+
+    SC.initialize({
+      client_id: '2dc887a365f4c737b309f890a7ea8584',
+      redirect_uri: 'https://bible.exchange/api/soundcloud'
+    });
+
+    var page_size = this.state.perPage;
+
+    let url = 'tracks'//'/users/130712524/tracks'
+    let offset = this.state.offset
+    let filter = this.state.filter
+
+    SC.get(url, {
+      limit: page_size, linked_partitioning: 1, offset: offset, q:"bible_exchange", tags: filter
+    }).then(function(tracks) {
+      setState({
+        tracks: tracks.collection,
+        next: tracks.next_href,
+        status: null
+      })
+    });
+
   }
 
 }

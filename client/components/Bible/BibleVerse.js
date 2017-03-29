@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import NoteCreator from '../Note/NoteCreator';
 
 class BibleVerseComponent extends React.Component {
 
@@ -12,12 +11,6 @@ class BibleVerseComponent extends React.Component {
   }
 
   render() {
-    let noteCreator = null;
-
-    if (this.state.noteStatus) {
-      noteCreator = null; // <NoteCreator viewer={this.props.viewer} bibleVerse={this.props.bibleVerse} />
-    }
-
     return (
 	<div>
 
@@ -32,8 +25,6 @@ class BibleVerseComponent extends React.Component {
         </span>
 
       </p>
-
-      {noteCreator}
 
 	</div>
     );
@@ -56,7 +47,6 @@ export default Relay.createContainer(BibleVerseComponent, {
   fragments: {
     bibleVerse: () => Relay.QL`
       fragment on BibleVerse  {
-        ${NoteCreator.getFragment('bibleVerse')}
       	 id
          order_by
       	 body
@@ -66,7 +56,6 @@ export default Relay.createContainer(BibleVerseComponent, {
     viewer: () => Relay.QL`
       fragment on Viewer  {
         user{authenticated}
-        ${NoteCreator.getFragment('viewer')}
      }`
   },
 

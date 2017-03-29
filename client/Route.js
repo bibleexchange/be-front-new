@@ -16,8 +16,6 @@ import CoursePrint from './components/Course/CoursePrintComponent';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import NotePrintPage from './components/Note/NotePrintPageComponent';
-import NotesCreatorPage from './components/NoteCreator/NoteCreatorPage';
-import NoteEditorPage from './components/Note/NoteEditorComponent';
 import CourseEditor from './components/User/CourseEditor';
 import LessonEditor from './components/User/LessonEditor';
 
@@ -36,9 +34,6 @@ export default (
     <Route path='/notes(/tag/:filter)' component={NotesIndex} queries={ViewerQueries} />
     <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
     <Route path='/notes/:noteId/print' component={NotePrintPage} queries={ViewerQueries} />
-    <Route path='/notes/:noteId/edit' component={NoteEditorPage} queries={ViewerQueries} />
-
-    <Route path='/my-notes(/tag/:filterBy)' component={NotesCreatorPage} queries={ViewerQueries} />
 
     <Route path='bible/:reference' component={Bible} queries={ViewerQueries} />
     <Route path='/user' component={Dashboard} queries={ViewerQueries} />

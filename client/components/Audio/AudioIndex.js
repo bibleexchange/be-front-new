@@ -12,7 +12,7 @@ class AudioIndex extends React.Component {
                 <AudioWidget
                   filter={this.props.params.filter}
                   viewer={this.props.viewer}
-                  tags
+                  handlePlayAudio={this.props.handlePlayAudio}
                 />
               </div>
        	</div>

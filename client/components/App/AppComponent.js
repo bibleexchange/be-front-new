@@ -1,17 +1,17 @@
-import React from 'react';
-import { Route, Link } from 'react-router';
-import MainNavigation from '../Navbar/NavbarComponent';
-import Footer from './FooterComponent';
-import Relay from 'react-relay';
-import auth from './auth';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import LoginUserMutation from '../../mutations/LoginUserMutation';
-import SignUpUserMutation from '../../mutations/SignUpUserMutation';
-
-import './App.scss';
-import './Print.scss';
-import './Typography.scss';
-import './Widget.scss';
+import React from 'react'
+import { Route, Link } from 'react-router'
+import MainNavigation from '../Navbar/NavbarComponent'
+import Footer from './FooterComponent'
+import Relay from 'react-relay'
+import auth from './auth'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import LoginUserMutation from '../../mutations/LoginUserMutation'
+import SignUpUserMutation from '../../mutations/SignUpUserMutation'
+import Dock from '../Dock/Dock'
+import './App.scss'
+import './Print.scss'
+import './Typography.scss'
+import './Widget.scss'
 
 import '../../assets/favicons/favicon.ico';
 
@@ -41,7 +41,11 @@ class App extends React.Component {
       password,
       signup: {},
       user: this.props.viewer.user ? this.props.viewer.user : { name: 'Guest' },
-      message: this.props.viewer.message
+      message: this.props.viewer.message,
+      player: {
+       playStatus: false,
+       currentSoundId: null
+      }
     };
   }
 
@@ -96,7 +100,9 @@ class App extends React.Component {
 
 	                                                                                                                                                                                                          return (
     	<div className='container'>
-      	<MainNavigation location={this.props.location}
+        <Dock viewer={this.props.viewer} player={this.state.player} handleCloseAudio={this.handleCloseAudio.bind(this)} bibleVerse={this.props.viewer.bibleVerses}/>
+
+        <MainNavigation location={this.props.location}
         updateIt={this.state}
         route={this.props.route}
         user={user}
@@ -121,12 +127,15 @@ class App extends React.Component {
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}
           >
+
              {React.cloneElement(children, {
-               key: this.props.location.pathname
+               key: this.props.location.pathname,
+               handlePlayAudio: this.handlePlayAudio.bind(this)
              })}
           </ReactCSSTransitionGroup>
 
           {errorMessage}
+
           <footer id='footer' className='push'><Footer user={user} /></footer>
     	</div>
     );
@@ -241,7 +250,7 @@ class App extends React.Component {
   }
 
   handleBookmark(e) {
-  	                                                                                                    e.preventDefault();
+  	e.preventDefault();
 
     if (this.props.location.pathname !== null) {
       let navs = JSON.parse(localStorage.getItem('navs'));
@@ -260,6 +269,15 @@ class App extends React.Component {
 
   uniques(array) {
     return Array.from(new Set(array));
+  }
+
+  handlePlayAudio(e){
+    console.log("new sound selected...")
+    this.setState({ player: { playStatus: true, currentSoundId: e.target.dataset.id}})
+  }
+
+  handleCloseAudio(){
+    this.setState({ player: { playStatus: false, currentSoundId: null}})
   }
 
 }
@@ -282,12 +300,24 @@ App.defaultProps = {
 export default Relay.createContainer(App, {
   initialVariables: {
     noteId: '',
-    verseId: '',
+    verseId: "QmlibGVWZXJzZToxMDAxMDAx",
     filter:''
   },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
+
+        bibleVerses(id: $verseId, first: 1) {
+          edges {
+            node {
+              ${Dock.getFragment('bibleVerse')}
+              id
+              reference
+            }
+          }
+        }
+
+        ${Dock.getFragment('viewer')}
         error{
           message
           code
