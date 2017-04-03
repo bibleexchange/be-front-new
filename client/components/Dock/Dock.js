@@ -2,7 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
 import Loading from '../ListWidget/Loading'
-import SoundCloudPlayer from './SoundCloudPlayer'
+//import SoundCloudPlayer from './SoundCloudPlayer'
 import NoteEditor from '../NoteEditor/NoteEditorWidget'
 import './Dock.scss';
 
@@ -12,12 +12,12 @@ class Dock extends React.Component {
   	  this.state = {
         status: false,
         styles: [
-            {  top:"0", left:"0", position: "fixed"},
-            {  right:"0", top: "0", position: "fixed"},
-            {  right:"0", bottom: "0", position: "fixed"},
-            {  left:"0", bottom: "0", position: "fixed"},
+            {  top:"75px", left:"75px", position: "absolute"},
+            {  right:"75px", top: "75px", position: "absolute"},
+            {  right:"75px", bottom: "75px", position: "absolute"},
+            {  left:"75px", bottom: "75px", position: "absolute"},
           ],
-        position:2
+        position:1
       	};
   }
 
@@ -27,35 +27,41 @@ class Dock extends React.Component {
 
   render() {
 
-    let player = <div style={{width:"100px"}}> </div>
+    let player = null
 
     let style = {
-      display:"none"
+      visibility: "hidden"
     }
 
     if(this.state.status){
       style = {
-        display:"block"
+        visibility:"visible"
       }
     }
-
+    let viewer = this.props.viewer
     if(this.props.player.playStatus){
-      player = <div><SoundCloudPlayer id={this.props.player.currentSoundId} /><button onClick={this.props.handleCloseAudio}>close</button></div>
+      //player = <div><SoundCloudPlayer id={this.props.player.currentSoundId} /><button onClick={this.props.handleCloseAudio}>close</button></div>
     }
 
     return (
     		<div id='dock-widget' style={this.state.styles[this.state.position]}>
 
           <button id="open-close" onClick={this.handleOpenClose.bind(this)}></button>
+          <button id="move-dock" onClick={this.handleMove.bind(this)}></button>
 
-          <div style={style}>
-            <button id="move-dock" onClick={this.handleMove.bind(this)}></button>
+          <div id="dock-main" style={style}>
+
             <div className="note-main">
               <ul>
                 <li>{player}</li>
-                <li><NoteEditor viewer={this.props.viewer} bibleVerse={this.props.bibleVerse} /></li>
+
+              {this.props.viewer.bibleVerses.edges.map(function(v,k){
+                return <li key={k}><NoteEditor viewer={viewer} bibleVerse={v.node} noteId={viewer.note.id}/></li>;
+              })}
               </ul>
             </div>
+
+
           </div>
 
     		</div>
@@ -89,17 +95,31 @@ Dock.propTypes = {
 
 export default Relay.createContainer(Dock, {
   initialVariables: {
-    id: null,
+    id: '',
+    verseId: "QmlibGVWZXJzZToxMDAxMDAx",
+    noteId:"Tm90ZToyMzUxNQ=="
   },
   fragments: {
-    viewer: () => Relay.QL`
+    viewer: ({verseId, noteId}) => Relay.QL`
       fragment on Viewer  {
-        ${NoteEditor.getFragment('viewer')}
-     }`,
-     bibleVerse: () => Relay.QL`
-       fragment on BibleVerse  {
-         ${NoteEditor.getFragment('bibleVerse')}
-         id
-      }`
+        ${NoteEditor.getFragment('viewer', {noteId})}
+        note(id:$noteId){
+          id
+          title
+          type
+          body
+          tags_string
+        }
+        bibleVerses(id: $verseId, first: 1) {
+          edges {
+            node {
+              ${NoteEditor.getFragment('bibleVerse')}
+              id
+              reference
+            }
+          }
+        }
+
+     }`
   }
 });

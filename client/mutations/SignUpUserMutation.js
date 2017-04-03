@@ -3,13 +3,15 @@ import Relay from 'react-relay';
 export default class SignUpUserMutation extends Relay.Mutation {
 
   static fragments = {
-    user: () => Relay.QL`
-      fragment on User {
-        id
-        token
-      	name
-      	email
-        authenticated
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        user {
+          id
+          token
+        	name
+        	email
+          authenticated
+        }
       }`,
   };
 

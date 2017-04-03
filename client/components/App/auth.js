@@ -10,7 +10,7 @@ module.exports = {
 
   logout() {
     delete localStorage.be_token;
-    this.onChange(false);
+    setTimeout(this.onChange(true), 1000);
   },
 
   loggedIn() {

@@ -5,6 +5,7 @@ import Loading from '../ListWidget/Loading'
 import './NoteEditorWidget.scss';
 
 import N from '../../NoteTypes';
+import Template from '../../NoteTemplate';
 import NoteCreateMutation from './NoteCreateMutation';
 import Status from '../User/StatusComponent';
 import PickNoteForm from './PickNoteForm';
@@ -12,70 +13,92 @@ import PickNoteForm from './PickNoteForm';
 class NoteEditorWidget extends React.Component {
 
 componentWillMount() {
-    let verse = {}
-  if(this.props.bibleVerse.edges !== 'undefined'){
-    verse = this.props.bibleVerse.edges[0].node
-  }
+
+    let verse = this.props.bibleVerse
 
   this.state = {
-    type: null,
     inputs: {},
     noteTypes: Object.keys(N),
     verse: verse,
-    status: <Status type='done' />,
+    status: 'original',
+    data: this.setInitialData(this.props.viewer.note )
   };
 }
 
 componentWillReceiveProps(newProps) {
   this.setState({
-    status: <Status type='done' />,
+    status: "done",
   });
 }
 
     render() {
-      console.log(this.state.verse)
+
       let form = null;
       let clearForm = null;
-      let noteType = this.state.type;
+      let noteType = this.state.data.type;
       let optionsStyle = { display: 'block' };
 
-      if (noteType !== null) {
-        optionsStyle = { display: 'none' };
-        clearForm = <button style={{ color: 'red' }} onClick={this.clearForm.bind(this)}>X Clear</button>;
-        form = <form onSubmit={this.handleCreateNote.bind(this)} ><PickNoteForm type={this.state.type} handleInputChanges={this.handleInputChanges.bind(this)} inputs={this.state.inputs} /><input type='submit' value='save' onClick={this.handleCreateNote.bind(this)} /></form>;
-      } else {
-        optionsStyle = { display: 'block' };
-        clearForm = null;
+      let media = []
+
+      if (this.state.status !== 'done' && this.state.status !== 'original') {
+        clearForm = <button style={{ color: 'red' }} onClick={this.clearForm.bind(this)}>X Undo All Changes</button>;
+        form = <input type='submit' value='save' onClick={this.handleCreateNote.bind(this)} />;
       }
 
       let setNoteType = this.setNoteType.bind(this);
       let selectedType = this.state.type;
+      let newId = this.state.data.media.length;
+      let updateMedia = this.updateMedia.bind(this)
 
-      return (<div id='note-creator'>
-                {this.state.verse.reference}
-              {this.state.status}
-              {clearForm} {form}
+      return (<ul id='note-creator'>
 
+              <div id="status-bar">
+                <section>{clearForm}</section>
+                <section>{form}</section>
+                <section> <Status type={this.state.status} /></section>
+              </div>
+
+              <h1>Title: <input type="text" value={this.state.data.title? this.state.data.title:""} onChange={this.updateTitle.bind(this)}/></h1>
+
+              <h2>Bible Reference: <input type="text" value={this.state.data.reference? this.state.data.reference:""} onChange={this.updateReference.bind(this)}/></h2>
+
+              <h2>Tags: <input type="text" value={this.state.data.tags? this.state.data.tags:""} onChange={this.updateTags.bind(this)}/></h2>
+
+            {this.state.data.media.map(function(m,k){
+              return <li key={k}><input type="text" value={JSON.stringify(m)} onChange={updateMedia(m.id)} data-id={m.id}/></li>;
+            })}
+
+            <p>ADD Media...</p>
             <form id='note-options' style={optionsStyle}>
 
               {this.state.noteTypes.map(function (type, index) {
-                return <p key={index} >{type}: <input type='radio' name='form_type' onClick={setNoteType} value={type} /></p>;
+                return <p key={index} >{type}: <input type='radio' name='form_type' onClick={setNoteType} data-type={type} data-id={newId}/></p>;
               })}
 
             </form>
-          </div>
+          </ul>
       );
     }
 
     setNoteType(e) {
-      this.setState({ type: e.target.value });
+
+    let id = +e.target.dataset.id
+    let type = e.target.dataset.type
+
+      let newMedia = {id: id, type: type, body: this.blankNote(type)};
+      let data = this.state.data
+      data.media[id] = newMedia
+
       this.setState({
-        status: <Status type='changes-not-saved' />
+        status: 'changes-not-saved',
+        data: data
       });
     }
 
     clearForm(e) {
-      this.setState({ type: null, inputs: {} });
+       let n = this.setInitialData(this.props.viewer.note );
+
+       this.setState({data: n, status: "original"})
     }
 
     handleInputChanges(e) {
@@ -84,38 +107,98 @@ componentWillReceiveProps(newProps) {
       newInputs[e.target.name] = e.target.value;
       this.setState({
         inputs: newInputs,
-        status: <Status type='changes-not-saved' />
+        status: 'changes-not-saved'
       });
     }
 
-    handleCreateNote(e) {
-      e.preventDefault();
-      this.setState({ status: <Status type='saving' /> });
-      let body = null;
-      let inputs = this.state.inputs;
-      let tags = this.state.inputs.tags;
-      let type = this.state.type;
+    updateTitle(e){
+      e.preventDefault()
+      let data = this.state.data
+      data.title = e.target.value
 
-      if (type === 'STRING') {
-        body = inputs.text;
-      } else {
-        body = JSON.stringify(inputs);
+      this.setState({
+        data: data,
+        status: 'changes-not-saved',
+      })
+    }
+
+
+      updateReference(e){
+        e.preventDefault()
+        let data = this.state.data
+        data.reference = e.target.value
+
+        this.setState({
+          data: data,
+          status: 'changes-not-saved',
+        })
       }
 
-      let note = {
-        id: 'newNoteId',
-        type,
-        body,
-        tags_string: tags
-      };
+      updateTags(e){
+        e.preventDefault()
+        let data = this.state.data
+        data.tags = e.target.value
+
+        this.setState({
+          data: data,
+          status: 'changes-not-saved',
+        })
+      }
+
+    handleCreateNote(e) {
+      e.preventDefault();
+      this.setState({ status:'saving'});
+      let note = this.state.data
 
       Relay.Store.commitUpdate(new NoteCreateMutation({
-        newNote: note,
-        bibleVerse: this.props.bibleVerse.edges[0].node,
-        note: this.props.viewer.note
+        note: note
       }));
     }
 
+    blankNote(type) {
+      return Template[type];
+    }
+
+    setInitialData(note){
+      let n = null
+      let body = {}
+
+      if (note !== undefined){
+        let body = JSON.parse(note.body)
+
+        n = {
+          title: body.title,
+          tags: body.tags,
+          type: note.type,
+          id: note.id,
+          media: body.media,
+          reference: note.verse.reference,
+          tags: note.tags_string
+        }
+      }else{
+        n = {
+          title:"",
+          tags: "",
+          type: "",
+          id: "",
+          media: [],
+          reference: ""
+        }
+      }
+
+      return n;
+
+    }
+
+    updateMedia(e){
+      e.preventDefault()
+      console.log("EDIT .." . e)
+
+    /*  this.setState({
+        data: data,
+        status: <Status type='changes-not-saved' />,
+      })*/
+    }
 
   }
 
@@ -126,28 +209,29 @@ componentWillReceiveProps(newProps) {
 
   export default Relay.createContainer(NoteEditorWidget, {
     initialVariables: {
-    	noteId: '55555',
+    	noteId: 'Tm90ZToyMzUxNQ=',
     },
     fragments: {
-      viewer: () => Relay.QL`fragment on Viewer {
+      viewer: ({noteId}) => Relay.QL`fragment on Viewer {
           user {
             id
             name
             email
           }
 
-          notes(first:1, id:"newNote"){
-            edges{
-              node{
+          note(id:$noteId){
                 ${NoteCreateMutation.getFragment('note')}
                 id
+                title
                 type
                 body
                 tags_string
-              }
+                verse{
+                  id
+                  reference
+                }
             }
 
-          }
         }`,
       bibleVerse: () => Relay.QL`fragment on BibleVerse {
         id

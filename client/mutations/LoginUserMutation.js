@@ -3,56 +3,64 @@ import Relay from 'react-relay';
 export default class LoginUserMutation extends Relay.Mutation {
 
   static fragments = {
-    user: () => Relay.QL`
-      fragment on User {
-        id
-        token
-      	name
-      	email
-        authenticated
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        error {
+          code
+          message
+        }
+        user{
+          id
+          name
+          email
+        }
       }`,
   };
 
+//invalid field name on fat query error message will result if fieldIDs
+// entered do not correspond to a fat query entry
+// if nothing is here then only "mutationid" will be returned in response graphql query
   getConfigs() {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-        user: this.props.user.id,
+        token: "" ,
+        error:{},
+        message:"",
+        code:"",
+        user: this.props.viewer.user.id
       },
     }];
   }
 
   getFatQuery() {
     return Relay.QL`
-      fragment on LoginUserPayload {
-  	    user {
-  	      id
-          token
-  	      name
-  	      email
-  	      authenticated
-  	    }
-  	    clientMutationId
+      fragment on CreateTokenPayload {
   	    token
-  	    error
-  	    code
+        message
+        code
+  	    clientMutationId
+  	    error{
+          code
+          message
+        }
+        user{
+          id
+          token
+          name
+          email
+          authenticated
+          nickname
+        }
       }`;
   }
 
   getMutation() {
-    return Relay.QL`mutation LoginUserMutation {loginUser}`;
+    return Relay.QL`mutation {createToken}`;
   }
 
   getVariables() {
-	                                                                                                                                                                                                        return { email: this.props.input.email, password: this.props.input.password };
-  }
-
-
-  getOptimisticResponse() {
-    return {
-      email: this.props.input.email,
-      id: this.props.user.id
-    };
+    return { email: this.props.input.email, password: this.props.input.password };
   }
 
 }

@@ -34,18 +34,23 @@ class App extends React.Component {
       onLine = false;
     }
 
+    let token = false
+
+    if(auth.getToken() !== undefined){token = auth.getToken()}
+
     this.state = {
       oembed: {},
       online: onLine,
       email,
       password,
-      signup: {},
       user: this.props.viewer.user ? this.props.viewer.user : { name: 'Guest' },
-      message: this.props.viewer.message,
+      signup: {},
       player: {
        playStatus: false,
        currentSoundId: null
-      }
+     },
+     error: this.props.viewer.error,
+     token: token
     };
   }
 
@@ -66,13 +71,23 @@ class App extends React.Component {
   componentWillMount() {
     auth.onChange = this.updateAuth.bind(this);
 
-    if (this.props.location.query.backdoor !== undefined) {
-      this.handleLogin(null);
+    if (this.state.token !== false) {
+      //this.handleLogin(null);
+    }else{
+      this.setState({error:false})
     }
+    let that = this
+
+    window.setTimeout(function(){
+      that.setState({
+        error: false,
+      });
+    }, 3000)
+
   }
 
   componentWillReceiveProps(newProps) {
-    if (navigator.onLine && this.props.viewer.error.code !== 500) {
+    if (navigator.onLine && this.props.viewer.error.code !== 500 ) {
       this.setState({ online: true });
     } else {
       this.setState({ online: false });
@@ -81,26 +96,30 @@ class App extends React.Component {
     if (JSON.stringify(this.props.viewer.user) !== JSON.stringify(newProps.viewer.user)) {
       this.setState({ user: newProps.viewer.user });
     }
+
   }
 
   render() {
-    let errorMessage = null;
-    let user = this.state.user;
-    let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
-    let children = null;
-    localStorage.setItem('navs', JSON.stringify(navs));
 
-    if (this.state.message !== undefined && this.state.message !== null && this.state.message.code !== 200) {
-      errorMessage = <div id='im-online' className='onlinefalse'><h2>{this.state.message.message}</h2></div>;
+    let errorMessage = null
+
+    if(this.state.error !== false){
+      errorMessage = <div id='im-online' className='onlinefalse'><h2>{this.state.error.code}: {this.state.error.message}</h2></div>
     }
+
+
+    let user = this.state.user;
+    let navs = []//this.uniques(JSON.parse(localStorage.getItem('navs')));
+    let children = null;
+    //localStorage.setItem('navs', JSON.stringify(navs));
 
     if (this.props.children !== null) {
       children = React.cloneElement(this.props.children, { online: this.state.online });
     }
 
-	                                                                                                                                                                                                          return (
+	  return (
     	<div className='container'>
-        <Dock viewer={this.props.viewer} player={this.state.player} handleCloseAudio={this.handleCloseAudio.bind(this)} bibleVerse={this.props.viewer.bibleVerses}/>
+        <Dock viewer={this.props.viewer} player={this.state.player} handleCloseAudio={this.handleCloseAudio.bind(this)}  />
 
         <MainNavigation location={this.props.location}
         updateIt={this.state}
@@ -163,17 +182,54 @@ class App extends React.Component {
 
   handleLogout() {
     console.log('Logging user out...');
+    let that = this;
+    this.setState({
+      user:{},
+      error: {message:"You are Logged out!", code:200}
+    })
+            window.setTimeout(function(){
+              that.setState({
+                error: false,
+              });
+            }, 3000);
+
     auth.logout();
   }
 
   handleLogin(e) {
+
+    let that = this
+
     var onSuccess = (Login) => {
-      console.log('Mutation successful!', Login, ' Stored token: ', Login.loginUser.user.token);
-      let newState = this.state;
-      newState.user = Login.loginUser.user;
-      newState.message = { message: 'Login Successful', code: 200 };
-      this.setState(newState);
-      auth.login(Login.loginUser.user.token);
+
+      let error = {}
+      let createToken = Login.createToken
+      let token = createToken.token? createToken.token:"";
+      console.log('Mutation completed!', Login, ' Stored token: ', token);
+
+      if(createToken.code === "200" || createToken.code === 200 || createToken.code === null){
+        error = { message: 'Login Successful', code: 200 };
+        auth.login(token);
+
+        that.setState({
+          error: error,
+          token: token,
+          user: createToken.user
+        });
+
+        window.setTimeout(function(){
+          that.setState({
+            error: false,
+          });
+        }, 3000);
+
+      }else{
+        console.log(createToken)
+        that.setState({
+          error: { message: createToken.message, code: createToken.code }
+        });
+      }
+
     };
 
     var onFailure = (transaction) => {
@@ -182,13 +238,13 @@ class App extends React.Component {
     };
 
     let details = {
-  	                                                                                                                                                                                                       email: this.state.email,
-  	                                                                                                                                                                                                       password: this.state.password
+      email: this.state.email,
+      password: this.state.password
     };
 
     Relay.Store.commitUpdate(
-       new LoginUserMutation({ input: details, user: this.props.viewer.user }), { onFailure, onSuccess }
-     );
+       new LoginUserMutation({ input: details, viewer: this.props.viewer }), { onFailure, onSuccess }
+     )
   }
 
   handleSignUp(e) {
@@ -207,8 +263,8 @@ class App extends React.Component {
     };
 
     let details = {
-  	                                                                                                                                                                                                       email: this.state.signup.email,
-  	                                                                                                                                                                                                       password: this.state.signup.password
+email: this.state.signup.email,
+password: this.state.signup.password
     };
 
     Relay.Store.commitUpdate(
@@ -299,25 +355,17 @@ App.defaultProps = {
 
 export default Relay.createContainer(App, {
   initialVariables: {
-    noteId: '',
+    noteId: 'Tm90ZToyMzUxNQ==',
     verseId: "QmlibGVWZXJzZToxMDAxMDAx",
     filter:''
   },
   fragments: {
-    viewer: () => Relay.QL`
+    viewer: ({verseId, noteId}) => Relay.QL`
       fragment on Viewer {
+        ${SignUpUserMutation.getFragment('viewer')}
+        ${LoginUserMutation.getFragment('viewer')}
+        ${Dock.getFragment('viewer', {verseId, noteId})}
 
-        bibleVerses(id: $verseId, first: 1) {
-          edges {
-            node {
-              ${Dock.getFragment('bibleVerse')}
-              id
-              reference
-            }
-          }
-        }
-
-        ${Dock.getFragment('viewer')}
         error{
           message
           code
@@ -328,10 +376,9 @@ export default Relay.createContainer(App, {
       	      name
       	      email
       	      authenticated
+              nickname
               ${MainNavigation.getFragment('user')}
               ${Footer.getFragment('user')}
-              ${LoginUserMutation.getFragment('user')}
-              ${SignUpUserMutation.getFragment('user')}
           }
       }
     `,

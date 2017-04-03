@@ -1,10 +1,29 @@
 #dock-widget {
-  border: 2px solid;
   resize: both;
   overflow: auto;
-  background-color: rgba(255,255,255, 0.9);
   z-index: 3000;
-  position:fixed;
+  background-color: rgba(255,255,255, 0.1);
+
+h1 {
+  input{
+    height:100%;
+    line-height: 100%;
+    font-size: inherit;
+  }
+}
+
+#dock-main {
+    border: 2px solid;
+    background-color: rgba(255,255,255, 0.9);
+
+    input {
+      width:100%;
+      margin-top:10px;
+      border:none;
+      border-bottom: solid 1px black;
+    }
+
+}
 
   ul {
     list-style: none;
@@ -22,7 +41,6 @@
   }
 
   #move-dock{
-    position:absolute;
     top:0;
     right:0;
     height:35px;
@@ -35,8 +53,7 @@
 
   .note-main {
     clear:both;
-    margin-top:30px;
-    padding:15px;
+    padding:5px;
   }
 
 }
