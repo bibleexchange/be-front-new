@@ -46,8 +46,8 @@ class Dock extends React.Component {
     return (
     		<div id='dock-widget' style={this.state.styles[this.state.position]}>
 
-          <button id="open-close" onClick={this.handleOpenClose.bind(this)}></button>
-          <button id="move-dock" onClick={this.handleMove.bind(this)}></button>
+          <button id="open-close" onClick={this.handleOpenClose.bind(this)}>X</button>
+          <button id="move-dock" onClick={this.handleMove.bind(this)}>-></button>
 
           <div id="dock-main" style={style}>
 

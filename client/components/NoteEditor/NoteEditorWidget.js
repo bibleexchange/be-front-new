@@ -190,9 +190,9 @@ componentWillReceiveProps(newProps) {
 
     }
 
-    updateMedia(e){
-      e.preventDefault()
-      console.log("EDIT .." . e)
+    updateMedia(mediaId){
+      //e.preventDefault()
+      console.log("EDIT .." . mediaId)
 
     /*  this.setState({
         data: data,

@@ -39,7 +39,7 @@ class WidgetComponent extends React.Component {
       <div>
       	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl} />
       	  {verses.map(function (verse) {
-      		                                                                                                    return <BibleVerse viewer={viewer} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl} />;
+      		  return <BibleVerse viewer={viewer} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl} />;
       	  })}
 
           {goToNext}
@@ -56,10 +56,10 @@ WidgetComponent.propTypes = {
 
 export default Relay.createContainer(WidgetComponent, {
   initialVariables: {
-	                                                                                                                                                                                                        bibleChapterId: 5,
-	                                                                                                                                                                                                        libraryFilter: '',
-	                                                                                                                                                                                                        reference: 'john_2_16',
-	                                                                                                                                                                                                        courseSlug: ''
+    bibleChapterId: 5,
+    libraryFilter: '',
+    reference: 'john_2_16',
+    courseSlug: ''
   },
   fragments: {
     bibleChapter: () => Relay.QL`fragment on BibleChapter {

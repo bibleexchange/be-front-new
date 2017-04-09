@@ -2,9 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import StepEditor from './StepEditor';
+//import StepEditor from './StepEditor';
 import NewLessonNoteForm from './NewLessonNoteForm';
-import LessonUpdateMutation from './LessonUpdateMutation';
+//import LessonUpdateMutation from './LessonUpdateMutation';
 import Status from './StatusComponent';
 import TextInput from './TextInput';
 
@@ -96,7 +96,7 @@ class LessonEditor extends React.Component {
             {newNote}
 
             {lessonSteps.map(function (bridge) {
-              return <StepEditor key={bridge.node.id} step={bridge.node} />;
+              //return <StepEditor key={bridge.node.id} step={bridge.node} />;
             })}
           </div>
 

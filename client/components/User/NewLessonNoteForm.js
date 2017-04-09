@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
-import StepCreateMutation from './StepCreateMutation';
+//import StepCreateMutation from './StepCreateMutation';
 import Status from './StatusComponent';
 import NotePreview from '../Note/NotePreview';
 import TextInput from './TextInput';

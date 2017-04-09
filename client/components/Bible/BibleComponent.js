@@ -90,12 +90,22 @@ class Bible extends React.Component {
 
   			  </div>
   			  <div className='Widget' style={notesStyle}>
+           <p><strong> {reference} cross references: </strong> 
+            {this.props.viewer.crossReferences.edges.map(function(c){
+              let verses = ''
+              c.node.verses.edges.map(function(v){
+                verses += v.node.order_by + " " + v.node.body + " "
+              })
+
+              return <Link key={c.node.id} to={c.node.url} title={verses} >| {c.node.reference} </Link>;
+            })}
+            </p>
       		  <NotesWidget
-        filter={reference}
-        viewer={this.props.viewer}
-        selectNote={null}
-        tags
-          />
+            filter={reference}
+            viewer={this.props.viewer}
+            selectNote={null}
+            tags
+              />
   			  </div>
 
   	 </div>
@@ -119,7 +129,7 @@ Bible.propTypes = {
 
 export default Relay.createContainer(Bible, {
   initialVariables: {
-  	                                                                                                    reference: 'john_3_16',
+  	reference: 'john_3_16',
     token: 'nothinghere',
     startCursor: '',
     pageSize: 5,
@@ -149,6 +159,25 @@ export default Relay.createContainer(Bible, {
             }
           }
         }
+ 
+ crossReferences(first: 20, filter: $reference) {
+      edges {
+        node {
+          id
+          url
+          reference
+                verses(first:20){
+                  edges{
+                    node{
+                      id
+                      order_by
+                      body
+                    }
+                  }
+                }
+              }
+            }
+          }    
 
         bibleVerses (first:$versesPageSize, filter:$reference) {
           pageInfo{
