@@ -22,8 +22,6 @@
 
 <div id="root"></div>
 
-<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
-
 <% if (htmlWebpackPlugin.options.appMountId) { %>
 <div id="<%= htmlWebpackPlugin.options.appMountId%>"></div>
 <% } %>
@@ -41,20 +39,6 @@
 <% if (htmlWebpackPlugin.options.devServer) { %>
 <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
 <% } %>
-
-<script>
-  // Let's register our serviceworker
-/*
-  navigator.serviceWorker.register('service-worker.js', {
-    // The scope cannot be parent to the script url
-    scope: './'
-  });
-*/
-
-//<script src="/sw-logging.js"><//////script>
-</script>
-
-
 
 </body>
 </html>

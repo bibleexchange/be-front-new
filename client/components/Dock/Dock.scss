@@ -1,9 +1,15 @@
-#dock-widget {
-  resize: both;
-  overflow: auto;
-  z-index: 3000;
-  background-color: rgba(255,255,255, 0.1);
+@import "../variables.scss";
 
+#dock-section {
+  margin-bottom: 15px;
+  width:100%;
+  box-shadow: $boxShadow;
+  background-color: rgba(255,255,255, .95);
+}
+
+#dock-widget {
+  overflow: auto;
+  padding: 0;
 h1 {
   input{
     height:100%;
@@ -13,8 +19,7 @@ h1 {
 }
 
 #dock-main {
-    border: 2px solid;
-    background-color: rgba(255,255,255, 0.9);
+    border: none;
 
     input {
       width:100%;
@@ -23,37 +28,109 @@ h1 {
       border-bottom: solid 1px black;
     }
 
+  .main-true {
+    display:block;
+  }
+
+  .main-false {
+    display:none;
+  }
+
 }
 
-  ul {
+  ul.main {
     list-style: none;
     margin:0;
     padding:0;
+
+    li {
+      background-color: rgba(255,255,255, 0.2);
+      li{border:none;}
+      display:block;
+      padding:15px;
+    }
+
+    #bookmarks {
+
+      button {
+        width:100%;
+      }
+      ul {margin:0; padding:0;}
+
+      li {
+        display:block;
+        width:100%;
+        margin:0;
+        padding:0;
+      }
+
+    }
+
   }
 
-  #open-close {
-    border:none;
-    height:35px;
-    width:35px;
-    background-image: url("/assets/img/expand.png");
-    background-size: cover;
-    background-color: transparent;
+  #dock-menu {
+      background-color: #00c97b;;
+      overflow: auto;
+      white-space: nowrap;
+ul {
+  margin:0;
+  padding:0;
+
+
+    li {
+      display: inline-block;
+
+      button {
+        padding: 14px;
+        border:none;
+        background: none;
+        color:white;
+        font-weight:900;
+        text-align: center;
+      }
+    }
+
+    li:hover {
+      background-color: #777;
+    }
+
+  .menu-true {
+    background-color: #777
   }
 
-  #move-dock{
-    top:0;
-    right:0;
-    height:35px;
-    width:35px;
-    background-image: url("/assets/img/four-arrows.png");
-    background-size: cover;
-    background-color: transparent;
-    border:none;
   }
 
-  .note-main {
-    clear:both;
-    padding:5px;
+  }
+
+}
+
+
+@media screen and (min-width: 670px) {
+
+  #dock-section {
+
+    width:50%;
+    margin:auto;
+
+  }
+    #dock-widget
+   {
+    margin: 3rem;
+
+  }
+
+
+    #dock-section {
+    width:50%;
+    margin:auto;
+    margin-bottom:60px;
+
+    > div {
+      flex: 0;
+      margin: 0;
+      flex-basis: 800px;
+    }
+
   }
 
 }

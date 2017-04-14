@@ -100,6 +100,7 @@ class Bible extends React.Component {
               return <Link key={c.node.id} to={c.node.url} title={verses} >| {c.node.reference} </Link>;
             })}
             </p>
+
       		  <NotesWidget
             filter={reference}
             viewer={this.props.viewer}

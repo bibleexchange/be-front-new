@@ -7,57 +7,68 @@ export default class SocialShareButton extends React.Component {
   render() {
     let href = this.props.url;
 
- 	                                                                                                                                                     let options = {
- 		                                                                                                    fill: '#28B6CD',
- 		                                                                                                    width: '100px',
- 		                                                                                                    height: '100px',
-   shareThisUrl: 'https://bible.exchange/' + href,
-   message: this.props.message,
-   media: 'https://www.bible.exchange/images/be_logo.png'
+let options = {
+fill: '#28B6CD',
+width: '100px',
+height: '100px',
+shareThisUrl: 'https://bible.exchange/' + href,
+message: this.props.message,
+media: 'https://www.bible.exchange/images/be_logo.png'
  	};
 
     let logo = null;
     let className = '';
     let config = {};
 
-    switch (this.props.site) {
+switch (this.props.site) {
 
-      case 'twitter':
-			                                                                                                                                                                                                                                                                                                                                                                                                           logo = this.twitter(options);
-			                                                                                                                                                                                                                                                                                                                                                                                                           className = 'social-sharing-buttons social-twitter';
-			                                                                                                                                                                                                                                                                                                                                                                                                           config.url = 'https://twitter.com/intent/tweet?text=' + options.message;
-			                                                                                                                                                                                                                                                                                                                                                                                                           break;
-		                                                                                                                                                                                                                                                                                                       case 'facebook':
-			                                                                                                                                                                                                                                                                                                                                                                                                           logo = this.facebook(options);
-			                                                                                                                                                                                                                                                                                                                                                                                                           className = 'social-sharing-buttons social-facebook';
-			                                                                                                                                                                                                                                                                                                                                                                                                           config.url = 'http://www.facebook.com/sharer/sharer.php?u=' + options.shareThisUrl;
-			                                                                                                                                                                                                                                                                                                                                                                                                           break;
-		                                                                                                                                                                                                                                                                                                       case 'googleplus':
-			                                                                                                                                                                                                                                                                                                                                                                                                           logo = this.googleplus(options);
-			                                                                                                                                                                                                                                                                                                                                                                                                           className = 'social-sharing-buttons social-gplus';
-			                                                                                                                                                                                                                                                                                                                                                                                                           config.url = 'http://plus.google.com/share?url=' + options.shareThisUrl;
-			                                                                                                                                                                                                                                                                                                                                                                                                           break;
-		                                                                                                                                                                                                                                                                                                       case 'pinterest':
-			                                                                                                                                                                                                                                                                                                                                                                                                           logo = this.pinterest(options);
-			                                                                                                                                                                                                                                                                                                                                                                                                           className = 'social-sharing-buttons social-pinterest';
-			                                                                                                                                                                                                                                                                                                                                                                                                           config.url = 'http://pinterest.com/pin/create/button/?url=' + options.shareThisUrl + '&ampmedia=' + options.media + '&ampdescription=' + options.message;
-			                                                                                                                                                                                                                                                                                                                                                                                                           break;
-      case 'edit':
+    case 'twitter':
+        logo = this.twitter(options);
+        className = 'social-sharing-buttons social-twitter';
+        config.url = 'https://twitter.com/intent/tweet?text=' + options.message;
+        break;
+    case 'facebook':
+        logo = this.facebook(options);
+        className = 'social-sharing-buttons social-facebook';
+        config.url = 'http://www.facebook.com/sharer/sharer.php?u=' + options.shareThisUrl;
+        break;
+    case 'googleplus':
+        logo = this.googleplus(options);
+        className = 'social-sharing-buttons social-gplus';
+        config.url = 'http://plus.google.com/share?url=' + options.shareThisUrl;
+        break;
+    case 'pinterest':
+        logo = this.pinterest(options);
+        className = 'social-sharing-buttons social-pinterest';
+        config.url = 'http://pinterest.com/pin/create/button/?url=' + options.shareThisUrl + '&ampmedia=' + options.media + '&ampdescription=' + options.message;
+        break;
+    case 'edit':
+
         logo = this.edit(options);
         className = 'social-sharing-buttons edit-button';
         config.url = href;
+
+        config.handle = this.props.handle
+        config.id = this.props.data.id
+
         break;
-      case 'print':
+    case 'print':
         logo = this.print(options);
-        className = 'social-sharing-buttons edit-button';
+        className = 'social-sharing-buttons print-button';
         config.url = href;
         break;
-		                                                                                                                                                                                                                                                                                                       default:
-			                                                                                                                                                                                                                                                                                                                                                                                                           return null;
+    default:
+        return null;
 
-    }
- 	                                                                                                                                                     return (<a className={className} href={config.url} target='_blank' dangerouslySetInnerHTML={logo}></a>);
-	                                                                                                   }
+}
+
+if(this.props.site === "edit"){
+    return <button className={className} dangerouslySetInnerHTML={logo} onClick={config.handle} data-id={config.id}/>
+}else{
+    return <a className={className} href={config.url} target='_blank' dangerouslySetInnerHTML={logo} onClick={config.handle} data-id={config.id} />
+}
+
+}
 
   facebook(options) {
     return { __html: '<svg enable-background="new 0 0 32 32" version="1.1" width="' + options.width + '" height="' + options.height + '" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="' + options.fill + '"><path d="M28,1c1.654,0,3,1.346,3,3v24c0,1.654-1.346,3-3,3H4c-1.654,0-3-1.346-3-3V4c0-1.654,1.346-3,3-3H28 M28,0H4 C1.8,0,0,1.8,0,4v24c0,2.2,1.8,4,4,4h24c2.2,0,4-1.8,4-4V4C32,1.8,30.2,0,28,0L28,0z"/><path d="M13.597,25.261h3.827v-9.262h2.553l0.338-3.191h-2.891l0.004-1.598c0-0.832,0.079-1.278,1.273-1.278h1.596V6.739h-2.554 c-3.067,0-4.146,1.549-4.146,4.152v1.916h-1.912v3.192h1.912V25.261z"/></g></svg>' };

@@ -4,6 +4,13 @@ import { Link } from 'react-router';
 import SearchBox from '../ListWidget/SearchBox'
 import './AudioWidget.scss';
 
+const SC = require('soundcloud');
+
+SC.initialize({
+    client_id: '2dc887a365f4c737b309f890a7ea8584',
+    redirect_uri: 'https://bible.exchange/api/soundcloud'
+});
+
 class SoundCloudCard extends React.Component {
 
   render() {
@@ -153,11 +160,6 @@ class AudioWidget extends React.Component {
   handleGetAudio(){
 
     let setState = this.setState.bind(this)
-
-    SC.initialize({
-      client_id: '2dc887a365f4c737b309f890a7ea8584',
-      redirect_uri: 'https://bible.exchange/api/soundcloud'
-    });
 
     var page_size = this.state.perPage;
 

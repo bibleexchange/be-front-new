@@ -25,8 +25,8 @@ class NoteOptions extends React.Component {
       mainStyle.display = 'block';
     }
 
-    if (this.props.note !== null) {
-      editNote = <li><SocialShareButton site='edit' url={'/notes/' + this.props.note.id + '/edit'} /></li>;
+    if (this.props.note !== null & this.props.viewer.user !== undefined) {
+      editNote = <li><SocialShareButton site='edit' url={null} data={this.props.note} handle={this.props.editThisNote}/></li>;
       shareURL = 'notes/' + this.props.note.id;
     }
 

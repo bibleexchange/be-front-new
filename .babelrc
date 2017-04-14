@@ -5,6 +5,8 @@
     "production": {
       "plugins": [
 	    "./server/utils/babelRelayPlugin",
+        "transform-react-constant-elements",
+        "transform-react-inline-elements"
       ]
     },
 

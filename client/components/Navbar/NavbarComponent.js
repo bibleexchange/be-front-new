@@ -12,43 +12,34 @@ class Navbar extends React.Component {
     this.state = {};
   }
 
-  render() {
-	                                                                                                                                                                                                        let url = this.props.location.pathname;
-	                                                                                                                                                                                                        let inOrOut = 'loading...';
+render() {
+    let url = this.props.location.pathname;
+    let inOrOut = 'loading...';
     let loggedIn = false;
 
     if (this.props.user !== null) {
       loggedIn = this.props.user.authenticated;
     }
 
-	                                                                                                                                                                                                        console.log('deciding session stuff based on: 1) User is Loggedin--' + loggedIn, '& 2) User is online--' + this.props.online);
+console.log('deciding session stuff based on: 1) User is Loggedin--' + loggedIn, '& 2) User is online--' + this.props.online);
 
-	                                                                                                                                                                                                        if (loggedIn === true) {
-	                                                                                                      inOrOut = <UserLoggedIn
-  loggedIn={loggedIn}
-  handleLogout={this.props.handleLogout}
-  message={this.state.message}
-  url={url} user={this.props.user}
-  handleBookmark={this.props.handleBookmark}
-  online={this.props.online}
-  navs={this.props.navs}
-                                                                                                     />;
-	} else {
-	                                                                                                      inOrOut = <UserLoggedOut
-  loggedIn={loggedIn}
-  handleLogin={this.props.handleLogin}
-  handleSignUp={this.props.handleSignUp}
-  message={this.state.message}
-  user={this.props.user}
-  UpdateLoginEmail={this.props.UpdateLoginEmail}
-  UpdateLoginPassword={this.props.UpdateLoginPassword}
-  handleEditSignUpEmail={this.props.handleEditSignUpEmail}
-  handleEditSignUpPassword={this.props.handleEditSignUpPassword}
-  handleEditSignUpPasswordConfirm={this.props.handleEditSignUpPasswordConfirm}
-  online={this.props.online}
-  signup={this.props.signup}
-                                                                                                     />;
-	}
+if (loggedIn === true) {
+inOrOut = <UserLoggedIn
+loggedIn={loggedIn}
+handleLogout={this.props.handleLogout}
+message={this.state.message}
+url={url} user={this.props.user}
+online={this.props.online}
+handleOpenCloseDock={this.props.handleOpenCloseDock}
+handleBookmark={this.props.handleBookmark}
+/>;
+} else {
+inOrOut = <UserLoggedOut
+loggedIn={loggedIn}
+user={this.props.user}
+handleOpenCloseDock={this.props.handleOpenCloseDock}
+/>;
+}
 
     return (
     	<header id='MainNavbar'>
@@ -59,9 +50,8 @@ class Navbar extends React.Component {
             <sup className='beta'>beta 2.0</sup>
 					</Link>
 				</nav>
-        <nav id='UserNav'>
-					{inOrOut}
-        </nav>
+        <nav id='UserNav'>{inOrOut}</nav>
+
 		 	</header>
     );
   }
@@ -89,7 +79,6 @@ export default Relay.createContainer(Navbar, {
       	email
       	name
       	authenticated
-        ${UserLoggedIn.getFragment('user')}
         ${UserLoggedOut.getFragment('user')}
       }
     `,

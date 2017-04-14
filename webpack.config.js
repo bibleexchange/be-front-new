@@ -87,5 +87,14 @@ module.exports = {
   new CopyWebpackPlugin([
     {from : 'client/assets', to: __dirname + '/build'}
   ]),
+  new webpack.DefinePlugin({
+      // A common mistake is not stringifying the "production" string.
+      'process.env.NODE_ENV': JSON.stringify('production')
+  }),
+  new webpack.optimize.UglifyJsPlugin({
+      compress: {
+          warnings: false
+      }
+  })
   ]
 };

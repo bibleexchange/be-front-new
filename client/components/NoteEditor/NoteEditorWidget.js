@@ -6,7 +6,7 @@ import './NoteEditorWidget.scss';
 
 import N from '../../NoteTypes';
 import Template from '../../NoteTemplate';
-import NoteCreateMutation from './NoteCreateMutation';
+import NoteUpdateMutation from './NoteUpdateMutation';
 import Status from '../User/StatusComponent';
 import PickNoteForm from './PickNoteForm';
 
@@ -14,12 +14,9 @@ class NoteEditorWidget extends React.Component {
 
 componentWillMount() {
 
-    let verse = this.props.bibleVerse
-
   this.state = {
     inputs: {},
     noteTypes: Object.keys(N),
-    verse: verse,
     status: 'original',
     data: this.setInitialData(this.props.viewer.note )
   };
@@ -33,22 +30,25 @@ componentWillReceiveProps(newProps) {
 
     render() {
 
-      let form = null;
-      let clearForm = null;
-      let noteType = this.state.data.type;
-      let optionsStyle = { display: 'block' };
-
-      let media = []
+      let form = null
+      let clearForm = null
+      let noteType = this.state.data.type
+      let optionsStyle = { display: 'block' }
+      let viewLink = null
 
       if (this.state.status !== 'done' && this.state.status !== 'original') {
         clearForm = <button style={{ color: 'red' }} onClick={this.clearForm.bind(this)}>X Undo All Changes</button>;
-        form = <input type='submit' value='save' onClick={this.handleCreateNote.bind(this)} />;
+        form = <input type='submit' value='save' onClick={this.handleUpdateNote.bind(this)} />;
       }
 
-      let setNoteType = this.setNoteType.bind(this);
+      if(this.props.viewer.note !== undefined){
+        viewLink = <section><Link to={"/notes/"+this.props.viewer.note.id}>View</Link></section>
+      }
+
       let selectedType = this.state.type;
       let newId = this.state.data.media.length;
       let updateMedia = this.updateMedia.bind(this)
+      let setNoteType = this.setNoteType.bind(this)
 
       return (<ul id='note-creator'>
 
@@ -56,6 +56,7 @@ componentWillReceiveProps(newProps) {
                 <section>{clearForm}</section>
                 <section>{form}</section>
                 <section> <Status type={this.state.status} /></section>
+                  {viewLink}
               </div>
 
               <h1>Title: <input type="text" value={this.state.data.title? this.state.data.title:""} onChange={this.updateTitle.bind(this)}/></h1>
@@ -65,7 +66,7 @@ componentWillReceiveProps(newProps) {
               <h2>Tags: <input type="text" value={this.state.data.tags? this.state.data.tags:""} onChange={this.updateTags.bind(this)}/></h2>
 
             {this.state.data.media.map(function(m,k){
-              return <li key={k}><input type="text" value={JSON.stringify(m)} onChange={updateMedia(m.id)} data-id={m.id}/></li>;
+              return <li key={k}><input type="text" value={JSON.stringify(m)} onChange={updateMedia} data-id={k}/></li>;
             })}
 
             <p>ADD Media...</p>
@@ -145,13 +146,13 @@ componentWillReceiveProps(newProps) {
         })
       }
 
-    handleCreateNote(e) {
+    handleUpdateNote(e) {
       e.preventDefault();
       this.setState({ status:'saving'});
-      let note = this.state.data
 
-      Relay.Store.commitUpdate(new NoteCreateMutation({
-        note: note
+      Relay.Store.commitUpdate(new NoteUpdateMutation({
+        changedNote: this.state.data,
+        note: this.props.viewer.note
       }));
     }
 
@@ -163,18 +164,24 @@ componentWillReceiveProps(newProps) {
       let n = null
       let body = {}
 
-      if (note !== undefined){
-        let body = JSON.parse(note.body)
+      if (note !== undefined) {
+          let body = JSON.parse(note.body)
 
-        n = {
-          title: body.title,
-          tags: body.tags,
-          type: note.type,
-          id: note.id,
-          media: body.media,
-          reference: note.verse.reference,
-          tags: note.tags_string
-        }
+          n = {
+              title: note.title,
+              tags: note.tags_string,
+              type: note.type,
+              id: note.id,
+              reference: note.verse.reference,
+              tags: note.tags_string
+          }
+
+          if (body.media !== undefined){
+            n.media = body.media
+          }else {
+            n.media = body
+          }
+
       }else{
         n = {
           title:"",
@@ -190,21 +197,22 @@ componentWillReceiveProps(newProps) {
 
     }
 
-    updateMedia(mediaId){
-      //e.preventDefault()
-      console.log("EDIT .." . mediaId)
+    updateMedia(e){
+      e.preventDefault()
+      let data = this.state.data
 
-    /*  this.setState({
+      data.media[e.target.dataset.id] = JSON.parse(e.target.value)
+
+    this.setState({
         data: data,
         status: <Status type='changes-not-saved' />,
-      })*/
+      })
     }
 
   }
 
   NoteEditorWidget.propTypes = {
-    viewer: React.PropTypes.object.isRequired,
-    bibleVerse: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object.isRequired
   };
 
   export default Relay.createContainer(NoteEditorWidget, {
@@ -212,7 +220,7 @@ componentWillReceiveProps(newProps) {
     	noteId: 'Tm90ZToyMzUxNQ=',
     },
     fragments: {
-      viewer: ({noteId}) => Relay.QL`fragment on Viewer {
+        viewer: ({noteId}) => Relay.QL`fragment on Viewer {
           user {
             id
             name
@@ -220,7 +228,7 @@ componentWillReceiveProps(newProps) {
           }
 
           note(id:$noteId){
-                ${NoteCreateMutation.getFragment('note')}
+                ${NoteUpdateMutation.getFragment('note')}
                 id
                 title
                 type
@@ -232,14 +240,6 @@ componentWillReceiveProps(newProps) {
                 }
             }
 
-        }`,
-      bibleVerse: () => Relay.QL`fragment on BibleVerse {
-        id
-        notesCount
-        order_by
-        body
-        url
-        reference
-        }`,
-    },
+        }`
+    }
   });

@@ -16,6 +16,7 @@ import './Widget.scss'
 import '../../assets/favicons/favicon.ico';
 
 class App extends React.Component {
+
   constructor(props) {
     super(props);
     let email = null;
@@ -49,8 +50,11 @@ class App extends React.Component {
        playStatus: false,
        currentSoundId: null
      },
+     dockStatus: true,
      error: this.props.viewer.error,
-     token: token
+     token: token,
+        loginStatus: false,
+        signupStatus: false
     };
   }
 
@@ -109,39 +113,65 @@ class App extends React.Component {
 
 
     let user = this.state.user;
-    let navs = []//this.uniques(JSON.parse(localStorage.getItem('navs')));
+    let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
     let children = null;
-    //localStorage.setItem('navs', JSON.stringify(navs));
+    localStorage.setItem('navs', JSON.stringify(navs));
 
     if (this.props.children !== null) {
       children = React.cloneElement(this.props.children, { online: this.state.online });
     }
 
+      let dockStyle = {
+          display:"none"
+      }
+
+      if(this.state.dockStatus) {
+          dockStyle = {
+              display: "block"
+          }
+      }
+
 	  return (
     	<div className='container'>
-        <Dock viewer={this.props.viewer} player={this.state.player} handleCloseAudio={this.handleCloseAudio.bind(this)}  />
 
-        <MainNavigation location={this.props.location}
+        <MainNavigation
+            location={this.props.location}
         updateIt={this.state}
         route={this.props.route}
         user={user}
-        signup={this.state.signup}
         handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}
         handleLogout={this.handleLogout.bind(this)}
-        handleLogin={this.handleLogin.bind(this)}
-        handleSignUp={this.handleSignUp.bind(this)}
-        handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
-        handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
-        handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
         handleBookmark={this.handleBookmark.bind(this)}
         online={this.state.online}
-        UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
-        UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
-        navs={navs}
+        handleOpenCloseDock = {this.handleOpenCloseDock.bind(this)}
        />
 
+          <section style={dockStyle} id="dock-section">
+            <Dock
+                status={this.state.dockStatus}
+                viewer={this.props.viewer}
+                player={this.state.player}
+                handleCloseAudio={this.handleCloseAudio.bind(this)}
+                navs={navs}
+                handleLogin={this.handleLogin.bind(this)}
+                handleSignUp={this.handleSignUp.bind(this)}
+                user={user}
+                handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
+                handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
+                handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
+                UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
+                UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
+                handleLoginStatus={this.handleLoginStatus.bind(this)}
+                handleSignUpStatus={this.handleSignUpStatus.bind(this)}
+                online={this.state.online}
+                signup={this.state.signup}
+            />
+          </section>
+
+          <main>
+
           <ReactCSSTransitionGroup
-            component='main'
+            component='section'
             transitionName='example'
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}
@@ -149,10 +179,14 @@ class App extends React.Component {
 
              {React.cloneElement(children, {
                key: this.props.location.pathname,
-               handlePlayAudio: this.handlePlayAudio.bind(this)
+               handlePlayAudio: this.handlePlayAudio.bind(this),
+                 handleEditThisNote: this.handleEditThisNote.bind(this)
              })}
           </ReactCSSTransitionGroup>
 
+
+
+          </main>
           {errorMessage}
 
           <footer id='footer' className='push'><Footer user={user} /></footer>
@@ -307,7 +341,7 @@ password: this.state.signup.password
 
   handleBookmark(e) {
   	e.preventDefault();
-
+    console.log("book mark it ...")
     if (this.props.location.pathname !== null) {
       let navs = JSON.parse(localStorage.getItem('navs'));
 
@@ -329,12 +363,38 @@ password: this.state.signup.password
 
   handlePlayAudio(e){
     console.log("new sound selected...")
-    this.setState({ player: { playStatus: true, currentSoundId: e.target.dataset.id}})
+    this.setState({ player: { dockStatus: true, playStatus: true, currentSoundId: e.target.dataset.id}})
   }
 
   handleCloseAudio(){
     this.setState({ player: { playStatus: false, currentSoundId: null}})
   }
+
+    handleOpenCloseDock(e){
+        let nState = this.state
+        nState.dockStatus = !nState.dockStatus
+        this.setState(nState)
+    }
+
+    handleEditThisNote(e){
+      e.preventDefault()
+      console.log(e.target)
+
+        this.props.relay.setVariables({
+            noteId: e.target.dataset.id
+        });
+    }
+
+    handleLoginStatus() {
+        let status = this.state.loginStatus;
+        this.setState({ loginStatus: !status, signUpStatus: false });
+    }
+
+    handleSignUpStatus() {
+        let status = this.state.signUpStatus;
+        this.setState({ signUpStatus: !status, closed: true });
+    }
+
 
 }
 
@@ -355,7 +415,7 @@ App.defaultProps = {
 
 export default Relay.createContainer(App, {
   initialVariables: {
-    noteId: 'Tm90ZToyMzUxNQ==',
+    noteId: 'hhhhhh',
     verseId: "QmlibGVWZXJzZToxMDAxMDAx",
     filter:''
   },
@@ -377,6 +437,7 @@ export default Relay.createContainer(App, {
       	      email
       	      authenticated
               nickname
+              ${Dock.getFragment('user')}
               ${MainNavigation.getFragment('user')}
               ${Footer.getFragment('user')}
           }

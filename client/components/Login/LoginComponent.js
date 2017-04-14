@@ -5,15 +5,10 @@ import './Login.scss';
 class LoginComponent extends React.Component {
 
   render() {
-    let loginFormStyle = {};
-
-    if (!this.props.status) {
-      loginFormStyle.display = 'block';
-    }
 
     return (
 
-        <div id='login-form' style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
+        <div id='login-form' onMouseLeave={this.props.handleStatus} >
 
             <form >
 

@@ -1,4 +1,7 @@
+/*
+
 var CACHE_VERSION = 'app-v1';
+
 var CACHE_FILES = [
   '/',
   'index.html',
@@ -54,3 +57,4 @@ var CACHE_FILES = [
 //    })
 //  );
 // });
+*/

@@ -44,10 +44,13 @@ class NoteTest extends React.Component {
       case N.DC_RECORDING:
         let recording = null
 
-        if(this.props.value !== "undefined"){
+        if(this.props.value !== undefined){
+            console.log(this.props.value)
           recording = JSON.parse(this.props.value);
         }else{
+            console.log(9999)
           recording = JSON.parse(note.output.body);
+
           if (this.props.api_request === false) { recording.body = JSON.parse(recording.body); }
         }
         component = <DCRecording recording={recording} request={this.props.api_request} note={note} viewer={this.props.viewer} />;

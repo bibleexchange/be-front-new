@@ -5,18 +5,11 @@ import './Login.scss';
 class SignUpComponent extends React.Component {
 
   render() {
-    let loginFormStyle = { display: 'none' };
-
-    if (this.props.status) {
-      loginFormStyle.display = 'block';
-    }
-
     let messageStyle = { color: 'red', height: '20px' };
     if (this.props.signup.message === 'passwords match :)') { messageStyle.color = 'green'; }
-    return (
-        <div id='login-form' style={loginFormStyle} onMouseLeave={this.props.handleStatus} >
-          {this.props.signup.message}
 
+    return (
+        <div id='login-form' onMouseLeave={this.props.handleStatus} >
             <form >
                 <input value={this.props.signup.email} type='text' onChange={this.props.handleEditSignUpEmail} placeholder='email' ref='email' />
                 <input value={this.props.signup.password} type='password' onChange={this.props.handleEditSignUpPassword} placeholder='password' ref='password' />
