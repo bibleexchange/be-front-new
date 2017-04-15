@@ -38,6 +38,7 @@ class Dashboard extends React.Component {
 
 
   render() {
+      console.log(this.props)
     let user = this.props.viewer.user;
 
     return (
@@ -70,16 +71,12 @@ Dashboard.contextTypes = {
 Dashboard.defaultProps = {};
 
 export default Relay.createContainer(Dashboard, {
-  initialVariables: {
-    pageNumber: '1',
-    reference: 'john_3_16'
-  },
-  fragments: {
-	                                                                                                                                                                                                        viewer: () => Relay.QL`
-	  fragment on Viewer {
-      user{
-        authenticated
-      }
-		}`
+fragments: {
+viewer: () => Relay.QL`
+fragment on Viewer {
+  user{
+    authenticated
   }
+}`
+}
 });

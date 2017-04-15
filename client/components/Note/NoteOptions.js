@@ -63,7 +63,7 @@ export default Relay.createContainer(NoteOptions, {
     note: () => Relay.QL`
       fragment on Note  {
           id
-
+          title
           verse{
             id
             url

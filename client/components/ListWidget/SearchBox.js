@@ -6,16 +6,18 @@ import './SearchBox.scss'
 
 class SearchBox extends React.Component {
 
+  componentWillMount(){
+    console.log(this.props.details)
+    this.state = {
+      filter: this.props.details.filter? this.props.details.filter:''
+    }
+  }
+
   render() {
 
     let nextButtonText = '_ of _';
     let nextPageDisabled = true;
-    let filter = ''
     let search = <Loading />
-
-    if(this.props.details.filter !== null){
-      filter = this.props.details.filter
-    }
 
     if (this.props.items !== undefined && this.props.items.pageInfo.hasNextPage ) {
       nextPageDisabled = false;
@@ -33,7 +35,8 @@ class SearchBox extends React.Component {
       }
 
       if (this.props.status === null) {
-        search = <input type='text' onKeyUp={this.props.runScriptOnPressEnter} onChange={this.props.handleEditFilter} onBlur={this.props.applyFilter} placeholder='  filter' value={filter} />
+
+        search = <input type='text' onKeyUp={this.runScriptOnPressEnterNoteSearch.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.updateFilter.bind(this)} placeholder='  filter' value={this.state.filter} />
       }
 
     return (
@@ -50,6 +53,26 @@ class SearchBox extends React.Component {
     )
 
   }
+
+  handleEditFilter(e){
+    e.preventDefault()
+      let n = this.state
+      n.filter = e.target.value
+
+      this.setState(n)
+  }
+
+    runScriptOnPressEnterNoteSearch(e) {
+
+        if (e.keyCode == 13) {
+            console.log('enter key pressed!');
+            this.props.handleUpdateNoteFilter(this.state.filter);
+        }
+    }
+
+    updateFilter(e){
+        this.props.handleUpdateNoteFilter(this.state.filter);
+    }
 
 }
 

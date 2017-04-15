@@ -48,7 +48,6 @@ class NoteTest extends React.Component {
             console.log(this.props.value)
           recording = JSON.parse(this.props.value);
         }else{
-            console.log(9999)
           recording = JSON.parse(note.output.body);
 
           if (this.props.api_request === false) { recording.body = JSON.parse(recording.body); }
@@ -56,6 +55,10 @@ class NoteTest extends React.Component {
         component = <DCRecording recording={recording} request={this.props.api_request} note={note} viewer={this.props.viewer} />;
 
         break;
+
+        case N.JSON:
+            component = <NoteFile note={note} viewer={this.props.viewer} />;
+            break;
 
       default:
         component = note.output.body;
@@ -86,6 +89,7 @@ export default Relay.createContainer(NoteTest, {
     note: () => Relay.QL`fragment on Note {
         ${DCRecording.getFragment('note')}
       id
+      title
       tags
     	author{
     	  name

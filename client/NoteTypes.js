@@ -5,5 +5,7 @@ export default {
   GITHUB: 'GITHUB',
   DC_RECORDING: 'DC_RECORDING',
   COURSE: 'COURSE',
-  FILE: 'FILE'
+  FILE: 'FILE',
+    SOUNDCLOUD: 'SOUNDCLOUD',
+    JSON: "JSON"
 };

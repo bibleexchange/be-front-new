@@ -19,7 +19,7 @@ class NoteFile extends React.Component {
     return (
     	<div id="note-file">
         <main>
-    		  <h1>{body.title}</h1>
+    		  <h1>{note.title}</h1>
 
           {body.media.map(function(b,k){
             return <NoteTest key={k} type={b.type} value={b.value} api_request={b.api_request} note={note}/>;
@@ -62,6 +62,7 @@ export default Relay.createContainer(NoteFile, {
     }`,
     note: () => Relay.QL`fragment on Note {
       id
+      title
       tags
       author{
         name

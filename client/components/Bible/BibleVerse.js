@@ -31,7 +31,7 @@ class BibleVerseComponent extends React.Component {
   }
 
   clickVerseBody(e) {
-    if (this.props.viewer.user.authenticated === 'true') {
+    if (this.props.user.authenticated === 'true') {
       this.setState({ noteStatus: !this.state.noteStatus });
     }
   }
@@ -42,21 +42,9 @@ class BibleVerseComponent extends React.Component {
 
 }
 
-export default Relay.createContainer(BibleVerseComponent, {
-  initialVariables: {},
-  fragments: {
-    bibleVerse: () => Relay.QL`
-      fragment on BibleVerse  {
-      	 id
-         order_by
-      	 body
-      	 url
-      	 notesCount
-     }`,
-    viewer: () => Relay.QL`
-      fragment on Viewer  {
-        user{authenticated}
-     }`
-  },
+BibleVerseComponent.propTypes = {
+    bibleVerse: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
+};
 
-});
+export default BibleVerseComponent

@@ -21,7 +21,7 @@ import LessonEditor from './components/User/LessonEditor';
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
-    <IndexRoute component={Dashboard} queries={ViewerQueries} />
+    <IndexRoute component={Dashboard} />
 
     <Route path='/courses' component={LibraryIndex} queries={ViewerQueries} />
 
@@ -35,7 +35,7 @@ export default (
     <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
     <Route path='/notes/:noteId/print' component={NotePrintPage} queries={ViewerQueries} />
 
-    <Route path='bible/:reference' component={Bible} queries={ViewerQueries} />
+    <Route path='bible/:reference' component={Bible} />
     <Route path='/user' component={Dashboard} queries={ViewerQueries} />
     <Route path='/course/:courseId/edit' component={CourseEditor} queries={ViewerQueries} >
       <Route path=':lessonId' component={LessonEditor} queries={ViewerQueries} />

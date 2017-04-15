@@ -7,29 +7,36 @@ import './Navigation.scss';
 
 class Navigation extends React.Component {
 
-  componentWillMount() {
-	                                                                                                                                                                                                        this.state = {
-	                                                                                                      showModal: false,
-	                                                                                                      filterBooksBy: '',
-	                                                                                                      search: this.props.bibleChapter ? this.props.bibleChapter.reference : ''
-	};
-  }
+componentWillMount() {
+this.state = {
+showModal: false,
+filterBooksBy: '',
+search: this.props.bibleChapter ? this.props.bibleChapter.reference : ''
+};
+}
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.bibleChapter.reference !== this.props.bibleChapter.reference) {
-      this.setState({ search: newProps.bibleChapter.reference });
+componentWillReceiveProps(newProps) {
+
+    if (newProps.bibleChapter == undefined || newProps.bibleChapter == null){
+
+    } else if(this.props.bibleChapter === undefined) {
+        this.setState({ search: newProps.bibleChapter.reference });
+    }else if(newProps.bibleChapter.reference !== this.props.bibleChapter.reference){
+        this.setState({ search: newProps.bibleChapter.reference });
     }
-  }
+}
 
-  render() {
-    let next = { pathname: this.props.baseUrl, query: {} };
-    let previous = { pathname: this.props.baseUrl, query: {} };
+render() {
+let next = { pathname: this.props.baseUrl, query: {} };
+let previous = { pathname: this.props.baseUrl, query: {} };
 
-	                                                                                                                                                                                                        const verseSelectorButtonStyle = {
-	                                                                                                      border: 'none', background: 'transparent'
-	};
+const verseSelectorButtonStyle = {
+border: 'none', background: 'transparent'
+};
 
-    if (this.props.bibleChapter !== null) {
+    if (this.props.bibleChapter === null || this.props.bibleChapter === undefined) {
+
+    }else{
       if (this.props.bibleChapter.nextChapter !== undefined) {
         next = { pathname: this.props.baseUrl + this.props.bibleChapter.nextChapter.url, query: {} };
       }
@@ -64,13 +71,13 @@ class Navigation extends React.Component {
     );
   }
 
-  bibleSearchSubmitHandler(term) {
-  	                                                                                                    console.log('search submitted...');
-    this.setState({ search: term });
+bibleSearchSubmitHandler(term) {
+console.log('search submitted...');
+this.setState({ search: term });
 
-  	                                                                                                    let url = term.replace(/\W+/g, '_');
-  	                                                                                                    this.props.history.push('/bible/' + url.toLowerCase());
-  }
+let url = term.replace(/\W+/g, '_');
+this.props.history.push('/bible/' + url.toLowerCase());
+}
 
   toggleModal() {
     console.log('toggle toggle ...');
@@ -95,10 +102,10 @@ export default Relay.createContainer(Navigation, {
   initialVariables: {
     courseSlug: ''
   },
-  fragments: {
-	                                                                                                                                                                                                        bible: (variables) => Relay.QL`
-	  fragment on Bible {
-		 books(first:66){
+fragments: {
+bible: () => Relay.QL`
+fragment on Bible {
+     books(first:66){
 		   edges {
 			cursor
 			node{

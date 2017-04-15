@@ -8,83 +8,48 @@ import SearchBox from '../ListWidget/SearchBox'
 
 class NotesWidget extends React.Component {
 
-  componentWillMount() {
-    let filter = '';
-    let currentPage = 1;
-
-    if (this.props.filter !== null) {
-      filter = this.props.filter;
-    }
-
-    this.props.relay.setVariables({ filter: filter });
-
-    if (this.props.viewer.notes !== undefined) {
-      currentPage = this.props.viewer.notes.currentPage;
-    }
-
-	  this.state = {
-	    showModal: false,
-      filter: filter,
-      notesCurrentPage: currentPage,
-      status: null
-	};
-  }
-
   componentWillReceiveProps(newProps) {
 
-    if (newProps.filter !== this.props.filter) {
-      this.props.relay.setVariables({ filter: newProps.filter });
-
-      this.setState({
-        filter: newProps.filter,
-        status: null
-      });
-    }else{
-      this.setState({
-        status: null
-      });
+    if (newProps.status.filter !== this.props.status.filter) {
+      this.props.handleUpdateNoteFilter(newProps.status.filter)
     }
+
   }
 
   render() {
 
-    let notes = [];
-    let noNotes = <h2>No notes match your search!</h2>;
-    let selectNote = this.props.selectNote;
-    let totalCount = 0
+      let notes = [];
+      let noNotes = <h2>No notes match your search!</h2>;
+      let selectNote = this.props.selectNote;
+      let totalCount = 0
 
-    if (this.props.viewer.notes !== undefined) {
-      notes = this.props.viewer.notes.edges;
-
-      if (this.props.viewer.notes.totalCount >= 1) {
-        noNotes = null;
+      if (this.props.notes !== undefined){
+          totalCount = this.props.notes.totalCount
+          notes = this.props.notes.edges
+          if (this.props.notes.totalCount >= 1) {
+              noNotes = null;
+          }
       }
 
-      totalCount = this.props.viewer.notes.totalCount
-
-    }
-
     let details = {
-      title: {
+      title:{
         singular: "Note",
         plural: "Notes"
       },
       totalCount: totalCount,
-      filter: this.state.filter
+      filter: this.props.status.filter
     }
 
     return (
     		<div id='notes-widget'>
 
             <SearchBox
-              items={this.props.viewer.notes}
+              items={this.props.notes}
               details = {details}
-              status={this.state.status}
-              handleClearFilter={this.handleClearFilter.bind(this)}
-              runScriptOnPressEnter={this.runScriptOnPressEnter.bind(this)}
-              handleEditFilter={this.handleEditFilter.bind(this)}
-              applyFilter={this.applyFilter.bind(this)}
-              handleNextPage={this.handleNextPage.bind(this)}
+              status={this.props.status.status}
+              handleClearFilter={this.props.handleClearNoteFilter}
+              handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
+              handleNextPage={this.props.handleNextNotePage}
             />
 
           {notes.map((n) => {
@@ -97,71 +62,19 @@ class NotesWidget extends React.Component {
     );
   }
 
-  handleEditFilter(event) {
-    let newState = this.state;
-    newState.filter = event.target.value
-    this.setState(newState);
-  }
-
-  applyFilter(event) {
-    this.props.relay.setVariables({
-      filter: this.state.filter.toLowerCase(),
-      startCursor: null
-    });
-    this.setState({
-      notesCurrentPage: 1,
-      status: 'loading...'
-    });
-
-  }
-
-  handleClearFilter(event) {
-    console.log("cllearing: ", this.state.filter)
-    event.preventDefault();
-    this.setState({filter:null});
-
-
-    this.props.relay.setVariables({
-      filter: null,
-      startCursor: null
-    });
-
-
-
-  }
-
-  handleNextPage() {
-    this.props.relay.setVariables({
-      startCursor: this.props.viewer.notes.pageInfo.endCursor
-    });
-    this.setState({ notesCurrentPage: this.state.notesCurrentPage + 1 });
-  }
-
-  runScriptOnPressEnter(e) {
-
-    if (e.keyCode == 13) {
-      console.log('enter key pressed!');
-      this.applyFilter(e);
-    }
-  }
-
 }
 
 NotesWidget.propTypes = {
-  viewer: React.PropTypes.object.isRequired,
-  relay: React.PropTypes.object.isRequired
+  notes: React.PropTypes.object.isRequired,
+  status: React.PropTypes.object.isRequired,
+    relay: React.PropTypes.object.isRequired,
+    handleUpdateNoteFilter:  React.PropTypes.func.isRequired,
 };
 
 export default Relay.createContainer(NotesWidget, {
-  initialVariables: {
-    startCursor: null,
-    pageSize: 5,
-    filter: ''
-  },
   fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer  {
-      	 notes (filter: $filter, first:$pageSize, after:$startCursor){
+
+      notes: () => Relay.QL`fragment on NoteConnection {
            totalCount
            perPage
            totalPagesCount
@@ -174,12 +87,12 @@ export default Relay.createContainer(NotesWidget, {
       	     cursor
       	     node {
       	       id
+      	       title
       	       type
                tags
                ${NoteThumbnail.getFragment('note')}
              }
       	   }
-	      }
-     }`
+      }`
   }
 });

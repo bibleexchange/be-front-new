@@ -6,7 +6,6 @@ import './NoteEditorWidget.scss';
 
 import N from '../../NoteTypes';
 import Template from '../../NoteTemplate';
-import NoteUpdateMutation from './NoteUpdateMutation';
 import Status from '../User/StatusComponent';
 import PickNoteForm from './PickNoteForm';
 
@@ -18,18 +17,25 @@ componentWillMount() {
     inputs: {},
     noteTypes: Object.keys(N),
     status: 'original',
-    data: this.setInitialData(this.props.viewer.note )
+    myNotesStatus: false,
+    data: this.setInitialData(this.props.note ),
+      saveable: this.props.user.authenticated
   };
 }
 
 componentWillReceiveProps(newProps) {
-  this.setState({
-    status: "done",
-  });
+
+    let newState = this.state
+        newState.status = "done"
+        newState.saveable = newProps.user.authenticated? newProps.user.authenticated:false
+    if(newProps.note !== null && newProps.note.id !== newState.data.id){
+        newState.data = this.setInitialData(newProps.note)
+    }
+  this.setState(newState);
 }
 
     render() {
-
+    let moreNotesButton = null
       let form = null
       let clearForm = null
       let noteType = this.state.data.type
@@ -38,20 +44,42 @@ componentWillReceiveProps(newProps) {
 
       if (this.state.status !== 'done' && this.state.status !== 'original') {
         clearForm = <button style={{ color: 'red' }} onClick={this.clearForm.bind(this)}>X Undo All Changes</button>;
-        form = <input type='submit' value='save' onClick={this.handleUpdateNote.bind(this)} />;
+
+          if(this.state.saveable === false)  {
+              form = <div style={{color: "red"}}>Your changes cannot be saved until you login!</div>
+          }else{
+              form = <input type='submit' value='save' onClick={this.props.handleUpdateNote} />;
+          }
+
       }
 
-      if(this.props.viewer.note !== undefined){
-        viewLink = <section><Link to={"/notes/"+this.props.viewer.note.id}>View</Link></section>
+      if(this.props.note !== null){
+        viewLink = <section><Link to={"/notes/"+this.props.note.id}>View</Link></section>
+      }
+
+      if(this.props.notes.pageInfo.hasNextPage){
+          moreNotesButton = <button onClick={this.props.moreNotes}>more</button>
       }
 
       let selectedType = this.state.type;
       let newId = this.state.data.media.length;
       let updateMedia = this.updateMedia.bind(this)
       let setNoteType = this.setNoteType.bind(this)
+        let handleEditThis = this.props.handleEditThis
 
-      return (<ul id='note-creator'>
+      return (<div id='note-creator'>
+                <section>
+              <button onClick={this.toggleMyNotes.bind(this)}>MyNotes</button>
+              <ol id="my-notes" className={"my-notes-"+this.state.myNotesStatus}>
+                  {this.props.notes.edges.map(function(note){
+                      return <li onClick={handleEditThis} key={note.node.id} data-id={note.node.id}> {note.node.title} [{note.node.verse.reference}]</li>
+                  })} <li>{moreNotesButton}</li>
+                  </ol>
 
+
+
+                </section>
+              <section>
               <div id="status-bar">
                 <section>{clearForm}</section>
                 <section>{form}</section>
@@ -66,7 +94,7 @@ componentWillReceiveProps(newProps) {
               <h2>Tags: <input type="text" value={this.state.data.tags? this.state.data.tags:""} onChange={this.updateTags.bind(this)}/></h2>
 
             {this.state.data.media.map(function(m,k){
-              return <li key={k}><input type="text" value={JSON.stringify(m)} onChange={updateMedia} data-id={k}/></li>;
+                return <li key={k}><div onChange={updateMedia} data-id={k} contentEditable={true}>{JSON.stringify(m)}</div></li>;
             })}
 
             <p>ADD Media...</p>
@@ -77,7 +105,8 @@ componentWillReceiveProps(newProps) {
               })}
 
             </form>
-          </ul>
+              </section>
+          </div>
       );
     }
 
@@ -97,7 +126,7 @@ componentWillReceiveProps(newProps) {
     }
 
     clearForm(e) {
-       let n = this.setInitialData(this.props.viewer.note );
+       let n = this.setInitialData(this.props.note );
 
        this.setState({data: n, status: "original"})
     }
@@ -146,17 +175,7 @@ componentWillReceiveProps(newProps) {
         })
       }
 
-    handleUpdateNote(e) {
-      e.preventDefault();
-      this.setState({ status:'saving'});
-
-      Relay.Store.commitUpdate(new NoteUpdateMutation({
-        changedNote: this.state.data,
-        note: this.props.viewer.note
-      }));
-    }
-
-    blankNote(type) {
+    blankNote(type){
       return Template[type];
     }
 
@@ -164,33 +183,36 @@ componentWillReceiveProps(newProps) {
       let n = null
       let body = {}
 
-      if (note !== undefined) {
+      if (note == undefined || note == null || note.api_request == false) {
+          n = {
+              id:"newNoteEdge",
+              title:"",
+              tags: "",
+              type: "JSON",
+              id: "",
+              media: [],
+              reference: ""
+          }
+
+      }else{
+
           let body = JSON.parse(note.body)
 
           n = {
               title: note.title,
               tags: note.tags_string,
-              type: note.type,
+              type: "JSON",
               id: note.id,
               reference: note.verse.reference,
               tags: note.tags_string
           }
 
           if (body.media !== undefined){
-            n.media = body.media
+              n.media = body.media
           }else {
-            n.media = body
+              n.media = [body]
+              n.media[0].type = note.type
           }
-
-      }else{
-        n = {
-          title:"",
-          tags: "",
-          type: "",
-          id: "",
-          media: [],
-          reference: ""
-        }
       }
 
       return n;
@@ -209,26 +231,25 @@ componentWillReceiveProps(newProps) {
       })
     }
 
+    toggleMyNotes(e){
+        let s = this.state
+        s.myNotesStatus = !this.state.myNotesStatus
+
+        this.setState(s)
+    }
+
   }
 
   NoteEditorWidget.propTypes = {
-    viewer: React.PropTypes.object.isRequired
+      user: React.PropTypes.object.isRequired,
+      note: React.PropTypes.object.isRequired,
+      notes: React.PropTypes.object.isRequired
   };
 
   export default Relay.createContainer(NoteEditorWidget, {
-    initialVariables: {
-    	noteId: 'Tm90ZToyMzUxNQ=',
-    },
-    fragments: {
-        viewer: ({noteId}) => Relay.QL`fragment on Viewer {
-          user {
-            id
-            name
-            email
-          }
 
-          note(id:$noteId){
-                ${NoteUpdateMutation.getFragment('note')}
+    fragments: {
+        note: ()=> Relay.QL`fragment on Note {
                 id
                 title
                 type
@@ -238,7 +259,24 @@ componentWillReceiveProps(newProps) {
                   id
                   reference
                 }
-            }
+
+        }`,
+        user: () => Relay.QL`fragment on User {
+            id
+            name
+            email
+            authenticated
+        }`,
+        notes: () => Relay.QL`fragment on SimpleNoteConnection {
+                pageInfo{hasNextPage}
+                edges{
+                    node {
+                        id
+                        title
+                        verse {id, reference}
+
+                    }
+                }
 
         }`
     }

@@ -60,6 +60,10 @@ class NoteThumbnail extends React.Component {
         component = <FileNoteThumbnail note={note} />;
         break;
 
+        case N.JSON:
+            component = <FileNoteThumbnail note={note} />;
+            break;
+
       case N.DC_RECORDING:
 
         let recording = JSON.parse(note.output.body);
@@ -107,6 +111,7 @@ export default Relay.createContainer(NoteThumbnail, {
     note: () => Relay.QL`
       fragment on Note  {
           id
+          title
           tags
           verse{
             id

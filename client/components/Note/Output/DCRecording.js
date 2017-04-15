@@ -13,7 +13,7 @@ class DCRecordingNoteComponent extends React.Component {
     let verse = null
     let tags = []
     let author = null
-console.log(this.props.note)
+
     if(this.props.note !== "undefined"){
       console.log("why is this running???")
         verse = <blockquote>{this.props.note.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.note.verse} viewer={this.props.viewer} /></blockquote>;
