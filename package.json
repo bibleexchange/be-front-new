@@ -18,16 +18,7 @@
     "url": "git+https://github.com/bibleexchange/bibleexchange.git"
   },
   "keywords": [
-    "react",
-    "relay",
-    "graphql",
-    "express",
-    "es6",
-    "es7",
-    "jsx",
-    "webpack",
-    "babel",
-    "postcss"
+    "bible"
   ],
   "author": "Varayut Lerdkanlayanawat",
   "license": "MIT",

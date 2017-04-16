@@ -8,18 +8,6 @@ import './Course.scss';
 
 class Found extends React.Component {
 
-  componentWillMount() {
-    let lang = "eng"
-
-    if(localStorage.getItem('language') !== null){
-      lang = localStorage.getItem('language')
-    }
-
-    this.state = {
-      language: lang
-    };
-  }
-
   render() {
     let course = {};
     let sectionId = this.props.params.section ? this.props.params.section : 1;
@@ -47,7 +35,7 @@ class Found extends React.Component {
       	<div className='WidgetContainer'>
           <div className='Widget'>
              <Navigation course={course} section={sectionId} step={stepId} baseUrl={baseUrl} nextAndPrevious={nextAndPrevious} />
-             <Lesson lesson={currentLesson} language={this.state.language} handleLanguage={this.handleLanguage.bind(this)} />
+             <Lesson lesson={currentLesson} language={this.props.language} handleLanguage={this.props.handleLanguage} />
           </div>
       	</div>
     );
@@ -111,13 +99,6 @@ class Found extends React.Component {
       previous
     };
   }
-
-  handleLanguage(lang){
-    console.log(lang)
-    localStorage.setItem('language',lang)
-    this.setState({language: lang})
-  }
-
 }
 
 class Missing extends React.Component {
@@ -138,7 +119,7 @@ class Course extends React.Component {
   render() {
     let renderThis = <Missing />;
 
-    if (this.props.viewer.course !== null) {
+    if (this.props.course !== null) {
       renderThis = <Found {...this.props} />;
     }
 
@@ -152,26 +133,16 @@ Course.propTypes = {
 };
 
 export default Relay.createContainer(Course, {
-  initialVariables: {
-  reference: 'amos_1',
-  courseId: '1',
-  lessonId: '1',
-  pageSize: 1,
-  opaqueCursor: 'opaqueCursor',
-  courseSlug: '',
-    token: 'tokentoekntoekn',
-  },
   fragments: {
-    viewer: ({ pageSize }) => Relay.QL`fragment on Viewer {
-
+    viewer: () => Relay.QL`fragment on Viewer {
         user {
           authenticated
         }
 
-        course(id:$courseId){
-              id
-              everything
-              }
       }`,
+      course: () => Relay.QL`fragment on Course {
+                  id
+                  everything
+          }`,
   },
 });

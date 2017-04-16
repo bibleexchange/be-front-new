@@ -26,9 +26,9 @@ export default (
     <Route path='/courses' component={LibraryIndex} />
 
     <Route path='course' >
-      <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />
-      <Route path=':courseId/print' component={CoursePrint} queries={ViewerQueries} />
-      <Route path=':courseId/:section/:step' component={Course} queries={ViewerQueries} />
+      <Route path=':courseId' component={CourseIndex} />
+      <Route path=':courseId/print' component={CoursePrint} />
+      <Route path=':courseId/:section/:step' component={Course} />
     </Route>
 
     <Route path='/notes(/tag/:filter)' component={NotesIndex} queries={ViewerQueries} />

@@ -137,7 +137,7 @@ LessonEditor.contextTypes = {
 };
 
 LessonEditor.defaultProps = {
-	                                                                                                    course: {}
+course: {}
 };
 
 LessonEditor.propTypes = {

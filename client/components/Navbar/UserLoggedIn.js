@@ -7,13 +7,13 @@ class UserLoggedIn extends React.Component {
 
     return (
     <ul>
-		<li><button id="sign-out" onClick={this.props.handleLogout} />
-		</li>
-		<li><button id='bookmark-it' onClick={this.props.handleBookmark} />
-		</li>
-        <li><button id="open-close" onClick={this.props.handleOpenCloseDock}></button>
-        </li>
-	 </ul>
+  		<li><button id="sign-out" onClick={this.props.handleLogout} />
+  		</li>
+  		<li><button id='bookmark-it' onClick={this.props.handleBookmark} />
+  		</li>
+      <li><button id="open-close" onClick={this.props.handleOpenCloseDock}></button>
+      </li>
+	  </ul>
     );
   }
 
@@ -21,8 +21,8 @@ class UserLoggedIn extends React.Component {
 
 UserLoggedIn.propTypes = {
   handleLogout: React.PropTypes.func.isRequired,
-    handleBookmark: React.PropTypes.func.isRequired,
-    handleOpenCloseDock: React.PropTypes.func.isRequired
+  handleBookmark: React.PropTypes.func.isRequired,
+  handleOpenCloseDock: React.PropTypes.func.isRequired
 };
 
 export default UserLoggedIn;

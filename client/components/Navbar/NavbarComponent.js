@@ -8,37 +8,27 @@ import UserLoggedIn from './UserLoggedIn';
 
 class Navbar extends React.Component {
 
-  componentWillMount() {
-    this.state = {};
-  }
-
 render() {
     let url = this.props.location.pathname;
-    let inOrOut = 'loading...';
-    let loggedIn = false;
-
-    if (this.props.user !== null) {
-      loggedIn = this.props.user.authenticated;
-    }
-
-console.log('deciding session stuff based on: 1) User is Loggedin--' + loggedIn, '& 2) User is online--' + this.props.online);
+    let inOrOut = null;
+    let loggedIn = this.props.user.authenticated
 
 if (loggedIn === true) {
 inOrOut = <UserLoggedIn
-loggedIn={loggedIn}
-handleLogout={this.props.handleLogout}
-message={this.state.message}
-url={url} user={this.props.user}
-online={this.props.online}
-handleOpenCloseDock={this.props.handleOpenCloseDock}
-handleBookmark={this.props.handleBookmark}
-/>;
+          loggedIn={loggedIn}
+          handleLogout={this.props.handleLogout}
+          message={this.props.message}
+          url={url} user={this.props.user}
+          online={this.props.online}
+          handleOpenCloseDock={this.props.handleOpenCloseDock}
+          handleBookmark={this.props.handleBookmark}
+          />;
 } else {
 inOrOut = <UserLoggedOut
-loggedIn={loggedIn}
-user={this.props.user}
-handleOpenCloseDock={this.props.handleOpenCloseDock}
-/>;
+          loggedIn={loggedIn}
+          user={this.props.user}
+          handleOpenCloseDock={this.props.handleOpenCloseDock}
+          />;
 }
 
     return (
@@ -51,7 +41,6 @@ handleOpenCloseDock={this.props.handleOpenCloseDock}
 					</Link>
 				</nav>
         <nav id='UserNav'>{inOrOut}</nav>
-
 		 	</header>
     );
   }
@@ -63,21 +52,10 @@ Navbar.propTypes = {
 	                                                                                                    location: React.PropTypes.object.isRequired,
 };
 
-Navbar.defaultProps = {
-  user: { 'name': 'Guest', 'authenticated': false }
-};
-
 export default Relay.createContainer(Navbar, {
-  initialVariables: {
-	                                                                                                                                                                                                        slug: ''
-  },
   fragments: {
     user: () => Relay.QL`
       fragment on User {
-      	id
-        token
-      	email
-      	name
       	authenticated
         ${UserLoggedOut.getFragment('user')}
       }

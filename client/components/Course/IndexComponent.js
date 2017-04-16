@@ -63,15 +63,6 @@ class SectionsList extends React.Component {
 
 class IndexComponent extends React.Component {
 
-  componentWillMount() {
-    // let filterBy = localStorage.getItem('notes-filter')
-    // localStorage.setItem('notes-filter',filterBy)
-
-    this.state = {
-      lesson: 1
-    };
-  }
-
   render() {
     let baseUrl = '/course/';
     let course = { title: 'Course Could not Be Loaded!' };
@@ -79,8 +70,8 @@ class IndexComponent extends React.Component {
     let edit = null;
     let data = { sections: [], title: '' };
 
-    if (this.props.viewer.course !== null) {
-      course = this.props.viewer.course;
+    if (this.props.course !== null && this.props.course !== undefined) {
+      course = this.props.course;
       let data1 = JSON.parse(course.everything);
       baseUrl = '/course/' + course.id;
       if (data1 !== null) {
@@ -93,7 +84,7 @@ class IndexComponent extends React.Component {
      // edit = <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup>;
     }
 if(data.image === ""){
-  data.image = this.props.viewer.course.image
+  data.image = this.props.course.image
 }
 
     return (
@@ -119,19 +110,16 @@ IndexComponent.propTypes = {
 };
 
 export default Relay.createContainer(IndexComponent, {
-  initialVariables: {
-  	                                                                                                    courseId: '1',
-  },
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
-        user{
+        user {
           authenticated
         }
-        course(id:$courseId){
-              id
-              image
-              everything
-              }
+
       }`,
+      course: () => Relay.QL`fragment on Course {
+                  id
+                  everything
+          }`,
   },
 });

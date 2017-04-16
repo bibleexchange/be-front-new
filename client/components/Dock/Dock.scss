@@ -1,5 +1,10 @@
 @import "../variables.scss";
 
+@keyframes example {
+    from {background-color: transparent;}
+    to {background-color: rgba(255,255,255,.5);}
+}
+
 #dock-section {
   margin-bottom: 15px;
   width:100%;
@@ -79,6 +84,8 @@ ul {
 
     li {
       display: inline-block;
+      animation-name: example;
+      animation-duration: 2s;
 
       button {
         padding: 14px;

@@ -7,16 +7,13 @@ import './Footer.scss';
 class Footer extends React.Component {
 
   render() {
-    let usingAs = '';
-
-    if (this.props.user !== null) {
-      usingAs = <a href={this.props.user.email}> {this.props.user.name}</a>;
-    } else {
-      usingAs = 'Guest';
+    let usingAs = "Guest"
+    if(this.props.user.authenticated){
+        usingAs = this.props.user.name
     }
 
     return (
-	   <center> Using Bible exchange as {usingAs}</center>
+	   <center> Using Bible exchange as {usingAs} </center>
     );
   }
 }
@@ -26,15 +23,12 @@ Footer.propTypes = {
 };
 
 export default Relay.createContainer(Footer, {
-  initialVariables: {
-	                                                                                                                                                                                                        slug: ''
-  },
   fragments: {
     user: () => Relay.QL`
       fragment on User {
+        authenticated
       	email
       	name
-      	authenticated
       }
     `,
   },

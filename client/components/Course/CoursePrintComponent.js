@@ -69,12 +69,12 @@ class Sections extends React.Component {
 class CoursePrintComponent extends React.Component {
 
   componentDidMount(){
-    window.print(); 
+    window.print();
   }
 
   render() {
     let baseUrl = '/course/';
-    let course = JSON.parse(this.props.viewer.course.everything);
+    let course = JSON.parse(this.props.course.everything);
 
     return (
 
@@ -102,15 +102,10 @@ CoursePrintComponent.propTypes = {
 };
 
 export default Relay.createContainer(CoursePrintComponent, {
-  initialVariables: {
-  	courseId: '1',
-  },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-        course(id:$courseId){
-          id
-          everything
-          }
-      }`,
+    course: () => Relay.QL`fragment on Course {
+                id
+                everything
+        }`,
   },
 });

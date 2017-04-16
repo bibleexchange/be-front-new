@@ -119,7 +119,7 @@ class Bible extends React.Component {
 
   			  </div>
   			  <div className='Widget' style={notesStyle}>
-           <p><strong> {reference} cross references: </strong> 
+           <p><strong> {reference} cross references: </strong>
             {crossReferences.map(function(c){
               let verses = ''
               c.node.verses.edges.map(function(v){
@@ -159,21 +159,11 @@ Bible.propTypes = {
 
 
 export default Relay.createContainer(Bible, {
-    initialVariables: {
-        noteId: 'newNoteEdge',
-        filter:'',
-        userNotesCount: 5,
-        reference: 'john_3_16',
-        startCursor: '',
-        pageSize: 5,
-        bibleVersion: 'kjv',
-        versesPageSize: 200
-    },
   fragments: {
     viewer: () => Relay.QL`fragment on Viewer {
-        
+
         ${BibleWidget.getFragment('viewer')}
-        
+
         user {
           authenticated
         }
@@ -184,13 +174,13 @@ export default Relay.createContainer(Bible, {
         user {
           id
         }
- 
+
       }`,
     notes: () => Relay.QL`fragment on NoteConnection {
          ${NotesWidget.getFragment('notes')}
       }`,
       bibles: () => Relay.QL`fragment on BibleConnection {
-            
+
           pageInfo{
             hasNextPage
             hasPreviousPage
@@ -207,14 +197,6 @@ export default Relay.createContainer(Bible, {
               id
               reference
               notesCount
-              notes(first:$pageSize){
-                edges{
-                  node{
-                    id
-                    title
-                  }
-                }
-          }
       }`,
     crossReferences: () => Relay.QL`fragment on CrossReferenceConnection {
                 pageInfo{hasNextPage}
@@ -237,7 +219,6 @@ export default Relay.createContainer(Bible, {
                     }
                 }`,
     bibleChapter: () => Relay.QL`fragment on BibleChapter {
-
                     ${BibleWidget.getFragment('bibleChapter')}
                     id
                     url
@@ -250,7 +231,7 @@ export default Relay.createContainer(Bible, {
                                 body
                               }
                             }
-                     }    
+                     }
                 }`
 
   },

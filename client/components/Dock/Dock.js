@@ -15,6 +15,12 @@ class Dock extends React.Component {
     let status = this.props.status
     let name = 'login/register'
     let playStatus = null
+    let bookmarksButton = null
+    let bookmarksMain = null
+    let notepadButton = null
+    let notepadMain = null
+    let audioButton = null
+    let audioMain = null
 
         let mainLogin = <div><li id="login" className={"main-"+ status.login}><LoginComponent
             handleLogin={this.props.handleLogin}
@@ -36,12 +42,32 @@ class Dock extends React.Component {
         if (this.props.user.authenticated){
             name = 'profile'
             mainLogin = <li id="login" className={"main-"+ status.login}>EMAIL: {this.props.user.email}</li>
+            notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
+            notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.notes} handleEditThis={this.props.handleEditThisNote}/> </li>
         }else{
             name = 'login/register'
+            notepadButton = null
+            notepadMain = null
         }
 
     if(this.props.player.playStatus === true){
             playStatus = '(!)'
+    }
+
+    if(this.props.bookmarks === undefined || this.props.bookmarks === null){
+      bookmarksButton = null
+      bookmarksMain = null
+    }else{
+      bookmarksButton = <li  className={"menu-"+ status.bookmarks}><button onClick={this.props.showInDockMenu} data-name="bookmarks">bookmarks</button></li>
+      bookmarksMain = <li id="bookmarks"  className={"main-"+ status.bookmarks}> BOOKMARKS: <BookMarksWidget navs={this.props.navs}/></li>
+    }
+
+    if(this.props.player === undefined || this.props.player === null || this.props.player.playStatus === false){
+      audioButton = null
+      audioMain = null
+    }else{
+      audioButton = <li id="audio-player" className={"menu-"+ status.soundcloud}><button onClick={this.props.showInDockMenu} data-name="soundcloud">audio {playStatus}</button></li>
+      audioMain =  <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId} status={this.props.player.playStatus} handleCloseAudio={this.props.handleCloseAudio}/></li>
     }
 
         return (
@@ -55,25 +81,17 @@ class Dock extends React.Component {
                             <li  className={"menu-"+ status.login + " " + "menu-"+ status.signup}>
                                 <button onClick={this.props.showInDockMenu} data-name="login">{name}</button>
                             </li>
-
-                            <li  className={"menu-"+ status.bookmarks}>
-                                <button onClick={this.props.showInDockMenu} data-name="bookmarks">bookmarks</button>
-                            </li>
-                            <li className={"menu-"+ status.soundcloud}>
-                                <button onClick={this.props.showInDockMenu} data-name="soundcloud">audio {playStatus}</button>
-                            </li>
-                            <li className={"menu-"+ status.notepad}>
-                                <button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button>
-                            </li>
+                            {audioButton}
+                            {bookmarksButton}
+                            {notepadButton}
                         </ul>
                     </nav>
 
                     <ul className="main">
                         {mainLogin}
-
-                        <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId} status={this.props.player.playStatus} handleCloseAudio={this.props.handleCloseAudio}/></li>
-                            <li id="bookmarks"  className={"main-"+ status.bookmarks}> BOOKMARKS: <BookMarksWidget navs={this.props.navs}/></li>
-                        <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.notes} handleEditThis={this.props.handleEditThisNote}/> </li>
+                        {audioMain}
+                        {bookmarksMain}
+                        {notepadMain}
                     </ul>
                 </div>
 
@@ -85,17 +103,13 @@ class Dock extends React.Component {
 
 Dock.propTypes = {
   user: React.PropTypes.object.isRequired,
-  note: React.PropTypes.object.isRequired,
+  note: React.PropTypes.object,
   notes: React.PropTypes.object.isRequired,
   relay: React.PropTypes.object.isRequired
 };
 
 export default Relay.createContainer(Dock, {
 
-    initialVariables: {
-        verseId: "QmlibGVWZXJzZToxMDAxMDAx",
-        userNotesCount:5
-    },
   fragments: {
       note: ()=> Relay.QL`fragment on Note {
                 ${NoteEditor.getFragment('note')}
@@ -128,7 +142,7 @@ export default Relay.createContainer(Dock, {
                 node {
                     id
                     title
-                    verse {id, reference}      
+                    verse {id, reference}
                 }
       }
       }`,

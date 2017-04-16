@@ -14,36 +14,26 @@ import NoteCreateMutation from '../../mutations/NoteCreateMutation'
 import Dock from '../Dock/Dock'
 
 import Bible from '../Bible/BibleComponent'
+
+import Course from '../Course/CourseComponent'
+import CoursePrint from '../Course/CoursePrintComponent'
+import CourseIndex from '../Course/IndexComponent'
+
 import Dashboard from '../Dashboard/DashboardComponent'
 import Library from '../Library/IndexComponent'
-
-const COMPONENTS = [
-    Dashboard,
-    Bible
-];
 
 import './App.scss'
 import './Print.scss'
 import './Typography.scss'
 import './Widget.scss'
 
-import '../../assets/favicons/favicon.ico';
-
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    let email = null;
-    let password = null;
     let onLine = false;
 
-    if (this.props.location.query.backdoor !== undefined) {
-      let keys = this.props.location.query.backdoor.split('_');
-      email = keys[0];
-      password = keys[1];
-    }
-
-    if (navigator.onLine && this.props.viewer.error.code !== 500) {
+  if (navigator.onLine && this.props.viewer.error.code !== 500) {
       onLine = true;
     } else {
       onLine = false;
@@ -56,7 +46,7 @@ class App extends React.Component {
     let user = this.props.viewer.user ? this.props.viewer.user : { name: 'Guest' }
 
      let dockStatus = {
-        main: false,
+        main: true,
         login: !user.authenticated,
         signup: false,
         soundcloud: false,
@@ -71,12 +61,19 @@ class App extends React.Component {
           currentPage = this.props.viewer.notes.currentPage;
       }
 
+      let lang = "eng"
+
+      if(localStorage.getItem('language') !== null){
+        lang = localStorage.getItem('language')
+      }
+
     this.state = {
       oembed: {},
       online: onLine,
-      email,
-      password,
+      email:null,
+      password:null,
       user: user,
+      language: lang,
       signup: {},
       player: {
        playStatus: false,
@@ -100,7 +97,6 @@ class App extends React.Component {
   }
 
   updateAuth(trueOrFalse) {
-    console.log('update auth ran. results: ', trueOrFalse);
 
     if (trueOrFalse === false) {
       let newState = this.state;
@@ -114,23 +110,8 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-
-
     auth.onChange = this.updateAuth.bind(this);
-
-    if (this.state.token !== false) {
-      //this.handleLogin(null);
-    }else{
-      this.setState({error:false})
-    }
-    let that = this
-
-    window.setTimeout(function(){
-      that.setState({
-        error: false,
-      });
-    }, 3000)
-
+    //this.checkForParams(this.props.params)
   }
 
   componentWillReceiveProps(newProps) {
@@ -159,6 +140,7 @@ class App extends React.Component {
           this.setState(newState)
       }
 
+        //this.checkForParams(newProps.params)
   }
 
   render() {
@@ -202,6 +184,7 @@ class App extends React.Component {
         handleBookmark={this.handleBookmark.bind(this)}
         online={this.state.online}
         handleOpenCloseDock = {this.handleOpenCloseDock.bind(this)}
+        message={this.state.error.message}
        />
 
            {/* <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p> */}
@@ -251,12 +234,14 @@ class App extends React.Component {
                  crossReferences: this.props.viewer.crossReferences,
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
+                 course: this.props.viewer.course,
                  handleChangeReference: this.handleChangeReference.bind(this),
                  handleChangeNoteFilter: this.handleChangeNoteFilter.bind(this),
                  bibleChapter: this.props.viewer.bibleChapter,
                  bibleVerse: this.props.viewer.bibleVerse,
                  bibleStatus: this.state.bibleStatus,
                  handleToggleBible: this.handleToggleBible.bind(this),
+                 language: this.state.languge,
                  notes: this.props.viewer.notes,
                  notesWidget: this.state.notesWidget,
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
@@ -268,14 +253,11 @@ class App extends React.Component {
                  handleUpdateCoursesFilter:this.handleUpdateCoursesFilter.bind(this),
                  handleNextCoursesPage: this.handleNextCoursesPage.bind(this),
                  handleClearCoursesFilter: this.handleClearCoursesFilter.bind(this),
+                 handleLanguage: this.handleLanguage.bind(this)
              })}
           </ReactCSSTransitionGroup>
-
-
-
           </main>
           {errorMessage}
-
           <footer id='footer' className='push'><Footer user={user} /></footer>
     	</div>
     );
@@ -680,6 +662,28 @@ password: this.state.signup.password
 
     }
 
+    handleLanguage(lang){
+      localStorage.setItem('language',lang)
+      let s = this.state
+      s.languge = lang
+      this.setState(s)
+    }
+
+checkForParams(params){
+  /*
+  console.log(params, this.props.relay.variables)
+  if(params.courseId !== undefined && params.courseId !== this.props.relay.variables.courseId){
+    this.props.relay.setVariables({
+        courseId:params.courseId
+    });
+  }else if(params.notedId !== undefined && params.noteId !== this.props.relay.variables.noteId){
+    this.props.relay.setVariables({
+        noteId:params.notedId
+    });
+  }
+  */
+}
+
 }
 
 App.contextTypes = {
@@ -691,61 +695,57 @@ App.propTypes = {
   viewer: React.PropTypes.object.isRequired
 };
 
-App.defaultProps = {
-  viewer: {
-    user: { 'name': 'Guest-1', 'authenticated': false },
-      note: {'id':"blank","title":""}
-  }
-};
-
 export default Relay.createContainer(App, {
   initialVariables: {
-      noteId: 'newNoteEdge',
-      noteFilter: null,
+      noteId: undefined,
+      noteFilter: undefined,
       userNotesCount: 5,
       reference: "",
-      notesStartCursor: "",
+      notesStartCursor: undefined,
       pageSize: 5,
       bibleVersion: 'kjv',
       versesPageSize: 200,
+      courseId: undefined,
       coursesFilter: null,
       coursesPageSize: 6,
       coursesCursor:null
   },
   fragments: {
-    viewer: (variables) => Relay.QL`
+    viewer: () => Relay.QL`
       fragment on Viewer {
         ${SignUpUserMutation.getFragment('viewer')}
         ${LoginUserMutation.getFragment('viewer')}
-        
-        ${Bible.getFragment('viewer', {reference: variables.reference, versesPageSize:  variables.versesPageSize, pageSize: variables.pageSize, bibleVersion:variables.bibleVersion})}
-        
+        ${Dashboard.getFragment('viewer')}
+        ${Bible.getFragment('viewer')}
+        ${Course.getFragment('viewer')}
+        ${CourseIndex.getFragment('viewer')}
+
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
 	     }
-	      
+
         bibleVerse (filter:$reference) {
           ${Bible.getFragment('bibleVerse')}
         }
-        
+
         note(id:$noteId){
           ${Dock.getFragment('note')}
           ${NoteUpdateMutation.getFragment('note')}
         }
-        
+
         error{
           message
           code
         }
-        
+
         crossReferences(first: 20, filter: $reference) {
           ${Bible.getFragment('crossReferences')}
         }
-        
+
         bibles (first:1, filter:$bibleVersion) {
           ${Bible.getFragment('bibles')}
         }
-        
+
         user{
             ${Dock.getFragment('user')}
             ${MainNavigation.getFragment('user')}
@@ -768,12 +768,17 @@ export default Relay.createContainer(App, {
                     }
                 }
             }
-           } 
-           
+           }
+
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
             ${Bible.getFragment('notes')}
-	      }   
-
+	      }
+        course(id:$courseId){
+          id
+          ${Course.getFragment('course')}
+          ${CoursePrint.getFragment('course')}
+          ${CourseIndex.getFragment('course')}
+        }
       courses(filter:$coursesFilter, first:$coursesPageSize, after:$coursesCursor){
         currentPage
         pageInfo{
@@ -787,4 +792,3 @@ export default Relay.createContainer(App, {
     `,
   },
 });
-

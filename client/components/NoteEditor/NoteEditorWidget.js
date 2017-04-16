@@ -242,7 +242,7 @@ componentWillReceiveProps(newProps) {
 
   NoteEditorWidget.propTypes = {
       user: React.PropTypes.object.isRequired,
-      note: React.PropTypes.object.isRequired,
+      note: React.PropTypes.object,
       notes: React.PropTypes.object.isRequired
   };
 
