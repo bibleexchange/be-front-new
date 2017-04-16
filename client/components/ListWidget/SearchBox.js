@@ -7,7 +7,6 @@ import './SearchBox.scss'
 class SearchBox extends React.Component {
 
   componentWillMount(){
-    console.log(this.props.details)
     this.state = {
       filter: this.props.details.filter? this.props.details.filter:''
     }
@@ -43,13 +42,10 @@ class SearchBox extends React.Component {
 
       <div id='search'>
          <h3 className='search-count'>{sentence}</h3>
-         <Link to='' className='clearFilter' onClick={this.props.handleClearFilter} >&nbsp; &times; &nbsp;</Link>
+         <Link to='' className='clearFilter' onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
          {search}
          <button disabled={nextPageDisabled} onClick={this.props.handleNextPage}>{nextButtonText}</button>
        </div>
-
-
-
     )
 
   }
@@ -62,16 +58,24 @@ class SearchBox extends React.Component {
       this.setState(n)
   }
 
+  handleClearFilter(e){
+    let s = this.state
+      s.filter = ""
+      this.setState(s)
+
+      this.props.handleClearFilter(e)
+  }
+
     runScriptOnPressEnterNoteSearch(e) {
 
         if (e.keyCode == 13) {
             console.log('enter key pressed!');
-            this.props.handleUpdateNoteFilter(this.state.filter);
+            this.props.handleUpdateFilter(this.state.filter);
         }
     }
 
     updateFilter(e){
-        this.props.handleUpdateNoteFilter(this.state.filter);
+        this.props.handleUpdateFilter(this.state.filter);
     }
 
 }

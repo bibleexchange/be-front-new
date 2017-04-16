@@ -23,7 +23,7 @@ export default (
   <Route path='/' component={App} queries={ViewerQueries} >
     <IndexRoute component={Dashboard} />
 
-    <Route path='/courses' component={LibraryIndex} queries={ViewerQueries} />
+    <Route path='/courses' component={LibraryIndex} />
 
     <Route path='course' >
       <Route path=':courseId' component={CourseIndex} queries={ViewerQueries} />

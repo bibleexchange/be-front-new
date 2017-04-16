@@ -48,7 +48,7 @@ class NotesWidget extends React.Component {
               details = {details}
               status={this.props.status.status}
               handleClearFilter={this.props.handleClearNoteFilter}
-              handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
+              handleUpdateFilter={this.props.handleUpdateNoteFilter}
               handleNextPage={this.props.handleNextNotePage}
             />
 

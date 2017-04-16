@@ -71,9 +71,8 @@ class Dock extends React.Component {
                     <ul className="main">
                         {mainLogin}
 
-                        <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId}/>
-                            <button onClick={this.props.handleCloseAudio}>close</button></li>
-                        <li id="bookmarks"  className={"main-"+ status.bookmarks}> BOOKMARKS: <BookMarksWidget navs={this.props.navs}/></li>
+                        <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId} status={this.props.player.playStatus} handleCloseAudio={this.props.handleCloseAudio}/></li>
+                            <li id="bookmarks"  className={"main-"+ status.bookmarks}> BOOKMARKS: <BookMarksWidget navs={this.props.navs}/></li>
                         <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.notes} handleEditThis={this.props.handleEditThisNote}/> </li>
                     </ul>
                 </div>

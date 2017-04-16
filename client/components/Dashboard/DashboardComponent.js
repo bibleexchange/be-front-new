@@ -23,23 +23,13 @@ class Search extends React.Component {
 class Dashboard extends React.Component {
 
   componentWillMount() {
-    let filterBy = localStorage.getItem('notes-filter');
-
-    if (filterBy == undefined) {
-      filterBy = null;
-    }
-
-    localStorage.setItem('notes-filter', filterBy);
-
     this.state = {
-      filterBy
+      filterBy: this.props.notesWidget.filter
     };
   }
 
 
   render() {
-      console.log(this.props)
-    let user = this.props.viewer.user;
 
     return (
 	      <div id='dashboard' >
@@ -54,11 +44,12 @@ class Dashboard extends React.Component {
   }
 
   handleUpdateSearch(e) {
-    this.setState({ filterBy: e.target.value.replace(/ /g, '+') });
+    this.setState({ filterBy: e.target.value.replace(/ /g, '_') });
   }
 
   searchIt(e) {
     e.preventDefault();
+    this.props.handleUpdateNoteFilter(this.state.filterBy);
     this.context.router.push('/notes/tag/' + this.state.filterBy);
   }
 

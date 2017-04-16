@@ -15,6 +15,7 @@ import Dock from '../Dock/Dock'
 
 import Bible from '../Bible/BibleComponent'
 import Dashboard from '../Dashboard/DashboardComponent'
+import Library from '../Library/IndexComponent'
 
 const COMPONENTS = [
     Dashboard,
@@ -85,10 +86,14 @@ class App extends React.Component {
      bibleStatus: 'both',
      error: this.props.viewer.error,
      token: token,
-        notesWidget: {
-            showModal: false,
-            filter: this.props.relay.variables.noteFilter,
-            notesCurrentPage: currentPage,
+    notesWidget: {
+        showModal: false,
+        filter: this.props.relay.variables.noteFilter,
+        notesCurrentPage: currentPage,
+        status: null
+    },
+        coursesWidget: {
+          filter: this.props.relay.variables.coursesFilter,
             status: null
         }
     };
@@ -245,6 +250,7 @@ class App extends React.Component {
                  viewer: this.props.viewer,
                  crossReferences: this.props.viewer.crossReferences,
                  bibles: this.props.viewer.bibles,
+                 courses: this.props.viewer.courses,
                  handleChangeReference: this.handleChangeReference.bind(this),
                  handleChangeNoteFilter: this.handleChangeNoteFilter.bind(this),
                  bibleChapter: this.props.viewer.bibleChapter,
@@ -254,11 +260,14 @@ class App extends React.Component {
                  notes: this.props.viewer.notes,
                  notesWidget: this.state.notesWidget,
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
-
                  handleClearNoteFilter: this.handleClearNoteFilter.bind(this),
                  handleNextNotePage: this.handleNextNotePage.bind(this),
                  handleApplyNoteFilter: this.handleApplyNoteFilter.bind(this),
-                 handleNotesAreReady: this.notesAreReady.bind(this)
+                 handleNotesAreReady: this.notesAreReady.bind(this),
+                 coursesWidget: this.state.coursesWidget,
+                 handleUpdateCoursesFilter:this.handleUpdateCoursesFilter.bind(this),
+                 handleNextCoursesPage: this.handleNextCoursesPage.bind(this),
+                 handleClearCoursesFilter: this.handleClearCoursesFilter.bind(this),
              })}
           </ReactCSSTransitionGroup>
 
@@ -607,7 +616,7 @@ password: this.state.signup.password
 
         this.props.relay.setVariables({
             noteFilter: null,
-            notesStartCursor: null
+            notesStartCursor: ""
         });
 
         console.log("clearing: ", this.state.notesWidget.filter)
@@ -626,6 +635,49 @@ password: this.state.signup.password
         let newState = this.state
         newState.notesWidget.notesCurrentPage = this.state.notesWidget.notesCurrentPage + 1
         this.setState(newState);
+    }
+
+
+    handleApplyCoursesFilter(e) {
+        e.preventDefault()
+        this.props.relay.setVariables({
+            coursesFilter: this.state.coursesWidget.filter,
+            coursesCursor: ""
+        });
+    }
+
+    handleUpdateCoursesFilter(string) {
+
+        let newState = this.state
+        newState.coursesWidget.filter = string
+
+        this.props.relay.setVariables({
+            coursesFilter: string,
+            coursesCursor: ""
+        });
+    }
+
+    handleClearCoursesFilter(event) {
+        event.preventDefault();
+        let newState = this.state
+        newState.coursesWidget.filter = null
+        newState.coursesWidget.status = null
+        this.setState(newState);
+        this.props.relay.setVariables({
+            coursesfilter: null,
+            coursesCursor: ""
+        });
+
+        localStorage.removeItem('courses-filter');
+
+    }
+
+    handleNextCoursesPage() {
+        console.log(this.props.viewer.courses.pageInfo.endCursor)
+        this.props.relay.setVariables({
+            coursesCursor: this.props.viewer.courses.pageInfo.endCursor
+        });
+
     }
 
 }
@@ -649,13 +701,16 @@ App.defaultProps = {
 export default Relay.createContainer(App, {
   initialVariables: {
       noteId: 'newNoteEdge',
-      noteFilter:'Acts 7:12',
+      noteFilter: null,
       userNotesCount: 5,
-      reference: 'acts_7_12',
-      notesStartCursor: null,
+      reference: "",
+      notesStartCursor: "",
       pageSize: 5,
       bibleVersion: 'kjv',
-      versesPageSize: 200
+      versesPageSize: 200,
+      coursesFilter: null,
+      coursesPageSize: 6,
+      coursesCursor:null
   },
   fragments: {
     viewer: (variables) => Relay.QL`
@@ -674,7 +729,6 @@ export default Relay.createContainer(App, {
         }
         
         note(id:$noteId){
-          id
           ${Dock.getFragment('note')}
           ${NoteUpdateMutation.getFragment('note')}
         }
@@ -717,14 +771,17 @@ export default Relay.createContainer(App, {
            } 
            
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
-      	    pageInfo{
-      	        hasNextPage
-      	        endCursor
-      	        startCursor
-      	    }
             ${Bible.getFragment('notes')}
 	      }   
-            
+
+      courses(filter:$coursesFilter, first:$coursesPageSize, after:$coursesCursor){
+        currentPage
+        pageInfo{
+            hasNextPage
+            endCursor
+        }
+        ${Library.getFragment('courses')}
+        }
 
       }
     `,

@@ -12,7 +12,11 @@ class Index extends React.Component {
           <div className='Widget'>
 
           <CoursesWidget
-            viewer={this.props.viewer}
+            courses={this.props.courses}
+            handleUpdateCoursesFilter={this.props.handleUpdateCoursesFilter}
+            handleNextPage={this.props.handleNextCoursesPage}
+            coursesWidget={this.props.coursesWidget}
+            handleClearCoursesFilter={this.props.handleClearCoursesFilter}
           />
 
           </div>
@@ -22,13 +26,18 @@ class Index extends React.Component {
 
 }
 
-Index.defaultProps = {};
-
+Index.propTypes = {
+    courses: React.PropTypes.object.isRequired,
+    handleUpdateCoursesFilter: React.PropTypes.func.isRequired,
+    handleNextCoursesPage: React.PropTypes.func.isRequired,
+    coursesWidget: React.PropTypes.object.isRequired,
+    handleClearCoursesFilter: React.PropTypes.func.isRequired,
+};
 export default Relay.createContainer(Index, {
   fragments: {
-	   viewer: () => Relay.QL`
-	  fragment on Viewer {
-      ${CoursesWidget.getFragment('viewer')}
+	   courses: () => Relay.QL`
+	  fragment on CourseConnection {
+      ${CoursesWidget.getFragment('courses')}
 		}`
   }
 });
