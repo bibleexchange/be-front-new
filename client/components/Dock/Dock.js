@@ -93,6 +93,7 @@ class Dock extends React.Component {
                         {bookmarksMain}
                         {notepadMain}
                     </ul>
+
                 </div>
 
             </div>

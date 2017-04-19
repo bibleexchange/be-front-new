@@ -34,8 +34,14 @@
 	#title h2{margin-bottom:6in}
 	blockquote,pre,blockquote{border:1px solid #999;page-break-inside:avoid}
 
-	h1, .page-break{ page-break-before: always}
+	h1, .page-break { page-break-before: always}
+
+	h1:first-of-type {page-break-before: avoid;}
 
 	.emb-outline h1, #footnotes h1{ page-break-before: avoid}
+
+	header nav, footer, #dock-section, #dock-widget {
+		display: none;
+	}
 
 }

@@ -8,27 +8,14 @@ import SearchBox from '../ListWidget/SearchBox'
 
 class NotesWidget extends React.Component {
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status.filter !== this.props.status.filter) {
-      this.props.handleUpdateNoteFilter(newProps.status.filter)
-    }
-
-  }
-
   render() {
 
-      let notes = [];
-      let noNotes = <h2>No notes match your search!</h2>;
+      let notes = this.props.notes.edges;
       let selectNote = this.props.selectNote;
       let totalCount = 0
 
       if (this.props.notes !== undefined){
           totalCount = this.props.notes.totalCount
-          notes = this.props.notes.edges
-          if (this.props.notes.totalCount >= 1) {
-              noNotes = null;
-          }
       }
 
     let details = {
@@ -37,7 +24,8 @@ class NotesWidget extends React.Component {
         plural: "Notes"
       },
       totalCount: totalCount,
-      filter: this.props.status.filter
+      filter: this.props.status.filter,
+        noResultsMessage: "No notes match your search!"
     }
 
     return (
@@ -56,8 +44,6 @@ class NotesWidget extends React.Component {
             return <NoteThumbnail tags={n.node.tags} key={n.node.id} note={n.node} selectNote={selectNote} />;
           })};
 
-          <div style={{ display: 'inline-block', height: '175px', lineHeight: '175px' }}>{noNotes}</div>
-
     		</div>
     );
   }
@@ -67,7 +53,6 @@ class NotesWidget extends React.Component {
 NotesWidget.propTypes = {
   notes: React.PropTypes.object.isRequired,
   status: React.PropTypes.object.isRequired,
-    relay: React.PropTypes.object.isRequired,
     handleUpdateNoteFilter:  React.PropTypes.func.isRequired,
 };
 

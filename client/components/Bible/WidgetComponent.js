@@ -21,23 +21,22 @@ class BibleChapterComponent extends React.Component {
 class WidgetComponent extends React.Component {
 
   render() {
-    const baseUrl = this.props.baseUrl;
-    let verses = [];
-    let user = this.props.viewer.user;
+    const baseUrl = '';
+    let verses = this.props.bibleChapter.verses.edges;;
+    let user = this.props.user;
     let nextChapterUrl = null;
     let goToNext = null;
 
-    if (this.props.bibleChapter !== undefined && this.props.bibleChapter !== null && this.props.bibleChapter.verses !== undefined) {
-      verses = this.props.bibleChapter.verses.edges;
-      nextChapterUrl = this.props.bibleChapter.nextChapter.url;
-      goToNext = <Link className='nextChapter' to={nextChapterUrl} >next</Link>;
-    }
+      if (this.props.bibleChapter !== undefined && this.props.bibleChapter !== null && this.props.bibleChapter.nextChapter !== null) {
+          nextChapterUrl = this.props.bibleChapter.nextChapter.url;
+          goToNext = <Link className='nextChapter' to={nextChapterUrl} >next</Link>;
+      }
 
     let clickVerseBody = this.props.clickVerseBody;
 
     return (
       <div>
-      	<BibleNavigation history={this.props.history} bible={this.props.bible} bibleChapter={this.props.bibleChapter} baseUrl={baseUrl} />
+      	<BibleNavigation bible={this.props.bible} bibleChapter={this.props.bibleChapter} reference={this.props.reference} handleSearchBibleReference={this.props.handleSearchBibleReference} />
       	  {verses.map(function (verse) {
       		  return <BibleVerse user={user} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl} />;
       	  })}
@@ -78,10 +77,8 @@ export default Relay.createContainer(WidgetComponent, {
      ${BibleNavigation.getFragment('bible')}
    }`,
 
-    viewer: () => Relay.QL`fragment on Viewer {
-      user {
+    user: () => Relay.QL`fragment on User {
         authenticated
-      }
    }`
   },
 });

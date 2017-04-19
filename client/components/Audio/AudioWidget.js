@@ -68,14 +68,7 @@ class AudioWidget extends React.Component {
 
   render() {
 
-    let none = <h2>No audio matches your search!</h2>;
-    let totalCount = null;
     let handlePlayAudio = this.props.handlePlayAudio
-    let player = null
-
-    if (this.state.tracks.length >= 1) {
-      none = null;
-    }
 
     let items = {
       pageInfo: {
@@ -87,14 +80,13 @@ class AudioWidget extends React.Component {
         singular: "Audio",
         plural: "Audio"
       },
-      totalCount: totalCount,
-      filter: this.state.filter
+      totalCount: this.state.tracks.length,
+      filter: this.state.filter,
+        noResultsMessage: "No audio match your search!"
     }
 
     return (
     		<div id='audio-widget'>
-
-          <div id="page-player">{player}</div>
 
           <SearchBox
             items={items}
@@ -112,7 +104,6 @@ class AudioWidget extends React.Component {
               return <li  key={t.id} className="card"><SoundCloudCard track={t} handleClick={handlePlayAudio}/></li>;
             })}
           </ul>
-          <div style={{ display: 'inline-block', height: '200px', lineHeight: '200px' }}>{none}</div>
 
     		</div>
     );

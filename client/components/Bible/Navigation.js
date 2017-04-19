@@ -7,101 +7,67 @@ import './Navigation.scss';
 
 class Navigation extends React.Component {
 
-componentWillMount() {
-this.state = {
-showModal: false,
-filterBooksBy: '',
-search: this.props.bibleChapter ? this.props.bibleChapter.reference : ''
-};
-}
-
-componentWillReceiveProps(newProps) {
-
-    if (newProps.bibleChapter == undefined || newProps.bibleChapter == null){
-
-    } else if(this.props.bibleChapter === undefined) {
-        this.setState({ search: newProps.bibleChapter.reference });
-    }else if(newProps.bibleChapter.reference !== this.props.bibleChapter.reference){
-        this.setState({ search: newProps.bibleChapter.reference });
-    }
-}
-
-render() {
-let next = { pathname: this.props.baseUrl, query: {} };
-let previous = { pathname: this.props.baseUrl, query: {} };
-
-const verseSelectorButtonStyle = {
-border: 'none', background: 'transparent'
-};
-
-    if (this.props.bibleChapter === null || this.props.bibleChapter === undefined) {
-
-    }else{
-      if (this.props.bibleChapter.nextChapter !== undefined) {
-        next = { pathname: this.props.baseUrl + this.props.bibleChapter.nextChapter.url, query: {} };
-      }
-      if (this.props.bibleChapter.previousChapter !== undefined) {
-        previous = { pathname: this.props.baseUrl + this.props.bibleChapter.previousChapter.url, query: {} };
-      }
+    componentWillMount() {
+        this.state = {
+            showModal: false,
+            filterBooksBy: '',
+            search: this.props.reference
+        };
     }
 
-    if (this.props.baseUrl == '/') {
-      next = { pathname: this.props.bibleChapter.nextChapter.url, query: {} };
-      previous = { pathname: this.props.bibleChapter.previousChapter.url, query: {} };
+    componentWillReceiveProps(newProps) {
+        if(newProps.reference !== this.props.reference){
+            let n = this.state
+            n.search = newProps.reference
+            this.setState(n)
+        }
     }
 
-    return (<div id='biblenav'>
-		<div className='blueBG' style={{ marginBottom: '25p', textAlign: 'center' }}>
-			<Link className='previous' to={previous} >
-				&lt;
-			</Link>
+    render() {
 
-			<Search term={this.state.search} submitHandler={this.bibleSearchSubmitHandler.bind(this)} />
+        return (<div id='biblenav'>
+                <div className='blueBG'>
+                    <Link className='previous' to={this.props.bibleChapter.previousChapter.url}>&lt;</Link>
 
-			<Link className='next' to={next} >
-				&gt;
-			</Link>
+                    <Search term={this.state.search} submitHandler={this.props.handleSearchBibleReference}/>
 
-			<button className='menu' onClick={this.toggleModal.bind(this)} >
-			    &#x2637;
-			</button>
-		</div>
-			<VerseSelector bible={this.props.bible} handleBooksFilter={this.handleBooksFilter.bind(this)} toggleModal={this.props.toggleModal} shouldDisplay={this.state.showModal} filterBooksBy={this.state.filterBooksBy} close={this.close.bind(this)} />
-		</div>
-    );
-  }
+                    <Link className='next' to={this.props.bibleChapter.nextChapter.url}>
+                        &gt;
+                    </Link>
 
-bibleSearchSubmitHandler(term) {
-console.log('search submitted...');
-this.setState({ search: term });
+                    <button className='menu' onClick={this.toggleModal.bind(this)}>
+                        &#x2637;
+                    </button>
+                </div>
+                <VerseSelector
+                    bible={this.props.bible}
+                    handleBooksFilter={this.handleBooksFilter.bind(this)}
+                    toggleModal={this.props.toggleModal}
+                    shouldDisplay={this.state.showModal}
+                    filterBooksBy={this.state.filterBooksBy}
+                    close={this.close.bind(this)}/>
+            </div>
+        );
+    }
 
-let url = term.replace(/\W+/g, '_');
-this.props.history.push('/bible/' + url.toLowerCase());
-}
+    toggleModal() {
+        console.log('toggle toggle ...');
+        const show = !this.state.showModal;
+        this.setState({ showModal: show });
+    }
 
-  toggleModal() {
-    console.log('toggle toggle ...');
-    const show = !this.state.showModal;
-    this.setState({ showModal: show });
-  }
+    close() {
+        const show = !this.state.showModal;
+        this.setState({ showModal: show, filterBooksBy: '' });
+    }
 
-  close() {
-    const show = !this.state.showModal;
-    this.setState({ showModal: show, filterBooksBy: '' });
-  }
-
-  handleBooksFilter(event) {
-    this.setState({ filterBooksBy: event.target.value });
-  }
+    handleBooksFilter(event) {
+        this.setState({ filterBooksBy: event.target.value });
+    }
 
 }
-
-Navigation.defaultProps = {};
 
 export default Relay.createContainer(Navigation, {
-  initialVariables: {
-    courseSlug: ''
-  },
 fragments: {
 bible: () => Relay.QL`
 fragment on Bible {

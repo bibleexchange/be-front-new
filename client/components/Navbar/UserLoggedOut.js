@@ -1,7 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
-
+import Expand from '../Svg/Expand'
 class UserLoggedOut extends React.Component {
 
   render() {
@@ -18,7 +18,7 @@ class UserLoggedOut extends React.Component {
           {Login}
           {Signup}
               <li>
-                <button id="open-close" onClick={this.props.handleOpenCloseDock}>&nbsp;</button>
+                <button id="open-close" onClick={this.props.handleOpenCloseDock}><Expand /></button>
               </li>
             </ul>
     );

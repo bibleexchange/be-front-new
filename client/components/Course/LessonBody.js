@@ -17,7 +17,7 @@ class LessonBody extends React.Component {
     }
 
     let button = null
-console.log(this.props.media.trans)
+
     if(this.props.media.trans !== false){
       button = <button onClick={this.handleLanguage.bind(this)}>{text}</button>
     }

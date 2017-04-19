@@ -17,8 +17,9 @@ class SearchBox extends React.Component {
     let nextButtonText = '_ of _';
     let nextPageDisabled = true;
     let search = <Loading />
+    let noItems = null
 
-    if (this.props.items !== undefined && this.props.items.pageInfo.hasNextPage ) {
+      if (this.props.items !== undefined && this.props.items.pageInfo.hasNextPage ) {
       nextPageDisabled = false;
       nextButtonText = 'Next';
     } else if (this.props.items !== undefined) {
@@ -38,6 +39,12 @@ class SearchBox extends React.Component {
         search = <input type='text' onKeyUp={this.runScriptOnPressEnterNoteSearch.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.updateFilter.bind(this)} placeholder='  filter' value={this.state.filter} />
       }
 
+      if (this.props.details.totalCount >= 1) {
+          noItems = null;
+      }else{
+          noItems =  <div style={{ display: 'inline-block', height: '175px', lineHeight: '175px' }}><h2>{this.props.details.noResultsMessage}</h2></div>
+      }
+
     return (
 
       <div id='search'>
@@ -45,6 +52,9 @@ class SearchBox extends React.Component {
          <Link to='' className='clearFilter' onClick={this.handleClearFilter.bind(this)} >&nbsp; &times; &nbsp;</Link>
          {search}
          <button disabled={nextPageDisabled} onClick={this.props.handleNextPage}>{nextButtonText}</button>
+
+          {noItems}
+
        </div>
     )
 
@@ -59,11 +69,12 @@ class SearchBox extends React.Component {
   }
 
   handleClearFilter(e){
+    e.preventDefault()
     let s = this.state
       s.filter = ""
       this.setState(s)
 
-      this.props.handleClearFilter(e)
+      this.props.handleUpdateFilter("")
   }
 
     runScriptOnPressEnterNoteSearch(e) {

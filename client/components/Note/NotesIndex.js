@@ -5,16 +5,24 @@ import NotesWidget from './NotesWidget';
 
 class NotesIndex extends React.Component {
 
+  componentWillMount(){
+    this.props.handleUpdateNoteFilter(this.props.params.filter)
+  }
+
   render() {
     return (
       	<div id='bible' className='WidgetContainer'>
               <div className='Widget'>
                 <NotesWidget
                   filter={this.props.params.filter}
-                  viewer={this.props.viewer}
+                  notes={this.props.notes}
                   selectNote={null}
                   tags
-                />
+                  handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
+                  handleNextNotePage={this.props.handleNextNotePage}
+                  status={this.props.notesWidget}
+                  handleNotesAreReady={this.props.handleNotesAreReady}
+                  />
               </div>
        	</div>
     );
@@ -32,13 +40,9 @@ NotesIndex.propTypes = {
 };
 
 export default Relay.createContainer(NotesIndex, {
-  initialVariables: {
-    after: null,
-    pageSize: 5
-  },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-         ${NotesWidget.getFragment('viewer')}
-       }`,
+      notes: () => Relay.QL`fragment on NoteConnection {
+        ${NotesWidget.getFragment('notes')}
+      }`
   }
 });

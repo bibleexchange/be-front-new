@@ -8,75 +8,24 @@ import './Bible.scss';
 
 class Bible extends React.Component {
 
-  componentWillMount() {
-      let e = {
-        target: {
-          dataset: {
-            reference: this.props.params.reference
-          }
-        }
-      }
-      this.props.handleChangeReference(e);
-      this.props.handleChangeNoteFilter(e);
-
-  }
-
-    componentWillReceiveNewProps(newProps) {
-
-      if(newProps.params.reference !== this.props.params.reference){
-          let e = {
-              target: {
-                  dataset: {
-                      reference: this.props.params.reference
-                  }
-              }
-          }
-          this.props.handleChangeReference(e);
-          this.props.handleUpdateNoteFilter(this.props.params.reference)
-      }
-
-
-
+    componentDidUpdate() {
+        window.scrollTo(0, 0);
     }
-
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
-  }
 
   render() {
-    let bibles = [];
+      //console.log(this.props)
     let crossReferences = []
-    let bibleChapter = {}
-    let bibleVerse = null;
-    let reference = '';
-    let history = this.props.history;
-    let viewer = this.props.viewer;
-    let user = { null };
-    let buttonTitle = 'notes';
-    let bibleStyle = { display: 'block' };
-    let notesStyle = {};
-    let notesCount = 0;
-    let errorMessage = null;
-
-    if (this.props.bibles !== undefined) {
-      bibles = this.props.bibles.edges;
-    }
-
-      if (this.props.crossReferences !== undefined) {
-          crossReferences = this.props.crossReferences.edges;
-      }
-
-    if (this.props.viewer.user !== null) {
-      user = this.props.viewer.user;
-    }
-
-    if (this.props.bibleChapter !== undefined) {
-      bibleChapter = this.props.bibleChapter;
-    }
+    let bibleChapter = this.props.bibleChapter
+    let bibleVerse = this.props.bibleVerse
+    let reference = this.props.reference
+    let user = this.props.user
+    let buttonTitle = 'notes'
+    let bibleStyle = { display: 'block' }
+    let notesStyle = {}
+    let notesCount = 0
+    let handleSearchBibleReference = this.props.handleSearchBibleReference
 
     if (this.props.bibleVerse !== undefined && this.props.bibleVerse !== null) {
-      bibleVerse = this.props.bibleVerse
-      reference = this.props.bibleVerse.reference
       notesCount = this.props.bibleVerse.notesCount
     }
 
@@ -90,14 +39,6 @@ class Bible extends React.Component {
       buttonTitle = 'bible';
     }
 
-    if (this.props.viewer.error !== null && this.props.viewer.error.code !== 200) {
-      if (this.props.online === false) {
-        errorMessage = <div id='im-online' className='onlinefalse'><h2>ERROR CODE: {this.props.viewer.error.code} {this.props.viewer.error.message}</h2></div>;
-      } else {
-        errorMessage = <div id='im-online' className='onlinetrue'><h2>ERROR CODE: {this.props.viewer.error.code} {this.props.viewer.error.message}</h2></div>;
-      }
-    }
-
     return (
 		<div id='bible'>
 
@@ -105,22 +46,22 @@ class Bible extends React.Component {
 
   		  <div className='Widget' style={bibleStyle}>
 
-        {bibles.map(function (bible) {
+        {this.props.bibles.edges.map(function (bible) {
           return (<BibleWidget
             key={bible.node.id}
-            history={history}
-            baseUrl=''
             bible={bible.node}
             bibleChapter={bibleChapter}
             bibleVerse={bibleVerse}
-            viewer={viewer}
+            user={user}
+            reference={reference}
+            handleSearchBibleReference={handleSearchBibleReference}
           />);
         })}
 
   			  </div>
   			  <div className='Widget' style={notesStyle}>
            <p><strong> {reference} cross references: </strong>
-            {crossReferences.map(function(c){
+            {this.props.crossReferences.edges.map(function(c){
               let verses = ''
               c.node.verses.edges.map(function(v){
                 verses += v.node.order_by + " " + v.node.body + " "
@@ -131,21 +72,20 @@ class Bible extends React.Component {
             </p>
 
       		  <NotesWidget
-            status={this.props.notesWidget}
-            notes={this.props.notes}
-            selectNote={null}
-            tags
-            handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
-          handleClearNoteFilter={this.props.handleClearNoteFilter}
-          handleNextNotePage={this.props.handleNextNotePage}
-            handleNotesAreReady={this.props.handleNotesAreReady}
+                status={this.props.notesWidget}
+                notes={this.props.notes}
+                selectNote={null}
+                tags
+                handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
+                handleNextNotePage={this.props.handleNextNotePage}
+                handleNotesAreReady={this.props.handleNotesAreReady}
               />
   			  </div>
 
   	 </div>
 
      <ToggleBible title={buttonTitle} handleToggleBible={this.props.handleToggleBible} />
-     {errorMessage}
+
    </div>
     );
   }
@@ -157,24 +97,26 @@ Bible.propTypes = {
     history: React.PropTypes.object.isRequired
 };
 
+Bible.defaultProps = {
+    bibleVerse: null,
+    crossReferences: {
+        edges: []
+    },
+    bibleChapter: {
+        verses: {
+            edges: []
+        },
+        nextChapter: {},
+        previousChapter: {}
+    }
+}
 
 export default Relay.createContainer(Bible, {
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-
-        ${BibleWidget.getFragment('viewer')}
-
-        user {
-          authenticated
-        }
-        error{
-          message
-          code
-        }
-        user {
+      user: () => Relay.QL`fragment on User {
+          ${BibleWidget.getFragment('user')}
           id
-        }
-
+          authenticated
       }`,
     notes: () => Relay.QL`fragment on NoteConnection {
          ${NotesWidget.getFragment('notes')}

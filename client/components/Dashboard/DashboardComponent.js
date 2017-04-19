@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
 	      <div id='dashboard' >
         <Search handleUpdateSearch={this.handleUpdateSearch.bind(this)} searchIt={this.searchIt.bind(this)} search={this.state.filterBy} />
           <div className='WidgetContainer' >
-            <div className='Widget'><h2><Link to='/bible'>HOLY BIBLE</Link></h2></div>
+            <div className='Widget'><h2><Link to={'/bible/'+this.props.reference}>HOLY BIBLE</Link></h2></div>
             <div className='Widget'><h2><Link to='/courses'>COURSES</Link></h2></div>
             <div className='Widget'><h2><Link to='/audio'>AUDIO LIBRARY</Link></h2></div>
   	      </div>

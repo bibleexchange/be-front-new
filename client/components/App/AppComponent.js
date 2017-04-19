@@ -14,13 +14,12 @@ import NoteCreateMutation from '../../mutations/NoteCreateMutation'
 import Dock from '../Dock/Dock'
 
 import Bible from '../Bible/BibleComponent'
-
-import Course from '../Course/CourseComponent'
-import CoursePrint from '../Course/CoursePrintComponent'
-import CourseIndex from '../Course/IndexComponent'
-
+import Course from '../Course/Course'
+import CoursePrint from '../Course/CoursePrint'
+import CourseIndex from '../Course/CourseIndex'
+import NotesIndex from '../Note/NotesIndex'
 import Dashboard from '../Dashboard/DashboardComponent'
-import Library from '../Library/IndexComponent'
+import Library from '../Course/CoursesIndex'
 
 import './App.scss'
 import './Print.scss'
@@ -110,8 +109,15 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    auth.onChange = this.updateAuth.bind(this);
-    //this.checkForParams(this.props.params)
+    auth.onChange = this.updateAuth.bind(this)
+      if(this.props.params.reference !== undefined && this.props.params.reference !== null ){
+          this.handleUpdateReferenceForAll(this.props.params.reference);
+      }
+
+      if(this.props.params.courseId !== undefined && this.props.params.courseId !== null ){
+          this.handleUpdateCourse(this.props.params.courseId);
+      }
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -136,15 +142,19 @@ class App extends React.Component {
       newState.user = newProps.viewer.user;
     }
 
+      if(newProps.params.reference !== this.props.params.reference && newProps.params.reference !== undefined){
+          this.handleUpdateReferenceForAll(newProps.params.reference)
+      }
+
+
       if (JSON.stringify(this.state) !== JSON.stringify(newState)) {
           this.setState(newState)
       }
 
-        //this.checkForParams(newProps.params)
   }
 
   render() {
-
+    console.log(this.props)
     let errorMessage = null
 
     if(this.state.error !== false){
@@ -235,7 +245,9 @@ class App extends React.Component {
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
                  course: this.props.viewer.course,
+                 user: user,
                  handleChangeReference: this.handleChangeReference.bind(this),
+                 handleUpdateReferenceForAll: this.handleUpdateReferenceForAll.bind(this),
                  handleChangeNoteFilter: this.handleChangeNoteFilter.bind(this),
                  bibleChapter: this.props.viewer.bibleChapter,
                  bibleVerse: this.props.viewer.bibleVerse,
@@ -245,15 +257,15 @@ class App extends React.Component {
                  notes: this.props.viewer.notes,
                  notesWidget: this.state.notesWidget,
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
-                 handleClearNoteFilter: this.handleClearNoteFilter.bind(this),
                  handleNextNotePage: this.handleNextNotePage.bind(this),
                  handleApplyNoteFilter: this.handleApplyNoteFilter.bind(this),
                  handleNotesAreReady: this.notesAreReady.bind(this),
                  coursesWidget: this.state.coursesWidget,
                  handleUpdateCoursesFilter:this.handleUpdateCoursesFilter.bind(this),
                  handleNextCoursesPage: this.handleNextCoursesPage.bind(this),
-                 handleClearCoursesFilter: this.handleClearCoursesFilter.bind(this),
-                 handleLanguage: this.handleLanguage.bind(this)
+                 handleLanguage: this.handleLanguage.bind(this),
+                 reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
+                 handleSearchBibleReference: this.handleSearchBibleReference.bind(this)
              })}
           </ReactCSSTransitionGroup>
           </main>
@@ -528,12 +540,6 @@ password: this.state.signup.password
         this.setState(s)
     }
 
-    handleChangeReference(e){
-        this.props.relay.setVariables({
-            reference: e.target.dataset.reference
-        });
-    }
-
     handleChangeNoteFilter(e){
         this.props.relay.setVariables({
             noteFilter: e.target.dataset.reference
@@ -552,10 +558,11 @@ password: this.state.signup.password
     }
 
     handleUpdateNoteFilter(string) {
-        this.props.relay.setVariables({
-            noteFilter: string.toLowerCase(),
-            notesStartCursor: null
-        });
+        if (string !== undefined) {
+            this.props.relay.setVariables({
+                noteFilter: string.toLowerCase(),
+                notesStartCursor: null
+            });
 
         let s = this.state
 
@@ -563,6 +570,7 @@ password: this.state.signup.password
 
         s.notesWidget.notesCurrentPage = 1
         this.setState(s);
+        }
 
     }
 
@@ -575,7 +583,7 @@ password: this.state.signup.password
     handleApplyNoteFilter(e) {
         this.props.relay.setVariables({
             noteFilter: this.state.notesWidget.filter? this.state.notesWidget.filter.toLowerCase():"",
-            notesStartCursor: null
+            notesStartCursor: undefined
         });
 
         let s = this.state
@@ -593,22 +601,6 @@ password: this.state.signup.password
         this.setState(newState);
     }
 
-    handleClearNoteFilter(event) {
-        event.preventDefault();
-
-        this.props.relay.setVariables({
-            noteFilter: null,
-            notesStartCursor: ""
-        });
-
-        console.log("clearing: ", this.state.notesWidget.filter)
-        let newState = this.state
-        newState.notesWidget.filter = null
-        newState.notesWidget.status = null
-
-        this.setState(newState)
-    }
-
     handleNextNotePage() {
         this.props.relay.setVariables({
             notesStartCursor: this.props.viewer.notes.pageInfo.endCursor
@@ -624,7 +616,7 @@ password: this.state.signup.password
         e.preventDefault()
         this.props.relay.setVariables({
             coursesFilter: this.state.coursesWidget.filter,
-            coursesCursor: ""
+            coursesCursor: undefined
         });
     }
 
@@ -632,30 +624,21 @@ password: this.state.signup.password
 
         let newState = this.state
         newState.coursesWidget.filter = string
-
+        this.setState(newState)
         this.props.relay.setVariables({
             coursesFilter: string,
-            coursesCursor: ""
+            coursesCursor: undefined
         });
     }
+    handleUpdateCourse(courseId) {
 
-    handleClearCoursesFilter(event) {
-        event.preventDefault();
-        let newState = this.state
-        newState.coursesWidget.filter = null
-        newState.coursesWidget.status = null
-        this.setState(newState);
         this.props.relay.setVariables({
-            coursesfilter: null,
-            coursesCursor: ""
+            courseId: courseId
         });
-
-        localStorage.removeItem('courses-filter');
-
     }
 
-    handleNextCoursesPage() {
-        console.log(this.props.viewer.courses.pageInfo.endCursor)
+
+    handleNextCoursesPage(e) {
         this.props.relay.setVariables({
             coursesCursor: this.props.viewer.courses.pageInfo.endCursor
         });
@@ -669,20 +652,37 @@ password: this.state.signup.password
       this.setState(s)
     }
 
-checkForParams(params){
-  /*
-  console.log(params, this.props.relay.variables)
-  if(params.courseId !== undefined && params.courseId !== this.props.relay.variables.courseId){
-    this.props.relay.setVariables({
-        courseId:params.courseId
-    });
-  }else if(params.notedId !== undefined && params.noteId !== this.props.relay.variables.noteId){
-    this.props.relay.setVariables({
-        noteId:params.notedId
-    });
-  }
-  */
-}
+    handleSearchBibleReference(term) {
+        console.log('search submitted...');
+        this.setState({ search: term });
+
+        let url = term.replace(/\W+/g, '_');
+        this.props.history.push('/bible/' + url.toLowerCase());
+    }
+
+    handleChangeReference(e){
+        console.log('changing reference',e)
+        this.props.relay.setVariables({
+            reference: e.target.dataset.reference
+        });
+    }
+
+    handleUpdateReferenceForAll(ref){
+
+        this.props.relay.setVariables({
+            noteFilter: ref.toLowerCase(),
+            notesStartCursor: null,
+            reference: ref
+        });
+
+        let s = this.state
+
+        s.notesWidget.status = null
+        s.notesWidget.notesCurrentPage = 1
+        s.notesWidget.filter = ref
+        this.setState(s);
+
+    }
 
 }
 
@@ -695,20 +695,25 @@ App.propTypes = {
   viewer: React.PropTypes.object.isRequired
 };
 
+App.defaultProps = {
+    course: {}
+}
+
 export default Relay.createContainer(App, {
   initialVariables: {
       noteId: undefined,
       noteFilter: undefined,
       userNotesCount: 5,
-      reference: "",
+      reference: undefined,
       notesStartCursor: undefined,
       pageSize: 5,
       bibleVersion: 'kjv',
       versesPageSize: 200,
       courseId: undefined,
-      coursesFilter: null,
+      coursesFilter: undefined,
       coursesPageSize: 6,
-      coursesCursor:null
+      coursesCursor:undefined,
+      crPageSize: 20
   },
   fragments: {
     viewer: () => Relay.QL`
@@ -716,15 +721,13 @@ export default Relay.createContainer(App, {
         ${SignUpUserMutation.getFragment('viewer')}
         ${LoginUserMutation.getFragment('viewer')}
         ${Dashboard.getFragment('viewer')}
-        ${Bible.getFragment('viewer')}
-        ${Course.getFragment('viewer')}
-        ${CourseIndex.getFragment('viewer')}
 
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
 	     }
 
         bibleVerse (filter:$reference) {
+            id
           ${Bible.getFragment('bibleVerse')}
         }
 
@@ -738,7 +741,7 @@ export default Relay.createContainer(App, {
           code
         }
 
-        crossReferences(first: 20, filter: $reference) {
+        crossReferences(first: $crPageSize, filter: $reference) {
           ${Bible.getFragment('crossReferences')}
         }
 
@@ -747,6 +750,9 @@ export default Relay.createContainer(App, {
         }
 
         user{
+            ${Bible.getFragment('user')}
+            ${Course.getFragment('user')}
+            ${CourseIndex.getFragment('user')}
             ${Dock.getFragment('user')}
             ${MainNavigation.getFragment('user')}
             ${Footer.getFragment('user')}
@@ -772,18 +778,20 @@ export default Relay.createContainer(App, {
 
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
             ${Bible.getFragment('notes')}
+            ${NotesIndex.getFragment('notes')}
 	      }
         course(id:$courseId){
-          id
           ${Course.getFragment('course')}
           ${CoursePrint.getFragment('course')}
           ${CourseIndex.getFragment('course')}
         }
       courses(filter:$coursesFilter, first:$coursesPageSize, after:$coursesCursor){
-        currentPage
+        totalCount
         pageInfo{
-            hasNextPage
-            endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
         }
         ${Library.getFragment('courses')}
         }
