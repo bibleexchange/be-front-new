@@ -15,8 +15,10 @@ module.exports = {
       'webpack-dev-server/client?http://127.0.0.1:3000',
       'webpack/hot/only-dev-server'
     ],
-    vendor: ['react', 'react-dom', 'react-mdl', 'react-relay', 'react-router', 'react-router-relay']
-  },
+    vendor: [
+        'react-transform-hmr','react-transform-catch-errors','graphql','graphql-relay','marked','react', 'react-dom', 'react-relay', 'react-router', 'react-router-relay','redbox-react','soundcloud','react-addons-css-transition-group','lodash','react-proxy','global','url','strip-ansi','ansi-regex','url-parse','sockjs-client','es6-promise'
+  ]
+},
   output: {
     publicPath: 'http://127.0.0.1:3000/',
     path: path.join(__dirname, 'build'),

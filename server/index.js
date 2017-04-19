@@ -10,9 +10,6 @@ import config from './config/environment';
 // Launch Relay by using webpack.config.js
 const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',
-    proxy: {
-//'/login': `http://127.0.0.1:${config.graphql.port}`,
-    },
     stats: {
       colors: true
     },

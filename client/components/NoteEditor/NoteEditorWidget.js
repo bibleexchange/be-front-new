@@ -48,7 +48,7 @@ componentWillReceiveProps(newProps) {
           if(this.state.saveable === false)  {
               form = <div style={{color: "red"}}>Your changes cannot be saved until you login!</div>
           }else{
-              form = <input type='submit' value='save' onClick={this.props.handleUpdateNote} />;
+              form = <input type='submit' value='save' onClick={this.handleUpdateNote.bind(this)} />;
           }
 
       }
@@ -236,6 +236,10 @@ componentWillReceiveProps(newProps) {
         s.myNotesStatus = !this.state.myNotesStatus
 
         this.setState(s)
+    }
+
+    handleUpdateNote(e){
+        this.props.handleUpdateNote(this.state.data);
     }
 
   }

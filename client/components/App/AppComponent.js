@@ -483,22 +483,22 @@ password: this.state.signup.password
         });
     }
 
-    handleUpdateNote(e) {
-        e.preventDefault();
+    handleUpdateNote(note) {
+
         this.setState({status: 'saving'});
 
-        if (this.state.data.id === "newNoteEdge" || this.state.data.id === "") {
+        if (note.id === "newNoteEdge" || note.id === "") {
             console.log('creating note...')
             Relay.Store.commitUpdate(new NoteCreateMutation({
-                newNoteEdge: this.state.data,
-                user: this.props.user
+                newNoteEdge: note,
+                user: this.props.viewer.user
             }));
         } else {
 
-            console.log('updating note...', this.state.data)
+            console.log('updating note...', note)
             Relay.Store.commitUpdate(new NoteUpdateMutation({
-                changedNote: this.state.data,
-                note: this.props.note
+                changedNote: note,
+                notes: this.props.viewer.user.notes
             }));
         }
     }
@@ -594,7 +594,7 @@ password: this.state.signup.password
 
     }
 
-    handleEditNoteFilter(event) {
+    eeFilter(event) {
         console.log(event.target.value)
         let newState = this.state;
         newState.notesWidget.filter = event.target.value
@@ -779,6 +779,12 @@ export default Relay.createContainer(App, {
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
             ${Bible.getFragment('notes')}
             ${NotesIndex.getFragment('notes')}
+                    pageInfo{
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
 	      }
         course(id:$courseId){
           ${Course.getFragment('course')}

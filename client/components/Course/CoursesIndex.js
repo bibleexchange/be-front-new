@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
 import CoursesWidget from './CoursesWidget';
-import './Index.scss';
+import './CoursesIndex.scss';
 
 class Index extends React.Component {
 
