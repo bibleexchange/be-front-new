@@ -15,7 +15,7 @@ class NoteFile extends React.Component {
   render() {
     let body = JSON.parse(this.props.note.output.body)
     let note = this.props.note
-
+console.log(note)
     return (
     	<div id="note-file">
         <main>

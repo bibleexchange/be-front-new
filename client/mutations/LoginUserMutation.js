@@ -13,6 +13,15 @@ export default class LoginUserMutation extends Relay.Mutation {
           id
           name
           email
+          notes(first:5){
+            edges {
+              node {
+              id
+              title
+              body
+              }
+            }
+          }
         }
       }`,
   };
@@ -51,6 +60,15 @@ export default class LoginUserMutation extends Relay.Mutation {
           email
           authenticated
           nickname
+           notes(first:5){
+            edges {
+              node {
+              id
+              title
+              body
+              }
+            }
+          }
         }
       }`;
   }

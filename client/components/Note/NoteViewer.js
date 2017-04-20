@@ -27,17 +27,13 @@ NoteViewer.propTypes = {
 };
 
 export default Relay.createContainer(NoteViewer, {
-  initialVariables: {
-   noteId: '55555',
-  },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-      user {
+    user: () => Relay.QL`fragment on User {
         authenticated
-      }
     }`,
     note: () => Relay.QL`fragment on Note {
       id
+      title
       tags
     	author{
     	  name

@@ -25,7 +25,7 @@ class NoteOptions extends React.Component {
       mainStyle.display = 'block';
     }
 
-    if (this.props.note !== null & this.props.viewer.user !== undefined) {
+    if (this.props.note !== null & this.props.user !== undefined) {
       editNote = <li><SocialShareButton site='edit' url={null} data={this.props.note} handle={this.props.editThisNote}/></li>;
       shareURL = 'notes/' + this.props.note.id;
     }
@@ -55,10 +55,8 @@ class NoteOptions extends React.Component {
 
 export default Relay.createContainer(NoteOptions, {
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-      user {
+    user: () => Relay.QL`fragment on User {
         authenticated
-      }
     }`,
     note: () => Relay.QL`
       fragment on Note  {

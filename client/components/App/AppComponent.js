@@ -20,6 +20,7 @@ import CourseIndex from '../Course/CourseIndex'
 import NotesIndex from '../Note/NotesIndex'
 import Dashboard from '../Dashboard/DashboardComponent'
 import Library from '../Course/CoursesIndex'
+import Note from '../Note/NotePageComponent'
 
 import './App.scss'
 import './Print.scss'
@@ -97,19 +98,22 @@ class App extends React.Component {
 
   updateAuth(trueOrFalse) {
 
-    if (trueOrFalse === false) {
       let newState = this.state;
+
+    if (trueOrFalse === false) {
       newState.user.token = auth.getToken();
       newState.user.authenticated = false;
 
-      this.setState(newState);
     } else {
+    newState.user = this.props.viewer.user
 
     }
+      this.setState(newState);
   }
 
   componentWillMount() {
     auth.onChange = this.updateAuth.bind(this)
+
       if(this.props.params.reference !== undefined && this.props.params.reference !== null ){
           this.handleUpdateReferenceForAll(this.props.params.reference);
       }
@@ -146,7 +150,6 @@ class App extends React.Component {
           this.handleUpdateReferenceForAll(newProps.params.reference)
       }
 
-
       if (JSON.stringify(this.state) !== JSON.stringify(newState)) {
           this.setState(newState)
       }
@@ -154,7 +157,8 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props)
+    //console.log(this.props)
+
     let errorMessage = null
 
     if(this.state.error !== false){
@@ -197,7 +201,7 @@ class App extends React.Component {
         message={this.state.error.message}
        />
 
-           {/* <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p> */}
+           <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p>
 
           <section style={dockStyle} id="dock-section">
             <Dock
@@ -245,6 +249,8 @@ class App extends React.Component {
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
                  course: this.props.viewer.course,
+                 note: this.props.viewer.note,
+                 notes: this.props.viewer.notes,
                  user: user,
                  handleChangeReference: this.handleChangeReference.bind(this),
                  handleUpdateReferenceForAll: this.handleUpdateReferenceForAll.bind(this),
@@ -254,7 +260,6 @@ class App extends React.Component {
                  bibleStatus: this.state.bibleStatus,
                  handleToggleBible: this.handleToggleBible.bind(this),
                  language: this.state.languge,
-                 notes: this.props.viewer.notes,
                  notesWidget: this.state.notesWidget,
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
                  handleNextNotePage: this.handleNextNotePage.bind(this),
@@ -696,7 +701,10 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-    course: {}
+    viewer: {
+        course: {},
+        note: {}
+    }
 }
 
 export default Relay.createContainer(App, {
@@ -721,7 +729,8 @@ export default Relay.createContainer(App, {
         ${SignUpUserMutation.getFragment('viewer')}
         ${LoginUserMutation.getFragment('viewer')}
         ${Dashboard.getFragment('viewer')}
-
+        ${Note.getFragment('viewer')}
+        
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
 	     }
@@ -734,6 +743,7 @@ export default Relay.createContainer(App, {
         note(id:$noteId){
           ${Dock.getFragment('note')}
           ${NoteUpdateMutation.getFragment('note')}
+
         }
 
         error{
@@ -779,12 +789,12 @@ export default Relay.createContainer(App, {
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
             ${Bible.getFragment('notes')}
             ${NotesIndex.getFragment('notes')}
-                    pageInfo{
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
+                 pageInfo{
+                  hasNextPage
+                  hasPreviousPage
+                  startCursor
+                  endCursor
+                }
 	      }
         course(id:$courseId){
           ${Course.getFragment('course')}

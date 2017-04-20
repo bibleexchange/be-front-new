@@ -28,7 +28,7 @@ componentWillReceiveProps(newProps) {
     let newState = this.state
         newState.status = "done"
         newState.saveable = newProps.user.authenticated? newProps.user.authenticated:false
-    if(newProps.note !== null && newProps.note.id !== newState.data.id){
+    if(newProps.note !== undefined && newProps.note !== null && newProps.note.id !== newState.data.id){
         newState.data = this.setInitialData(newProps.note)
     }
   this.setState(newState);
@@ -53,7 +53,7 @@ componentWillReceiveProps(newProps) {
 
       }
 
-      if(this.props.note !== null){
+      if(this.props.note !== null && this.props.note !== undefined ){
         viewLink = <section><Link to={"/notes/"+this.props.note.id}>View</Link></section>
       }
 
