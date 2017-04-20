@@ -26,13 +26,9 @@ AudioIndex.propTypes = {
 };
 
 export default Relay.createContainer(AudioIndex, {
-  initialVariables: {
-    after: null,
-    pageSize: 5,
-  },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-        ${AudioWidget.getFragment('viewer')}
+    user: () => Relay.QL`fragment on User {
+        ${AudioWidget.getFragment('user')}
        }`,
   }
 });

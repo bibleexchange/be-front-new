@@ -16,7 +16,7 @@ module.exports = {
       'webpack/hot/only-dev-server'
     ],
     vendor: [
-        'react-transform-hmr','react-transform-catch-errors','graphql','graphql-relay','marked','react', 'react-dom', 'react-relay', 'react-router', 'react-router-relay','redbox-react','soundcloud','react-addons-css-transition-group','lodash','react-proxy','global','url','strip-ansi','ansi-regex','url-parse','sockjs-client','es6-promise'
+        'react-transform-hmr','react-transform-catch-errors','graphql','marked','react', 'react-dom', 'react-relay', 'react-router', 'react-router-relay','redbox-react','soundcloud','lodash','react-proxy','global','url','strip-ansi','ansi-regex','url-parse','sockjs-client','es6-promise'
   ]
 },
   output: {

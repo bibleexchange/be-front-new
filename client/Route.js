@@ -30,11 +30,11 @@ export default (
     </Route>
 
     <Route path='/notes(/tag/:filter)' component={NotesIndex} />
-    <Route path='/notes/:noteId' component={NotePage} queries={ViewerQueries} />
-    <Route path='/notes/:noteId/print' component={NotePrintPage} queries={ViewerQueries} />
+    <Route path='/notes/:noteId' component={NotePage} />
+    <Route path='/notes/:noteId/print' component={NotePrintPage} />
 
     <Route path='bible/:reference' component={Bible} />
-    <Route path='audio(/:filterBy)' component={AudioComponent} queries={ViewerQueries} />
+    <Route path='audio(/:filterBy)' component={AudioComponent} />
     <Redirect from='*' to='/bible/john_3_16' />
   </Route>
 );

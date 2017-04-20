@@ -6,13 +6,13 @@ import NoteTest from './NoteTest';
 class NoteViewer extends React.Component {
   render() {
     let component = null;
-    let note = this.props.note;
 
-    if (note !== null && note !== '') {
-      component = <NoteTest type={note.output.type} note={note} api_request={note.api_request} />;
+    if (this.props.note !== null && this.props.note !== undefined && this.props.note !== '') {
+      component = <NoteTest type={this.props.note.output.type} note={this.props.note} api_request={this.props.note.api_request} />
     } else {
-      component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
+      component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>
     }
+
     return (
         <div style={{ padding: '10px', wordWrap: 'break-word' }}>
           {component}

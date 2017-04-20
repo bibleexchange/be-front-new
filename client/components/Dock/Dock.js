@@ -8,6 +8,7 @@ import BookMarksWidget from './BookMarksWidget';
 import LoginComponent from '../Login/LoginComponent';
 import SignUpComponent from '../Login/SignUpComponent';
 import './Dock.scss';
+import NoteOptions from '../Note/NoteOptions';
 
 class Dock extends React.Component {
 
@@ -21,6 +22,9 @@ class Dock extends React.Component {
     let notepadMain = null
     let audioButton = null
     let audioMain = null
+
+    let shareMain = null
+    let shareButton = null
 
         let mainLogin = <div><li id="login" className={"main-"+ status.login}><LoginComponent
             handleLogin={this.props.handleLogin}
@@ -70,6 +74,14 @@ class Dock extends React.Component {
       audioMain =  <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId} status={this.props.player.playStatus} handleCloseAudio={this.props.handleCloseAudio}/></li>
     }
 
+    if(this.props.note === undefined || this.props.note === null){
+      shareButton = null
+      shareMain = null
+    }else{
+      shareButton = <li id="share" className={"menu-"+ status.share}><button onClick={this.props.showInDockMenu} data-name="share">share</button></li>
+      shareMain =  <li id="share"  className={"main-"+ status.share}> <NoteOptions note={this.props.note} user={this.props.user} editThisNote={this.props.handleEditThisNote} location={this.props.location}/></li>
+    }
+
         return (
             <div id='dock-widget'>
 
@@ -84,14 +96,17 @@ class Dock extends React.Component {
                             {audioButton}
                             {bookmarksButton}
                             {notepadButton}
+                            {shareButton}
                         </ul>
                     </nav>
 
                     <ul className="main">
+                        {shareMain}
                         {mainLogin}
                         {audioMain}
                         {bookmarksMain}
                         {notepadMain}
+                        
                     </ul>
 
                 </div>
@@ -109,11 +124,16 @@ Dock.propTypes = {
   relay: React.PropTypes.object.isRequired
 };
 
+Dock.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
 export default Relay.createContainer(Dock, {
 
   fragments: {
       note: ()=> Relay.QL`fragment on Note {
                 ${NoteEditor.getFragment('note')}
+                ${NoteOptions.getFragment('note')}
                 id
                 title
                 type
@@ -127,6 +147,7 @@ export default Relay.createContainer(Dock, {
         }`,
       user: () => Relay.QL`
       fragment on User {
+        ${NoteOptions.getFragment('user')}
         authenticated
         name
         email

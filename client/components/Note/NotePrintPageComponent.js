@@ -6,13 +6,21 @@ import './NotePrintPage.scss';
 
 class NotePrintPageComponent extends React.Component {
 
-  componentDidMount() {
-    window.print(); setTimeout('window.close()', 8000);
+  componentDidUpdate() {
+    console.log('printing...')
+    window.print();
   }
 
   render() {
+
+    let viewer = null
+
+    if(this.props.note !== null && this.props.note !== undefined){
+      viewer = <NoteViewer note={this.props.note} user={this.props.user} />      
+    }
+
     return (
-              <div id='print-this-note'><NoteViewer note={this.props.viewer.notes.edges[0].node} viewer={this.props.viewer} /></div>
+              <div id='print'>{viewer}</div>
     );
   }
 }
@@ -22,23 +30,15 @@ NotePrintPageComponent.propTypes = {
 };
 
 export default Relay.createContainer(NotePrintPageComponent, {
-  initialVariables: {
-  	                                                                                                    noteId: '55555',
-  },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-          user {
+    user: () => Relay.QL`fragment on User {
+            ${NoteViewer.getFragment('user')}
             authenticated
-          }
-        ${NoteViewer.getFragment('viewer')}
-        notes(first:1, id:$noteId){
-          edges{
-            node{
-              ${NoteViewer.getFragment('note')}
-            }
-          }
-        }
-      }`,
+            }`,
+
+    note: () => Relay.QL`fragment on Note {
+            ${NoteViewer.getFragment('note')}
+    }`,
 
   },
 });

@@ -4,8 +4,6 @@ import MainNavigation from '../Navbar/NavbarComponent'
 import Footer from './FooterComponent'
 import Relay from 'react-relay'
 import auth from './auth'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-
 import LoginUserMutation from '../../mutations/LoginUserMutation'
 import SignUpUserMutation from '../../mutations/SignUpUserMutation'
 import NoteUpdateMutation from '../..//mutations/NoteUpdateMutation'
@@ -13,6 +11,7 @@ import NoteCreateMutation from '../../mutations/NoteCreateMutation'
 
 import Dock from '../Dock/Dock'
 
+import Audio from '../Audio/AudioIndex'
 import Bible from '../Bible/BibleComponent'
 import Course from '../Course/Course'
 import CoursePrint from '../Course/CoursePrint'
@@ -20,8 +19,8 @@ import CourseIndex from '../Course/CourseIndex'
 import NotesIndex from '../Note/NotesIndex'
 import Dashboard from '../Dashboard/DashboardComponent'
 import Library from '../Course/CoursesIndex'
-import Note from '../Note/NotePageComponent'
-
+import NotePageComponent from '../Note/NotePageComponent'
+import NotePrintComponent from '../Note/NotePrintPageComponent'
 import './App.scss'
 import './Print.scss'
 import './Typography.scss'
@@ -51,7 +50,8 @@ class App extends React.Component {
         signup: false,
         soundcloud: false,
         bookmarks: false,
-        notepad: false
+        notepad: false,
+        share: false
       }
 
       let notesfilter = '';
@@ -122,6 +122,11 @@ class App extends React.Component {
           this.handleUpdateCourse(this.props.params.courseId);
       }
 
+
+      if(this.props.params.noteId !== undefined && this.props.params.noteId !== null ){
+          this.handleLoadThisNote(this.props.params.noteId);
+      }
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -150,6 +155,10 @@ class App extends React.Component {
           this.handleUpdateReferenceForAll(newProps.params.reference)
       }
 
+      if(newProps.params.noteId !== this.props.params.noteId && newProps.params.noteId !== undefined){
+          this.handleLoadThisNote(newProps.params.noteId)
+      }
+
       if (JSON.stringify(this.state) !== JSON.stringify(newState)) {
           this.setState(newState)
       }
@@ -157,7 +166,7 @@ class App extends React.Component {
   }
 
   render() {
-    //console.log(this.props)
+    console.log(this.props)
 
     let errorMessage = null
 
@@ -201,7 +210,7 @@ class App extends React.Component {
         message={this.state.error.message}
        />
 
-           <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p>
+          {/* <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p> */}
 
           <section style={dockStyle} id="dock-section">
             <Dock
@@ -228,17 +237,11 @@ class App extends React.Component {
                 moreMyNotes={this.handleMoreMyNotes.bind(this)}
                 toggleLogin={this.toggleLogin.bind(this)}
                 showInDockMenu={this.showInDockMenu.bind(this)}
+                location={this.props.location}
             />
           </section>
 
           <main>
-
-          <ReactCSSTransitionGroup
-            component='section'
-            transitionName='example'
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={500}
-          >
 
              {React.cloneElement(children, {
                key: this.props.location.pathname,
@@ -272,7 +275,7 @@ class App extends React.Component {
                  reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
                  handleSearchBibleReference: this.handleSearchBibleReference.bind(this)
              })}
-          </ReactCSSTransitionGroup>
+
           </main>
           {errorMessage}
           <footer id='footer' className='push'><Footer user={user} /></footer>
@@ -508,6 +511,12 @@ password: this.state.signup.password
         }
     }
 
+    handleLoadThisNote(noteId){
+    	this.props.relay.setVariables({
+            noteId: noteId
+        });
+    }
+
     toggleLogin() {
 
         let s = this.state
@@ -597,13 +606,6 @@ password: this.state.signup.password
         s.notesWidget.notesCurrentPage = 1
         this.setState(s);
 
-    }
-
-    eeFilter(event) {
-        console.log(event.target.value)
-        let newState = this.state;
-        newState.notesWidget.filter = event.target.value
-        this.setState(newState);
     }
 
     handleNextNotePage() {
@@ -729,7 +731,6 @@ export default Relay.createContainer(App, {
         ${SignUpUserMutation.getFragment('viewer')}
         ${LoginUserMutation.getFragment('viewer')}
         ${Dashboard.getFragment('viewer')}
-        ${Note.getFragment('viewer')}
         
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
@@ -743,7 +744,8 @@ export default Relay.createContainer(App, {
         note(id:$noteId){
           ${Dock.getFragment('note')}
           ${NoteUpdateMutation.getFragment('note')}
-
+          ${NotePageComponent.getFragment('note')}
+          ${NotePrintComponent.getFragment('note')}
         }
 
         error{
@@ -760,12 +762,15 @@ export default Relay.createContainer(App, {
         }
 
         user{
+            ${Audio.getFragment('user')}
             ${Bible.getFragment('user')}
             ${Course.getFragment('user')}
             ${CourseIndex.getFragment('user')}
             ${Dock.getFragment('user')}
             ${MainNavigation.getFragment('user')}
             ${Footer.getFragment('user')}
+            ${NotePageComponent.getFragment('user')}
+            ${NotePrintComponent.getFragment('user')}
             id
             token
             name
@@ -795,7 +800,7 @@ export default Relay.createContainer(App, {
                   startCursor
                   endCursor
                 }
-	      }
+	      } 
         course(id:$courseId){
           ${Course.getFragment('course')}
           ${CoursePrint.getFragment('course')}

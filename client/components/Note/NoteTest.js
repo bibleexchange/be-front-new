@@ -80,11 +80,9 @@ export default Relay.createContainer(NoteTest, {
     noteId: '55555',
   },
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-      ${DCRecording.getFragment('viewer')}
-      user {
+    user: () => Relay.QL`fragment on User {
+      ${DCRecording.getFragment('user')}
         authenticated
-      }
     }`,
     note: () => Relay.QL`fragment on Note {
         ${DCRecording.getFragment('note')}

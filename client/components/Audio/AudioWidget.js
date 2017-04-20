@@ -179,11 +179,9 @@ AudioWidget.propTypes = {
 
 export default Relay.createContainer(AudioWidget, {
   fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer  {
-        user{
+    user: () => Relay.QL`
+      fragment on User  {
           authenticated
-        }
      }`
   }
 });

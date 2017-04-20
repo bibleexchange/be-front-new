@@ -9,8 +9,8 @@ export default class SocialShareButton extends React.Component {
 
 let options = {
 fill: '#28B6CD',
-width: '100px',
-height: '100px',
+width: '75px',
+height: '75px',
 shareThisUrl: 'https://bible.exchange/' + href,
 message: this.props.message,
 media: 'https://www.bible.exchange/images/be_logo.png'

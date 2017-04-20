@@ -14,7 +14,7 @@ class DCRecordingNoteComponent extends React.Component {
     let tags = []
     let author = null
 
-    if(this.props.note !== "undefined"){
+    if(this.props.note !== undefined){
       console.log("why is this running???")
         verse = <blockquote>{this.props.note.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.note.verse} viewer={this.props.viewer} /></blockquote>;
         tags = this.props.note.tags;
@@ -67,17 +67,15 @@ class DCRecordingNoteComponent extends React.Component {
 }
 
 DCRecordingNoteComponent.propTypes = {
-  viewer: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired,
   note: React.PropTypes.object.isRequired,
   recording: React.PropTypes.object.isRequired
 };
 
 export default Relay.createContainer(DCRecordingNoteComponent, {
   fragments: {
-    viewer: () => Relay.QL`fragment on Viewer {
-      user {
+    user: () => Relay.QL`fragment on User {
         authenticated
-      }
     }`,
     note: () => Relay.QL`fragment on Note {
       id
