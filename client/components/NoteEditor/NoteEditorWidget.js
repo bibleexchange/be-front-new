@@ -3,10 +3,11 @@ import Relay from 'react-relay';
 import { Link } from 'react-router';
 import Loading from '../ListWidget/Loading'
 import './NoteEditorWidget.scss';
+import NotesWidget from '../Note/NotesWidget';
 
 import N from '../../NoteTypes';
 import Template from '../../NoteTemplate';
-import Status from '../User/StatusComponent';
+import Status from './StatusComponent';
 import PickNoteForm from './PickNoteForm';
 
 class NoteEditorWidget extends React.Component {
@@ -34,8 +35,7 @@ componentWillReceiveProps(newProps) {
   this.setState(newState);
 }
 
-    render() {
-    let moreNotesButton = null
+    render() { 
       let form = null
       let clearForm = null
       let noteType = this.state.data.type
@@ -57,28 +57,29 @@ componentWillReceiveProps(newProps) {
         viewLink = <section><Link to={"/notes/"+this.props.note.id}>View</Link></section>
       }
 
-      if(this.props.notes.pageInfo.hasNextPage){
-          moreNotesButton = <button onClick={this.props.moreNotes}>more</button>
-      }
-
       let selectedType = this.state.type;
-      let newId = this.state.data.media.length;
-      let updateMedia = this.updateMedia.bind(this)
-      let setNoteType = this.setNoteType.bind(this)
-        let handleEditThis = this.props.handleEditThis
+      let handleEditThis = this.props.handleEditThis
 
       return (<div id='note-creator'>
                 <section>
               <button onClick={this.toggleMyNotes.bind(this)}>MyNotes</button>
               <ol id="my-notes" className={"my-notes-"+this.state.myNotesStatus}>
-                  {this.props.notes.edges.map(function(note){
-                      return <li onClick={handleEditThis} key={note.node.id} data-id={note.node.id}> {note.node.title} [{note.node.verse.reference}]</li>
-                  })} <li>{moreNotesButton}</li>
+                  <li onClick={this.createBlankNote.bind(this)} data-id={undefined}> <em>create new note</em></li>
+                  <li>
+                  <NotesWidget
+                    status={this.props.myNotesWidget}
+                    notes={this.props.notes}
+                    selectNote={null}
+                    tags
+                    handleUpdateNoteFilter={this.props.handleUpdateMyNoteFilter}
+                    handleNextNotePage={this.props.moreNotes}
+                    handleNotesAreReady={this.props.handleNotesAreReady}
+                    handleEditThis={handleEditThis}
+                    user={this.props.user}
+                  />
+                  </li>
                   </ol>
-
-
-
-                </section>
+                   </section>
               <section>
               <div id="status-bar">
                 <section>{clearForm}</section>
@@ -87,42 +88,23 @@ componentWillReceiveProps(newProps) {
                   {viewLink}
               </div>
 
-              <h1>Title: <input type="text" value={this.state.data.title? this.state.data.title:""} onChange={this.updateTitle.bind(this)}/></h1>
+              <h1>Title:{this.state.data.title} noted on {this.state.data.reference}</h1>
 
-              <h2>Bible Reference: <input type="text" value={this.state.data.reference? this.state.data.reference:""} onChange={this.updateReference.bind(this)}/></h2>
+              <p>Tags:{this.state.data.tags}</p>
+              
+              <textarea onChange={this.updateBody.bind(this)} value={this.state.data.body} >{this.state.data.body}</textarea>
 
-              <h2>Tags: <input type="text" value={this.state.data.tags? this.state.data.tags:""} onChange={this.updateTags.bind(this)}/></h2>
-
-            {this.state.data.media.map(function(m,k){
-                return <li key={k}><div onChange={updateMedia} data-id={k} contentEditable={true}>{JSON.stringify(m)}</div></li>;
-            })}
-
-            <p>ADD Media...</p>
-            <form id='note-options' style={optionsStyle}>
-
-              {this.state.noteTypes.map(function (type, index) {
-                return <p key={index} >{type}: <input type='radio' name='form_type' onClick={setNoteType} data-type={type} data-id={newId}/></p>;
-              })}
-
-            </form>
               </section>
           </div>
       );
     }
 
-    setNoteType(e) {
+    createBlankNote(e){
+        e.preventDefault()
+        let n = this.setInitialData(null);
+        this.setState({data: n, status: "original"})
 
-    let id = +e.target.dataset.id
-    let type = e.target.dataset.type
-
-      let newMedia = {id: id, type: type, body: this.blankNote(type)};
-      let data = this.state.data
-      data.media[id] = newMedia
-
-      this.setState({
-        status: 'changes-not-saved',
-        data: data
-      });
+        this.props.handleEditThis(e)
     }
 
     clearForm(e) {
@@ -175,55 +157,44 @@ componentWillReceiveProps(newProps) {
         })
       }
 
-    blankNote(type){
-      return Template[type];
-    }
-
     setInitialData(note){
-      let n = null
-      let body = {}
-
-      if (note == undefined || note == null || note.api_request == false) {
-          n = {
+      let n = {
               id:"newNoteEdge",
               title:"",
               tags: "",
-              type: "JSON",
+              type: "",
               id: "",
-              media: [],
+              body: "",
               reference: ""
           }
 
-      }else{
+      if (note == undefined || note == null || note.api_request == false) {
 
-          let body = JSON.parse(note.body)
+      }else if (note.author.id !== this.props.user.id) {
+
+      }else{
 
           n = {
               title: note.title,
               tags: note.tags_string,
-              type: "JSON",
+              type: note.type,
               id: note.id,
               reference: note.verse.reference,
-              tags: note.tags_string
+              tags: note.tags_string,
+              body: note.body
           }
 
-          if (body.media !== undefined){
-              n.media = body.media
-          }else {
-              n.media = [body]
-              n.media[0].type = note.type
-          }
       }
 
       return n;
 
     }
 
-    updateMedia(e){
+    updateBody(e){
       e.preventDefault()
       let data = this.state.data
 
-      data.media[e.target.dataset.id] = JSON.parse(e.target.value)
+      data.body = e.target.value
 
     this.setState({
         data: data,
@@ -239,7 +210,10 @@ componentWillReceiveProps(newProps) {
     }
 
     handleUpdateNote(e){
-        this.props.handleUpdateNote(this.state.data);
+
+      let data = this.state.data
+
+      this.props.handleUpdateNote(data);
     }
 
   }
@@ -263,6 +237,9 @@ componentWillReceiveProps(newProps) {
                   id
                   reference
                 }
+                author{
+                  id
+                }
 
         }`,
         user: () => Relay.QL`fragment on User {
@@ -271,7 +248,8 @@ componentWillReceiveProps(newProps) {
             email
             authenticated
         }`,
-        notes: () => Relay.QL`fragment on SimpleNoteConnection {
+        notes: () => Relay.QL`fragment on NoteConnection {
+           ${NotesWidget.getFragment('notes')}
                 pageInfo{hasNextPage}
                 edges{
                     node {

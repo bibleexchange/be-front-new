@@ -26,6 +26,8 @@ class NoteThumbnail extends React.Component {
       display: 'none'
     };
 
+    let editButton = null
+
     if (this.state.tags) {
       tagsStyle.display = 'block';
     } else {
@@ -73,30 +75,30 @@ class NoteThumbnail extends React.Component {
         break;
 
       default:
-        component = <div><p><Link to={'/notes/' + this.props.note.id}> {this.props.note.id} {this.props.note.output.type}</Link></p><p>{this.props.note.tags.map(function (t) { return ' #' + t; })}</p><p><Link to={'/users/' + this.props.note.author.id}>{this.props.note.author.name}</Link></p></div>;
+        component = <div><p><Link to={'/notes/' + note.id}> {note.id} {note.output.type}</Link></p><p>{note.tags.map(function (t) { return ' #' + t; })}</p><p><Link to={'/users/' + note.author.id}>{note.author.name}</Link></p></div>;
     }
 
-    let selectButton = null;
-    let viewWidth = ' full';
-
-    if (this.props.selectNote !== null) {
-      selectButton = <button id={note.id} data-note={JSON.stringify(note)} className='select-note' onClick={this.props.selectNote}>select</button>;
-      viewWidth = null;
+    if(this.props.user.authenticated && note.author.id === this.props.user.id){
+      editButton = <li><button  onClick={this.props.handleEditThis} data-id={note.id} className={'select-note'}>edit</button></li>;
     }
-
-  	                                                                                                    return (
-  		<div id={note.id} className='note-thumbnail' draggable='true' >
+return (
+  		<div id={note.id} className='note-thumbnail'>
         <div className='output'>{component}</div>
-        <button onClick={this.toggleTags.bind(this)}> tags...</button>
+
+        <ul>
+          <li><Link to={'/notes/' + note.id} className={'view-it'}>view</Link></li>
+          {editButton}
+          <li><button onClick={this.toggleTags.bind(this)} className='tags'>tags</button></li>
+        </ul>
+
         <p style={tagsStyle}>{tags.map(function (t, key) {
           if (t !== '') {
             return <Link key={key} style={{ marginRight: '10px' }} to={'/notes/tag/' + t.trim()} >#{t}</Link>;
           }
         }
         )}</p>
-        {selectButton}
-        <Link to={'/notes/' + note.id} className={'view-it' + viewWidth}>view</Link>
-  		</div>
+
+      </div>
   		);
 	                                                                                                    }
 
@@ -108,6 +110,12 @@ class NoteThumbnail extends React.Component {
 
 export default Relay.createContainer(NoteThumbnail, {
   fragments: {
+        user: () => Relay.QL`
+      fragment on User  {
+         authenticated
+         id
+     }`,
+
     note: () => Relay.QL`
       fragment on Note  {
           id
@@ -117,6 +125,7 @@ export default Relay.createContainer(NoteThumbnail, {
             id
             url
             reference
+            quote
           }
           output {
             id

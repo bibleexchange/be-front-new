@@ -9,7 +9,7 @@ class VerseSelectorComponent extends React.Component {
 
     return (
 	    <div>
-		  <h4>Choose a book and chapter to open</h4>
+		  <h4>Choose a book and 3333chapter to open</h4>
 		  <input type='text' onChange={this.props.handleBooksFilter} placeholder='  filter'></input>
 		  <BibleBooksList bible={bible} filterBy={this.props.filterBooksBy} closeAll={this.props.close} />
 	</div>

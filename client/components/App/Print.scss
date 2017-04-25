@@ -1,14 +1,10 @@
 //Print Stuff here
 @media print {
 
-	#MainNavbar, #BrandNav svg, header, footer, nav, .noPrint,#sidebar,#progress,#table_progress,img#header,iframe.video,footer,video,div#sideBar,.navbar,video,#sidebar,#progress,#table_progress,img#header,iframe, #doc-select,.page-header,.well, #pageTop,img#passTest{
-		display:none;
-	}
-
+	#MainNavbar, #BrandNav svg, header, footer, nav, .noPrint,#sidebar,#progress,#table_progress,img#header,iframe.video,footer,video,div#sideBar,.navbar,video,#sidebar,#progress,#table_progress,img#header,iframe, 
 	table,tr,img{page-break-inside:avoid}
 
 	.textbook{background-color:#fff;color:#333;margin:0;padding:0}
-	form{display:none!important}
 	.textbook div#main{float:left;margin:0; padding-right:1in;width:700px; border:none;margin-top:0;padding-left:1in;padding-top:0;width:8in}
 	.textbook div#main h1{margin-bottom:1em; margin-top:1.5em; padding-top:0; break-before:always}
 	.textbook div#main div.main-notes{margin:0;padding:0;width:100%}
@@ -17,12 +13,8 @@
 	.textbook div#title h2{margin-bottom:340px}
 	.textbook img#coverEagle{margin-left:0;top:100px}
 	.textbook table td, .textbook table th{background-color:#fff!important}
-	.visible-print{display:block!important}
-	tr.visible-print{display:table-row!important}
-	th.visible-print,td.visible-print{display:table-cell!important}
 	a,a:hover,a:visited{text-decoration:none; color:#000}
 	thead{display:table-header-group}
-	img{max-width:100%!important}
 	p,h2,h3{orphans:3;widows:3}
 	h2,h3{page-break-after:avoid}
 	.btn > .caret,.dropup > .btn > .caret{border-top-color:#000!important}

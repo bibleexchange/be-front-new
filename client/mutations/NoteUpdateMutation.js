@@ -1,4 +1,5 @@
 import Relay from 'react-relay';
+import auth from '../components/App/auth'
 
 export default class NoteUpdateMutation extends Relay.Mutation {
 
@@ -12,11 +13,12 @@ return Relay.QL`mutation NoteUpdate {noteUpdate}`;
 
 getVariables() {
 return {
+token: auth.getToken(),
 id: this.props.note.id,
-body: JSON.stringify(this.props.changedNote),
+body: this.props.changedNote.body,
 title: this.props.changedNote.title,
 tags_string: this.props.changedNote.tags,
-type: this.props.changedNote.type,
+type: '',
 reference: this.props.changedNote.reference
 };
 }
@@ -31,16 +33,19 @@ type: 'FIELDS_CHANGE',
 fieldIDs: { note: this.props.note.id }
 }];
 }
-/*
+
 getOptimisticResponse() {
+
 return {
 note: {
-id: this.props.note.id,
-type: this.props.changedNote.type,
-body: this.props.changedNote.media,
-tags_string: this.props.changedNote.tags_string
+	id: this.props.note.id,
+	type: this.props.changedNote.type,
+	body: this.props.changedNote.body,
+	tags_string: this.props.changedNote.tags,
+	type: '',
+	reference: this.props.changedNote.reference
 }
 };
 }
-*/
+
 }

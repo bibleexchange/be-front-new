@@ -21,55 +21,10 @@ a.btn:hover, .btn-link:hover {
 	text-decoration:underline;
 }
 
-@media (min-width: 768px){
-
-	.thumbnail > p {display:none;}
-}
-
 html, body, p, h1, h2, h3, h4, h5 , h6, blockquote, li
 {line-height:125%;}
 
-	#questions-page h1{font-size:1.5rem;}
-	#questions-page h2{font-size:1rem;}
-	#questions-page h3{font-size:1rem;}
-	#questions-page h4{font-size:1rem;}
-
-	#sideBar h3{font-size:1rem}
-
-	li.box p.course-title {font-size:1.1rem;}
-	li.box p.modified-date{font-size:.8rem;}
-
-/* Font Sizes Ended */
-
-.icon-font {
-	font-size:120px;
-	float:right;
-	position:absolute;
-	display:block;
-	top:0;
-	padding:0;
-	margin:0;
-	color:white;
-	opacity:.4;
-	padding-left:15px;
-	white-space:nowrap;
-}
-
 /*background color styles */
-
-.redBGGradient {
-	background-color:$RED;
-	color:white;
-background: -webkit-linear-gradient(left,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Safari 5.1-6*/
-  background: -o-linear-gradient(right,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Opera 11.1-12*/
-  background: -moz-linear-gradient(right,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Fx 3.6-15*/
-  background: linear-gradient(to right, rgba(255,0,0,.25), rgba(255,0,0,1)); /*Standard*/
-}
-
-.redBG {
-	background-color:$RED;
-	color:white;
-	}
 
 .greenBG {
 	background-color:$GREEN;
@@ -121,29 +76,4 @@ background: -webkit-linear-gradient(left,rgba(255,0,0,.25),rgba(255,0,0,1)); /*S
 }
 .orangeBGtrans {
 	background-color:$ORANGE_TRANS;
-}
-
-.dropdown-menu > li > {
-	a.correct {color: $color_correct;}
-	a.wrong {color: $color_wrong;}
-	a.notgraded {color: $color_notgraded;}
-	a.linkprotected {color: $color_linkprotected;}
-	a.noquestion {color: $color_noquestion;}
-}
-
-p.summary {display:none;}
-
-#preview {
-	blockquote {line-height:175%;}
-	p.summary {display:inline;}
-}
-
-.preview-ellipsis {font-size:1.8rem; font-weight: bold;}
-
-pre {
- white-space: pre-wrap;       /* css-3 */
- white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
- white-space: -pre-wrap;      /* Opera 4-6 */
- white-space: -o-pre-wrap;    /* Opera 7 */
- word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }

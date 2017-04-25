@@ -14,16 +14,22 @@ class NoteFile extends React.Component {
 
   render() {
     let body = JSON.parse(this.props.note.output.body)
+    let present = body;
+
+    if(body.media !== undefined){
+      present = body.media.map(function(b,k){
+            return <li><NoteTest  key={k} type={b.type} body={b.body}  api_request={b.api_request} note={note} full={false}/></li>
+          })
+    }
     let note = this.props.note
-console.log(note)
+
     return (
     	<div id="note-file">
         <main>
-    		  <h1>{note.title}</h1>
-
-          {body.media.map(function(b,k){
-            return <NoteTest key={k} type={b.type} value={b.value} api_request={b.api_request} note={note}/>;
-          })}
+          <ul>
+            <li><h1>{note.title}</h1></li>
+          {present}
+          </ul>
 
         </main>
 

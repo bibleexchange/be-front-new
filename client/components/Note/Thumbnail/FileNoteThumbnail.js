@@ -7,10 +7,8 @@ class FileNoteThumbnail extends React.Component {
 
     return (
 	<div className='file'>
-    <p>{this.props.note.title}</p>
-    <p>tags: {this.props.note.tags.map(function(t){
-      return " #" + t;
-    })}</p>
+    <p>"{this.props.note.title}"</p>
+    <div dangerouslySetInnerHTML={{ __html: this.props.note.verse.quote }} />
 	</div>
     );
   }

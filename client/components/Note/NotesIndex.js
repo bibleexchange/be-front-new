@@ -11,26 +11,22 @@ class NotesIndex extends React.Component {
 
   render() {
     return (
-      	<div id='bible' className='WidgetContainer'>
+      	<div className='WidgetContainer'>
               <div className='Widget'>
                 <NotesWidget
                   filter={this.props.params.filter}
                   notes={this.props.notes}
-                  selectNote={null}
+                  selectNote={this.props.handleEditThisNote}
                   tags
                   handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
                   handleNextNotePage={this.props.handleNextNotePage}
                   status={this.props.notesWidget}
                   handleNotesAreReady={this.props.handleNotesAreReady}
+                  user={this.props.user}
                   />
               </div>
        	</div>
     );
-  }
-
-  handleSelectNote(e) {
-    let noteString = e.target.dataset.note;
-    localStorage.setItem('selected-note', noteString);
   }
 
 }
@@ -43,6 +39,9 @@ export default Relay.createContainer(NotesIndex, {
   fragments: {
       notes: () => Relay.QL`fragment on NoteConnection {
         ${NotesWidget.getFragment('notes')}
+      }`,
+      user: () => Relay.QL`fragment on User {
+        ${NotesWidget.getFragment('user')}
       }`
   }
 });

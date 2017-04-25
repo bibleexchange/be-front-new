@@ -5,18 +5,26 @@ import NoteTest from './NoteTest';
 
 class NoteViewer extends React.Component {
   render() {
-    let component = null;
+    let component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
+
+    let textVerse = null
+
+        if(this.props.note.verse !== undefined){
+          textVerse = <div dangerouslySetInnerHTML={{ __html: this.props.note.verse.quote }} ></div>
+        }
 
     if (this.props.note !== null && this.props.note !== undefined && this.props.note !== '') {
-      component = <NoteTest type={this.props.note.output.type} note={this.props.note} api_request={this.props.note.api_request} />
-    } else {
-      component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>
+      component = <div>
+
+          {textVerse}
+        <p>'{this.props.note.title}' Noted by {this.props.note.author.name}</p>
+        <hr/>
+        <NoteTest type={this.props.note.output.type} body={this.props.note.output.body}  api_request={this.props.note.output.api_request} note={this.props.note} full={true}/>
+        </div>
     }
 
     return (
-        <div style={{ padding: '10px', wordWrap: 'break-word' }}>
-          {component}
-        </div>
+          <div>{component}</div>
     );
   }
 
@@ -45,6 +53,7 @@ export default Relay.createContainer(NoteViewer, {
         url
         notesCount
         order_by
+        quote
       }
       output{
         type

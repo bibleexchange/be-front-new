@@ -21,6 +21,7 @@ class Dock extends React.Component {
     let notepadButton = null
     let notepadMain = null
     let audioButton = null
+    
     let audioMain = null
 
     let shareMain = null
@@ -47,7 +48,7 @@ class Dock extends React.Component {
             name = 'profile'
             mainLogin = <li id="login" className={"main-"+ status.login}>EMAIL: {this.props.user.email}</li>
             notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
-            notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.notes} handleEditThis={this.props.handleEditThisNote}/> </li>
+            notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor myNotesWidget={this.props.myNotesWidget} handleUpdateMyNoteFilter={this.props.handleUpdateMyNoteFilter} handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.notes} handleEditThis={this.props.handleEditThisNote}/> </li>
         }else{
             name = 'login/register'
             notepadButton = null
@@ -74,13 +75,8 @@ class Dock extends React.Component {
       audioMain =  <li id="soundcloud"  className={"main-"+ status.soundcloud}><SoundCloudPlayer id={this.props.player.currentSoundId} status={this.props.player.playStatus} handleCloseAudio={this.props.handleCloseAudio}/></li>
     }
 
-    if(this.props.note === undefined || this.props.note === null){
-      shareButton = null
-      shareMain = null
-    }else{
       shareButton = <li id="share" className={"menu-"+ status.share}><button onClick={this.props.showInDockMenu} data-name="share">share</button></li>
       shareMain =  <li id="share"  className={"main-"+ status.share}> <NoteOptions note={this.props.note} user={this.props.user} editThisNote={this.props.handleEditThisNote} location={this.props.location}/></li>
-    }
 
         return (
             <div id='dock-widget'>
@@ -157,7 +153,7 @@ export default Relay.createContainer(Dock, {
       }
     `,
     notes: () => Relay.QL`
-      fragment on SimpleNoteConnection {
+      fragment on NoteConnection {
         ${NoteEditor.getFragment('notes')}
             pageInfo{hasNextPage}
             edges{

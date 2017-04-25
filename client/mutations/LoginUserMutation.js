@@ -13,7 +13,9 @@ export default class LoginUserMutation extends Relay.Mutation {
           id
           name
           email
-          notes(first:5){
+        }
+        
+          myNotes(first:6){
             edges {
               node {
               id
@@ -22,7 +24,7 @@ export default class LoginUserMutation extends Relay.Mutation {
               }
             }
           }
-        }
+          
       }`,
   };
 
@@ -37,7 +39,8 @@ export default class LoginUserMutation extends Relay.Mutation {
         error:{},
         message:"",
         code:"",
-        user: this.props.viewer.user.id
+        user: this.props.viewer.user.id,
+          myNotes: this.props.viewer.myNotes
       },
     }];
   }
@@ -60,7 +63,8 @@ export default class LoginUserMutation extends Relay.Mutation {
           email
           authenticated
           nickname
-           notes(first:5){
+        }
+          myNotes(first:5){
             edges {
               node {
               id
@@ -69,7 +73,6 @@ export default class LoginUserMutation extends Relay.Mutation {
               }
             }
           }
-        }
       }`;
   }
 

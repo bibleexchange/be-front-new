@@ -13,7 +13,7 @@ class Footer extends React.Component {
     }
 
     return (
-	   <center> Using Bible exchange as {usingAs} </center>
+	   <p>Using Bible exchange as {usingAs}</p>
     );
   }
 }
@@ -27,7 +27,6 @@ export default Relay.createContainer(Footer, {
     user: () => Relay.QL`
       fragment on User {
         authenticated
-      	email
       	name
       }
     `,

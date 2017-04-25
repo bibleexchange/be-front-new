@@ -5,5 +5,6 @@ export default {
   MARKDOWN: "",
   DC_RECORDING: {text:"",tags:"",links:[], soundcloudId:""},
   COURSE: {title:"", lessons:[]},
-  FILE: ""
+  FILE: "",
+  SOUNDCLOUD: {type:"SOUNDCLOUD", body:""}
 };

@@ -21,20 +21,18 @@ this.url = url || 'http://localhost:80/graphql';
 }
 
 get defaultHeaders() {
-if (this.auth !== null) {
-let bearer = 'Bearer ' + this.auth;
+    let bearer = null
 
-return {
-'Authorization': bearer,
-'Accept': '*/*',
-'Content-Type': 'application/json'
-};
-} else {
-return {
-'Accept': '*/*',
-'Content-Type': 'application/json'
-};
-}
+    if(this.auth !== null){
+        bearer = 'Bearer ' + this.auth;
+    }
+
+    return {
+    'Authorization': bearer,
+    'Accept': '*/*',
+    'Content-Type': 'application/json'
+    };
+
 }
 
 buildRequest(request) {

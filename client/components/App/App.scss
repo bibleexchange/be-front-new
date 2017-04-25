@@ -17,9 +17,7 @@ body > #root {
       height: auto !important;
       margin: 0 auto -25px; /* the bottom margin is the negative value of the footer's height */
       position: relative;
-    //  background: url(../../assets/svg/be-background.svg);
       background: -webkit-linear-gradient(left, #28B6CD , #00C97B );
-    //  background-size: 20%;
       width:100%;
 }
 
@@ -27,18 +25,6 @@ body > #root {
   height: 100%;
   width:100%;
 }
-
-#footer {
-      bottom: 0px;
-      width: 100%;
-      text-align: center;
-      position:absolute;
-}
-
-#footer, .push {
-    height: 25px;
-}
-
 main {
 
   section{
@@ -69,14 +55,6 @@ main {
 
 }
 
-.heading {
-  font-size: 2em;
-  font-weight: normal;
-  width: 100%;
-  display: block;
-}
-
-
 .onlinefalse {
   display:block;
   height:40px;
@@ -95,23 +73,4 @@ main {
 
 .onlinetrue {
   display:none;
-}
-
-
-.example-enter {
-  opacity: 0.01;
-  transition: opacity .5s ease-in;
-}
-
-.example-enter.example-enter-active {
-  opacity: 1;
-}
-
-.example-leave {
-  opacity: 1;
-  transition: opacity .5s ease-in;
-}
-
-.example-leave.example-leave-active {
-  opacity: 0;
 }

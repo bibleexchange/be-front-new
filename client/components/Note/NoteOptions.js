@@ -12,17 +12,16 @@ class NoteOptions extends React.Component {
 
   render() {
     let shareURL = this.props.location.pathname.replace('/','');
-    let editNote = null;
+    let printNote = null
 
     if (this.props.note !== undefined && this.props.note !== null && this.props.user !== undefined) {
-      editNote = <li><SocialShareButton site='edit' url={null} data={this.props.note} handle={this.props.editThisNote}/></li>;
+      printNote = <li><SocialShareButton site='print' url={'/notes/' + this.props.note.id + '/print'} /></li>
     }
 
   	 return (
   		<nav id='note-options-menu' >
         <ul className="note-options">
-          {editNote}
-          <li><SocialShareButton site='print' url={'/notes/' + this.props.note.id + '/print'} /></li>
+          {printNote}
           <li><SocialShareButton site='facebook' url={shareURL} /></li>
           <li><SocialShareButton site='twitter' message='Discover this and more on Bible.exchange' url={shareURL} /></li>
           <li><SocialShareButton site='googleplus' url={shareURL} /></li>
@@ -38,6 +37,7 @@ export default Relay.createContainer(NoteOptions, {
   fragments: {
     user: () => Relay.QL`fragment on User {
         authenticated
+        id
     }`,
     note: () => Relay.QL`
       fragment on Note  {

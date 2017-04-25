@@ -11,9 +11,9 @@ class NotesWidget extends React.Component {
   render() {
 
       let notes = this.props.notes.edges;
-      let selectNote = this.props.selectNote;
       let totalCount = 0
-
+      let user = this.props.user
+      
       if (this.props.notes !== undefined){
           totalCount = this.props.notes.totalCount
       }
@@ -28,6 +28,8 @@ class NotesWidget extends React.Component {
         noResultsMessage: "No notes match your search!"
     }
 
+    let handleEditThis = this.props.handleEditThis
+
     return (
     		<div id='notes-widget'>
 
@@ -41,7 +43,7 @@ class NotesWidget extends React.Component {
             />
 
           {notes.map((n) => {
-            return <NoteThumbnail tags={n.node.tags} key={n.node.id} note={n.node} selectNote={selectNote} />;
+            return <NoteThumbnail user={user} tags={n.node.tags} key={n.node.id} note={n.node} selectNote={handleEditThis} />;
           })};
 
     		</div>
@@ -58,6 +60,13 @@ NotesWidget.propTypes = {
 
 export default Relay.createContainer(NotesWidget, {
   fragments: {
+
+    user: () => Relay.QL`
+      fragment on User  {
+         authenticated
+         ${NoteThumbnail.getFragment('user')}
+     }`,
+
 
       notes: () => Relay.QL`fragment on NoteConnection {
            totalCount

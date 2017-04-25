@@ -1,7 +1,7 @@
 module.exports = {
   login(token) {
-    	localStorage.setItem('be_token', token);
-    setTimeout(this.onChange(true), 10000);
+    console.log(' Stored token: ', token)
+    localStorage.setItem('be_token', token);
   },
 
   getToken() {

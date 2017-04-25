@@ -1,6 +1,6 @@
 // First time playing with SW? This script is just for logging,
 // you can pretty much ignore it until you want to dive deeper.
-
+/*
 if (!navigator.serviceWorker.controller) {
   console.log('This page is not controlled by a ServiceWorker');
 }
@@ -39,3 +39,4 @@ navigator.serviceWorker.getRegistration().then(function (reg) {
     showWaitingMessage();
   }
 });
+*/

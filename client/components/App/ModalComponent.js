@@ -4,12 +4,12 @@ import './Modal.scss';
 
 export default class ModalComponent extends React.Component {
 
-  render() {
-	                                                                                                                                                                                                        const modalStyle = {};
+render() {
+const modalStyle = {};
 
-	                                                                                                                                                                                                        if (!this.props.shouldDisplay) {
-	                                                                                                     modalStyle.display = 'none';
-	}
+if (!this.props.shouldDisplay) {
+modalStyle.display = 'none';
+}
 
     return (<div id='modal' style={modalStyle} >
 		  <div id='dialog' >

@@ -119,7 +119,7 @@ class Course extends React.Component {
   render() {
     let renderThis = <Missing />;
 
-    if (this.props.course !== null) {
+    if (this.props.course !== null && this.props.course !== undefined) {
       renderThis = <Found {...this.props} />;
     }
 
@@ -130,6 +130,7 @@ class Course extends React.Component {
 
 Course.propTypes = {
   user: React.PropTypes.object.isRequired,
+  course: React.PropTypes.object,  
 };
 
 export default Relay.createContainer(Course, {

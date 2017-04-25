@@ -18,7 +18,7 @@ class NotePageComponent extends React.Component {
 
     return (
       	<div className='WidgetContainer'>
-              <div className='Widget'>
+              <div className='Widget' style={{padding:"15px"}}>
                 {viewer}
               </div>
        	</div>

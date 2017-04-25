@@ -79,6 +79,7 @@ class Bible extends React.Component {
                 handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
                 handleNextNotePage={this.props.handleNextNotePage}
                 handleNotesAreReady={this.props.handleNotesAreReady}
+                user={this.props.user}
               />
   			  </div>
 
@@ -115,6 +116,7 @@ export default Relay.createContainer(Bible, {
   fragments: {
       user: () => Relay.QL`fragment on User {
           ${BibleWidget.getFragment('user')}
+          ${NotesWidget.getFragment('user')}
           id
           authenticated
       }`,

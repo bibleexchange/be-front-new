@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import Relay from 'react-relay';
 import ExternalLink from './Output/ExternalLinkNote';
-import Recording from './Output/RecordingNote';
 import BibleVerse from './Output/BibleVerse';
 import DCRecording from './Output/DCRecording';
 import NoteFile from './Output/NoteFile';
@@ -17,54 +16,65 @@ class NoteTest extends React.Component {
   noteTest(){
 
     let component = null;
-    let note = this.props.note
+    let p = this.props
 
-    switch (this.props.type) {
+    switch (p.type) {
 
       case N.GITHUB:
-        component = <div dangerouslySetInnerHTML={{ __html: this.props.body}} ></div>;
+        console.log(p)
+        component = <div dangerouslySetInnerHTML={{ __html: p.body}} ></div>;
         break;
 
       case N.BIBLE_VERSE:
-        component = <BibleVerse bibleVerse={this.props.value} request={this.props.api_request} fullReference={true}/>;
+        component = <BibleVerse bibleVerse={p.body} request={p.api_request} fullReference={true}/>;
         break;
 
       case N.STRING:
-        component = <div dangerouslySetInnerHTML={{ __html: note.output.body }} ></div>;
+        component = <div dangerouslySetInnerHTML={{ __html: p.body }} ></div>;
         break;
 
       case N.MARKDOWN:
-        component = <div dangerouslySetInnerHTML={{ __html: marked(JSON.parse(this.props.value)) }} ></div>;
+        
+        if(p.body === undefined){
+          console.log(p)
+          //component = <NoteFile note={p.note} />;
+        }else{
+          component = <div dangerouslySetInnerHTML={{ __html: marked(p.body) }} ></div>;
+        }
         break;
 
       case N.FILE:
-        component = <NoteFile note={note} viewer={this.props.viewer} />;
+        component = <NoteFile note={p.note} />;
         break;
 
       case N.DC_RECORDING:
-        let recording = null
 
-        if(this.props.value !== undefined){
-            console.log(this.props.value)
-          recording = JSON.parse(this.props.value);
+        if(p.body === undefined){
+          console.log(p)
+          //component = <NoteFile note={p.note} />;
         }else{
-          recording = JSON.parse(note.output.body);
-
-          if (this.props.api_request === false) { recording.body = JSON.parse(recording.body); }
+          let recording = p.body;
+          component = <DCRecording recording={recording} request={p.api_request} note={p.note} full={p.full}/>;
         }
-        component = <DCRecording recording={recording} request={this.props.api_request} note={note} viewer={this.props.viewer} />;
 
         break;
 
-        case N.JSON:
-            component = <NoteFile note={note} viewer={this.props.viewer} />;
-            break;
+      case N.JSON:
+          component = <NoteFile note={p.note} />;
+          break;
+
+      case N.SOUNDCLOUD:
+          let trackNumber = p.body;
+          let srcString = 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/' + trackNumber + '&amp;auto_play=false&amp;hide_related=false&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;visual=true';
+          component = <iframe width='100%' height='300px' scrolling='no' frameBorder='no' src={srcString}></iframe>;
+          break;
 
       default:
-        component = note.output.body;
-
+      console.log(p.type, p.body, p.api_request)
+        component = <div> {p.type} : {p.body} : {p.api_request} </div>
     }
-    return component;
+
+    return (<div>{component}</div>);
   }
 
 }

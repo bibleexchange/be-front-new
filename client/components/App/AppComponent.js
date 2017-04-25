@@ -46,12 +46,12 @@ class App extends React.Component {
 
      let dockStatus = {
         main: true,
-        login: !user.authenticated,
+        login: false,
         signup: false,
         soundcloud: false,
         bookmarks: false,
         notepad: false,
-        share: false
+        share: true
       }
 
       let notesfilter = '';
@@ -83,6 +83,14 @@ class App extends React.Component {
      bibleStatus: 'both',
      error: this.props.viewer.error,
      token: token,
+
+    myNotesWidget: {
+        showModal: false,
+        filter: this.props.relay.variables.myNotesFilter,
+        notesCurrentPage: currentPage,
+        status: null
+    },
+
     notesWidget: {
         showModal: false,
         filter: this.props.relay.variables.noteFilter,
@@ -94,25 +102,10 @@ class App extends React.Component {
             status: null
         }
     };
-  }
 
-  updateAuth(trueOrFalse) {
-
-      let newState = this.state;
-
-    if (trueOrFalse === false) {
-      newState.user.token = auth.getToken();
-      newState.user.authenticated = false;
-
-    } else {
-    newState.user = this.props.viewer.user
-
-    }
-      this.setState(newState);
   }
 
   componentWillMount() {
-    auth.onChange = this.updateAuth.bind(this)
 
       if(this.props.params.reference !== undefined && this.props.params.reference !== null ){
           this.handleUpdateReferenceForAll(this.props.params.reference);
@@ -139,10 +132,7 @@ class App extends React.Component {
         newState. online = false
     }
 
-      if(newProps.viewer.user.authenticated === true){
-          newState.dockStatus.login = true
-          newState.dockStatus.signup = false
-      }else{
+      if(newProps.viewer.user.authenticated === true && this.props.viewer.user.authenticated === false){
           newState.dockStatus.login = true
           newState.dockStatus.signup = false
       }
@@ -166,7 +156,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props)
+    //console.log(this.props)
 
     let errorMessage = null
 
@@ -221,7 +211,7 @@ class App extends React.Component {
                 handleLogin={this.handleLogin.bind(this)}
                 handleSignUp={this.handleSignUp.bind(this)}
                 user={user}
-                notes={this.props.viewer.user.notes}
+                notes={this.props.viewer.myNotes}
                 handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
                 handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
                 handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
@@ -238,6 +228,8 @@ class App extends React.Component {
                 toggleLogin={this.toggleLogin.bind(this)}
                 showInDockMenu={this.showInDockMenu.bind(this)}
                 location={this.props.location}
+                handleUpdateMyNoteFilter={this.handleUpdateMyNoteFilter.bind(this)}
+                myNotesWidget={this.state.myNotesWidget}
             />
           </section>
 
@@ -251,7 +243,7 @@ class App extends React.Component {
                  crossReferences: this.props.viewer.crossReferences,
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
-                 course: this.props.viewer.course,
+                 course: this.props.viewer.course? this.props.viewer.course: null,
                  note: this.props.viewer.note,
                  notes: this.props.viewer.notes,
                  user: user,
@@ -311,6 +303,7 @@ class App extends React.Component {
       error: {message:"You are Logged out!", code:200}
     })
             window.setTimeout(function(){
+                console.log('clearning error message after log out.')
               that.setState({
                 error: false,
               });
@@ -328,7 +321,7 @@ class App extends React.Component {
       let error = {}
       let createToken = Login.createToken
       let token = createToken.token? createToken.token:"";
-      console.log('Mutation completed!', Login, ' Stored token: ', token);
+      console.log('Mutation completed!', Login);
 
       if(createToken.code === "200" || createToken.code === 200 || createToken.code === null){
         error = { message: 'Login Successful', code: 200 };
@@ -341,6 +334,7 @@ class App extends React.Component {
         });
 
         window.setTimeout(function(){
+            console.log('clearning error message after log in.')
           that.setState({
             error: false,
           });
@@ -442,7 +436,7 @@ password: this.state.signup.password
       localStorage.setItem('navs', JSON.stringify(navs));
       this.handleUpdateBookmarks(navs);
       var that = this;
-      setTimeout(function () { that.setState({ message: { message: 'Bookmark saved!', code: 220 } }); }, 500);
+      setTimeout(function () { console.log('bookmark saved!.'); that.setState({ message: { message: 'Bookmark saved!', code: 220 } }); }, 500);
     }
   }
 
@@ -487,8 +481,12 @@ password: this.state.signup.password
         e.preventDefault()
 
         this.props.relay.setVariables({
-            userNotesCount: this.props.relay.variables.userNotesCount+5
+            myNotesStartCursor: this.props.viewer.myNotes.pageInfo.endCursor
         });
+
+        let newState = this.state
+        newState.myNotesWidget.notesCurrentPage = this.state.myNotesWidget.notesCurrentPage + 1
+        this.setState(newState);
     }
 
     handleUpdateNote(note) {
@@ -499,14 +497,14 @@ password: this.state.signup.password
             console.log('creating note...')
             Relay.Store.commitUpdate(new NoteCreateMutation({
                 newNoteEdge: note,
-                user: this.props.viewer.user
+                notes: this.props.viewer.myNotes
             }));
         } else {
 
             console.log('updating note...', note)
             Relay.Store.commitUpdate(new NoteUpdateMutation({
                 changedNote: note,
-                notes: this.props.viewer.user.notes
+                note: this.props.viewer.note
             }));
         }
     }
@@ -583,6 +581,24 @@ password: this.state.signup.password
         s.notesWidget.status = null
 
         s.notesWidget.notesCurrentPage = 1
+        this.setState(s);
+        }
+
+    }
+
+    handleUpdateMyNoteFilter(string) {
+
+        if (string !== undefined) {
+            this.props.relay.setVariables({
+                myNotesFilter: string.toLowerCase(),
+                myNotesStartCursor: undefined
+            });
+
+        let s = this.state
+
+        s.myNotesWidget.status = null
+        s.myNotesWidget.notesCurrentPage = 1
+        s.myNotesWidget.filter = string.toLowerCase()
         this.setState(s);
         }
 
@@ -713,7 +729,6 @@ export default Relay.createContainer(App, {
   initialVariables: {
       noteId: undefined,
       noteFilter: undefined,
-      userNotesCount: 5,
       reference: undefined,
       notesStartCursor: undefined,
       pageSize: 5,
@@ -723,7 +738,10 @@ export default Relay.createContainer(App, {
       coursesFilter: undefined,
       coursesPageSize: 6,
       coursesCursor:undefined,
-      crPageSize: 20
+      crPageSize: 20,
+      myNotesFilter:undefined,
+      myNotesPageSize: 5,
+      myNotesStartCursor: undefined
   },
   fragments: {
     viewer: () => Relay.QL`
@@ -731,6 +749,13 @@ export default Relay.createContainer(App, {
         ${SignUpUserMutation.getFragment('viewer')}
         ${LoginUserMutation.getFragment('viewer')}
         ${Dashboard.getFragment('viewer')}
+        
+        token
+        
+        error{
+          message
+          code
+        }
         
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
@@ -746,11 +771,6 @@ export default Relay.createContainer(App, {
           ${NoteUpdateMutation.getFragment('note')}
           ${NotePageComponent.getFragment('note')}
           ${NotePrintComponent.getFragment('note')}
-        }
-
-        error{
-          message
-          code
         }
 
         crossReferences(first: $crPageSize, filter: $reference) {
@@ -769,6 +789,7 @@ export default Relay.createContainer(App, {
             ${Dock.getFragment('user')}
             ${MainNavigation.getFragment('user')}
             ${Footer.getFragment('user')}
+            ${NotesIndex.getFragment('user')}
             ${NotePageComponent.getFragment('user')}
             ${NotePrintComponent.getFragment('user')}
             id
@@ -777,10 +798,18 @@ export default Relay.createContainer(App, {
             email
             authenticated
             nickname
-            notes(first:$userNotesCount){
+            notesCount
+           }
+           
+           myNotes(filter: $myNotesFilter, first:$myNotesPageSize, after:$myNotesStartCursor){
                 ${Dock.getFragment('notes')}
                 ${NoteCreateMutation.getFragment('notes')}
-                pageInfo{hasNextPage}
+                pageInfo{
+                    hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
+                  }
                 edges{
                     node {
                         id
@@ -789,7 +818,6 @@ export default Relay.createContainer(App, {
                     }
                 }
             }
-           }
 
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
             ${Bible.getFragment('notes')}
