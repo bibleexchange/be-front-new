@@ -16,7 +16,7 @@ class BibleVerseComponent extends React.Component {
 
 	    <p id={this.props.bibleVerse.id} >
 
-	      <Link to={!this.props.bibleVerse.url ? '' : this.props.bibleVerse.url} >
+	      <Link activeClassName="active-verse" to={!this.props.bibleVerse.url ? '' : this.props.bibleVerse.url} >
           <sup>{this.props.bibleVerse.order_by}</sup>
         </Link>
 

@@ -12,8 +12,14 @@ class Bible extends React.Component {
         window.scrollTo(0, 0);
     }
 
+      componentWillReceiveProps(newProps) {
+        
+        
+        console.log(newProps)
+      }
+
   render() {
-      //console.log(this.props)
+
     let crossReferences = []
     let bibleChapter = this.props.bibleChapter
     let bibleVerse = this.props.bibleVerse

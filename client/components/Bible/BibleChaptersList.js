@@ -4,12 +4,12 @@ import Helpers from '../Helpers.js';
 
 export default class BibleChaptersList extends React.Component {
   render() {
-	                                                                                                                                                                                                        var book = this.props.book;
-	                                                                                                                                                                                                        var chapters = [];
+var book = this.props.book;
+var chapters = [];
 
-	                                                                                                                                                                                                        for (var i = 1; i <= book.chapterCount; i++) { chapters.push(i); }
-	                                                                                                                                                                                                        const toggle = this.props.toggle;
-	                                                                                                                                                                                                        const getChapter = this.props.getChapter;
+for (var i = 1; i <= book.chapterCount; i++) { chapters.push(i); }
+const toggle = this.props.toggle;
+const getChapter = this.props.getChapter;
 
     return (
 <div>

@@ -2,6 +2,11 @@
 
 #bible {
 
+
+	.active-verse + span {
+		background-color: rgba(128,128,128,0.3);
+	}
+
 	#toggle-bible {
 		position:fixed;
 		bottom: 35px;

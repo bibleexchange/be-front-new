@@ -69,9 +69,8 @@ class NoteThumbnail extends React.Component {
       case N.DC_RECORDING:
 
         let recording = JSON.parse(note.output.body);
-        if (note.output.api_request === false) { recording.body = JSON.parse(recording.body); }
 
-        component = <DCRecording recording={recording} />;
+        component = <DCRecording recording={JSON.parse(recording)} />;
         break;
 
       default:

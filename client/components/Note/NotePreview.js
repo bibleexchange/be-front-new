@@ -13,6 +13,7 @@ class NotePreview extends React.Component {
   render() {
     let note = this.props.note;
     let component = null;
+console.log(note, 9999)
 
     switch (note.output.type) {
 
@@ -43,10 +44,8 @@ class NotePreview extends React.Component {
       default:
         component = <div><p><Link to={'/notes/' + this.props.note.id}> {this.props.note.id} {this.props.note.output.type}</Link></p><p>{this.props.note.tags.map(function (t) { return ' #' + t; })}</p><p><Link to={'/users/' + this.props.note.author.id}>{this.props.note.author.name}</Link></p></div>;
     }
-
-  	                                                                                                    return (
+                                                                            return (
   		<div className='note-preview' style={{ margin: '15px' }}>
-
       <button id='delete' >&#10008; CREATE FUNCTION TO DISMISS/CLOSE PREVIEW</button>
         <Link to={'/notes/' + this.props.note.id} style={{ width: '100%', height: '25px', display: 'block', textAlign: 'center', color: 'white', backgroundColor: 'rgba(0,0,0,.2)' }}>GO</Link>
   		  {component}

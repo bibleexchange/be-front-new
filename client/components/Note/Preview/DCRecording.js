@@ -7,6 +7,7 @@ class DCRecordingNoteComponent extends React.Component {
     let soundCloud = null;
     let recording = this.props.note.output.body;
     let links = [];
+console.log(recording)
 
     if (recording.soundcloudId !== undefined) {
       let trackNumber = recording.soundcloudId;

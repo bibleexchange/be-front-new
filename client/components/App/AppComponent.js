@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Link } from 'react-router'
 import MainNavigation from '../Navbar/NavbarComponent'
 import Footer from './FooterComponent'
+import UserMessage from './UserMessage'
 import Relay from 'react-relay'
 import auth from './auth'
 import LoginUserMutation from '../../mutations/LoginUserMutation'
@@ -25,6 +26,8 @@ import './App.scss'
 import './Print.scss'
 import './Typography.scss'
 import './Widget.scss'
+
+
 
 class App extends React.Component {
 
@@ -156,15 +159,6 @@ class App extends React.Component {
   }
 
   render() {
-    //console.log(this.props)
-
-    let errorMessage = null
-
-    if(this.state.error !== false){
-      errorMessage = <div id='im-online' className='onlinefalse'><h2>{this.state.error.code}: {this.state.error.message}</h2></div>
-    }
-
-
     let user = this.state.user;
     let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
     let children = null;
@@ -269,7 +263,8 @@ class App extends React.Component {
              })}
 
           </main>
-          {errorMessage}
+
+          <UserMessage error={this.state.error} />
           <footer id='footer' className='push'><Footer user={user} /></footer>
     	</div>
     );
@@ -302,13 +297,6 @@ class App extends React.Component {
       user:{},
       error: {message:"You are Logged out!", code:200}
     })
-            window.setTimeout(function(){
-                console.log('clearning error message after log out.')
-              that.setState({
-                error: false,
-              });
-            }, 3000);
-
     auth.logout();
   }
 
@@ -332,13 +320,6 @@ class App extends React.Component {
           token: token,
           user: createToken.user
         });
-
-        window.setTimeout(function(){
-            console.log('clearning error message after log in.')
-          that.setState({
-            error: false,
-          });
-        }, 3000);
 
       }else{
         console.log(createToken)
@@ -531,15 +512,12 @@ password: this.state.signup.password
         if(name === "login"){
 
             if(s.dockStatus.login === false && s.dockStatus.signup === false){
-                console.log(1)
                 s.dockStatus['login'] = true
                 s.dockStatus['signup'] = false
             }else if(s.login === true && s.signup === false){
-                console.log(2)
                 s.dockStatus['login']  = false
                 s.dockStatus['signup'] = false
             }else{
-                console.log(3)
                 s.dockStatus['login'] = false
                 s.dockStatus['signup']= false
             }
