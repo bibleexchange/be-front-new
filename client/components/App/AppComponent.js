@@ -18,7 +18,6 @@ import Course from '../Course/Course'
 import CoursePrint from '../Course/CoursePrint'
 import CourseIndex from '../Course/CourseIndex'
 import NotesIndex from '../Note/NotesIndex'
-import Dashboard from '../Dashboard/DashboardComponent'
 import Library from '../Course/CoursesIndex'
 import NotePageComponent from '../Note/NotePageComponent'
 import NotePrintComponent from '../Note/NotePrintPageComponent'
@@ -26,8 +25,6 @@ import './App.scss'
 import './Print.scss'
 import './Typography.scss'
 import './Widget.scss'
-
-
 
 class App extends React.Component {
 
@@ -54,7 +51,9 @@ class App extends React.Component {
         soundcloud: false,
         bookmarks: false,
         notepad: false,
-        share: true
+        share: true,
+        verse: false,
+        notes: false
       }
 
       let notesfilter = '';
@@ -69,6 +68,9 @@ class App extends React.Component {
       if(localStorage.getItem('language') !== null){
         lang = localStorage.getItem('language')
       }
+
+      let navs = this.uniques(JSON.parse(localStorage.getItem('navs')))
+      localStorage.setItem('navs', navs)
 
     this.state = {
       oembed: {},
@@ -103,7 +105,9 @@ class App extends React.Component {
         coursesWidget: {
           filter: this.props.relay.variables.coursesFilter,
             status: null
-        }
+        },
+
+      navs: navs
     };
 
   }
@@ -160,7 +164,9 @@ class App extends React.Component {
 
   render() {
     let user = this.state.user;
-    let navs = this.uniques(JSON.parse(localStorage.getItem('navs')));
+    let navs = this.state.navs
+
+
     let children = null;
     localStorage.setItem('navs', JSON.stringify(navs));
 
@@ -186,26 +192,27 @@ class App extends React.Component {
         updateIt={this.state}
         route={this.props.route}
         user={user}
-        handleUpdateBookmarks={this.handleUpdateBookmarks.bind(this)}
         handleLogout={this.handleLogout.bind(this)}
         handleBookmark={this.handleBookmark.bind(this)}
         online={this.state.online}
         handleOpenCloseDock = {this.handleOpenCloseDock.bind(this)}
+        dockStatus={this.state.dockStatus.main}
         message={this.state.error.message}
        />
 
           {/* <p style={{ wordWrap : "break-word"}}>{JSON.stringify(this.state)}</p> */}
 
+          <div className="sections">
           <section style={dockStyle} id="dock-section">
             <Dock
                 status={this.state.dockStatus}
                 player={this.state.player}
                 handleCloseAudio={this.handleCloseAudio.bind(this)}
-                navs={navs}
                 handleLogin={this.handleLogin.bind(this)}
                 handleSignUp={this.handleSignUp.bind(this)}
                 user={user}
-                notes={this.props.viewer.myNotes}
+                myNotes={this.props.viewer.myNotes}
+                notes={this.props.viewer.notes}
                 handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
                 handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
                 handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
@@ -223,10 +230,16 @@ class App extends React.Component {
                 showInDockMenu={this.showInDockMenu.bind(this)}
                 location={this.props.location}
                 handleUpdateMyNoteFilter={this.handleUpdateMyNoteFilter.bind(this)}
+                notesWidget={this.state.notesWidget}
                 myNotesWidget={this.state.myNotesWidget}
+                bibleVerse={this.props.viewer.bibleVerse}
+                crossReferences={this.props.viewer.crossReferences}
+                handleUpdateNoteFilter = {this.handleUpdateNoteFilter.bind(this)}
+                handleNextNotePage={this.handleNextNotePage.bind(this)}
             />
           </section>
 
+          <section>
           <main>
 
              {React.cloneElement(children, {
@@ -234,7 +247,6 @@ class App extends React.Component {
                handlePlayAudio: this.handlePlayAudio.bind(this),
                  handleEditThisNote: this.handleEditThisNote.bind(this),
                  viewer: this.props.viewer,
-                 crossReferences: this.props.viewer.crossReferences,
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
                  course: this.props.viewer.course? this.props.viewer.course: null,
@@ -245,11 +257,9 @@ class App extends React.Component {
                  handleUpdateReferenceForAll: this.handleUpdateReferenceForAll.bind(this),
                  handleChangeNoteFilter: this.handleChangeNoteFilter.bind(this),
                  bibleChapter: this.props.viewer.bibleChapter,
-                 bibleVerse: this.props.viewer.bibleVerse,
                  bibleStatus: this.state.bibleStatus,
                  handleToggleBible: this.handleToggleBible.bind(this),
                  language: this.state.languge,
-                 notesWidget: this.state.notesWidget,
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
                  handleNextNotePage: this.handleNextNotePage.bind(this),
                  handleApplyNoteFilter: this.handleApplyNoteFilter.bind(this),
@@ -259,19 +269,20 @@ class App extends React.Component {
                  handleNextCoursesPage: this.handleNextCoursesPage.bind(this),
                  handleLanguage: this.handleLanguage.bind(this),
                  reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
-                 handleSearchBibleReference: this.handleSearchBibleReference.bind(this)
+                 handleSearchBibleReference: this.handleSearchBibleReference.bind(this),
+                notesWidget: this.state.notesWidget,
+                deleteBookmark: this.deleteNav.bind(this),
+                navs: navs
              })}
 
           </main>
+          </section>
+          </div>
 
           <UserMessage error={this.state.error} />
           <footer id='footer' className='push'><Footer user={user} /></footer>
     	</div>
     );
-  }
-
-  handleUpdateBookmarks(string) {
-    this.setState({ string });
   }
 
   handleChangeNote(event) {
@@ -403,27 +414,44 @@ password: this.state.signup.password
     this.setState({ signup: newSignup });
   }
 
-  handleBookmark(e) {
-  	e.preventDefault();
-    console.log("book mark it ...")
-    if (this.props.location.pathname !== null) {
-      let navs = JSON.parse(localStorage.getItem('navs'));
-
-      if (navs === null) {
-        navs = [];
-      }
-
-      navs.unshift(this.props.location.pathname);
-      localStorage.setItem('navs', JSON.stringify(navs));
-      this.handleUpdateBookmarks(navs);
-      var that = this;
-      setTimeout(function () { console.log('bookmark saved!.'); that.setState({ message: { message: 'Bookmark saved!', code: 220 } }); }, 500);
-    }
-  }
 
   uniques(array) {
     return Array.from(new Set(array));
   }
+
+  handleBookmark(e) {
+  	e.preventDefault();
+
+    if (this.props.location.pathname !== null) {
+        console.log("book mark it ...")
+      
+      let navs = []
+      
+      if (this.state.navs !== null) {
+        navs = this.state.navs;
+      }
+
+      navs.unshift(this.props.location.pathname);
+      localStorage.setItem('navs', JSON.stringify(navs));
+      let newState = this.state
+
+      newState.error = { message: 'Bookmark saved! ' + this.props.location.pathname, code: 221 }
+      newState.navs = navs
+      this.setState(newState)
+    } 
+  }
+
+deleteNav(e){
+  let index = e.target.dataset.id
+
+  let newState = this.state
+
+  newState.navs.splice(index,1)
+
+  this.setState(newState)
+
+   localStorage.setItem('navs', JSON.stringify(newState.navs));
+}
 
   handlePlayAudio(e){
     console.log("new sound selected...")
@@ -442,6 +470,7 @@ password: this.state.signup.password
 
     handleEditThisNote(e){
       e.preventDefault()
+      console.log("editing: " + e.target.dataset.id)
 
         this.props.relay.setVariables({
             noteId: e.target.dataset.id
@@ -557,7 +586,7 @@ password: this.state.signup.password
         let s = this.state
 
         s.notesWidget.status = null
-
+        s.notesWidget.filter =  string.toLowerCase()
         s.notesWidget.notesCurrentPage = 1
         this.setState(s);
         }
@@ -603,6 +632,7 @@ password: this.state.signup.password
     }
 
     handleNextNotePage() {
+      console.log(666)
         this.props.relay.setVariables({
             notesStartCursor: this.props.viewer.notes.pageInfo.endCursor
         });
@@ -725,9 +755,7 @@ export default Relay.createContainer(App, {
     viewer: () => Relay.QL`
       fragment on Viewer {
         ${SignUpUserMutation.getFragment('viewer')}
-        ${LoginUserMutation.getFragment('viewer')}
-        ${Dashboard.getFragment('viewer')}
-        
+        ${LoginUserMutation.getFragment('viewer')}        
         token
         
         error{
@@ -741,7 +769,7 @@ export default Relay.createContainer(App, {
 
         bibleVerse (filter:$reference) {
             id
-          ${Bible.getFragment('bibleVerse')}
+          ${Dock.getFragment('bibleVerse')}
         }
 
         note(id:$noteId){
@@ -752,7 +780,7 @@ export default Relay.createContainer(App, {
         }
 
         crossReferences(first: $crPageSize, filter: $reference) {
-          ${Bible.getFragment('crossReferences')}
+          ${Dock.getFragment('crossReferences')}
         }
 
         bibles (first:1, filter:$bibleVersion) {
@@ -780,7 +808,7 @@ export default Relay.createContainer(App, {
            }
            
            myNotes(filter: $myNotesFilter, first:$myNotesPageSize, after:$myNotesStartCursor){
-                ${Dock.getFragment('notes')}
+                ${Dock.getFragment('myNotes')}
                 ${NoteCreateMutation.getFragment('notes')}
                 pageInfo{
                     hasNextPage
@@ -798,7 +826,7 @@ export default Relay.createContainer(App, {
             }
 
       	 notes (filter: $noteFilter, first:$pageSize, after:$notesStartCursor){
-            ${Bible.getFragment('notes')}
+            ${Dock.getFragment('notes')}
             ${NotesIndex.getFragment('notes')}
                  pageInfo{
                   hasNextPage

@@ -1,5 +1,11 @@
 @import "../variables.scss";
 
+@keyframes toggle {
+	0%   {stroke:gray; stroke-width:35%;}
+    40%  {stroke:black; stroke-width:20%;}
+    100% {stroke:black; stroke-width:5%;}
+}
+
 #MainNavbar {
 
 	display: flex;
@@ -85,10 +91,21 @@
 				margin:0;
 				padding:0;
 				margin-top:10px;
-				background-image: url("/assets/img/expand.png");
-				background-color: transparent;
-				background-size: 30px 30px;
-				background-repeat: no-repeat;
+				background: none;				
+
+				.minimize {
+					stroke:black;
+					stroke-width:5%;
+					animation-name: toggle;
+                	animation-duration: 1s;				
+				}
+
+				.expand {
+					stroke:black;
+					stroke-width:5%;
+					animation-name: toggle;
+                	animation-duration: 1s;				
+				}
 			}
 
 			#sign-out {

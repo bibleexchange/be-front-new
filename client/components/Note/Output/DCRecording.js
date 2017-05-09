@@ -10,16 +10,14 @@ function slugIt(string) {
 class DCRecordingNoteComponent extends React.Component {
 
   render() {
+
     let verse = null
     let tags = []
     let author = null
     let fullDetails = null
 
     if(this.props.note !== undefined){
-      console.log("why is this running???")
-        verse = <blockquote>{this.props.note.verse.reference}&mdash;<BibleVerse bibleVerse={this.props.note.verse} viewer={this.props.viewer} /></blockquote>;
-        tags = this.props.note.tags;
-        author = this.props.note.author;
+        verse = <Link to={this.props.note.verse.url}>{this.props.note.verse.reference}</Link>;
     }
 
     let notes = this.props.recording.text;
@@ -34,25 +32,14 @@ class DCRecordingNoteComponent extends React.Component {
     }
 
     if(this.props.full){
-      fullDetails = <div>   <h2>Scripture Reference</h2>
-    {verse}
-
-    <h2>LINKS</h2>
-    <ul>
-      {links.map(function (link, key) {
-        return <li key={key}><a href={link}>{link}</a></li>;
-      })}
-    </ul>
-
-    <h2>TAGS</h2>
-    <p>{tags.map(function (t, key) {
-  let x = null;
-  if (t !== '') { x = <Link key={key} style={{ marginRight: '10px' }} to={'/notes/tag/' + t.trim()} >#{t}</Link>; }
-  return x;
-})}</p>
-
-    <h2>AUTHOR OF THIS NOTE</h2>
-    <p>{author.name}</p></div>
+      fullDetails = <div>
+          <h2>LINKS</h2>
+          <ul>
+            {links.map(function (link, key) {
+              return <li key={key}><a href={link}>{link}</a></li>;
+            })}
+          </ul>
+      </div>
     }
 
     return (

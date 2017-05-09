@@ -5,16 +5,11 @@
     to {background-color: rgba(255,255,255,.5);}
 }
 
-#dock-section {
-  margin-bottom: 15px;
-  width:100%;
-  box-shadow: $boxShadow;
-  background-color: rgba(255,255,255, .95);
-}
-
 #dock-widget {
-  overflow: auto;
+  overflow: hidden;
   padding: 0;
+  width: 100%;
+
 h1 {
   input{
     height:100%;
@@ -49,95 +44,110 @@ h1 {
     padding:0;
 
     li {
-      background-color: rgba(255,255,255, 0.2);
       li{border:none;}
       display:block;
       padding:15px;
     }
 
-    #bookmarks {
-
-      button {
-        width:100%;
-      }
-      ul {margin:0; padding:0;}
-
-      li {
-        display:block;
-        width:100%;
-        margin:0;
-        padding:0;
-      }
-
+    #verse, #login {
+      background-color:white;
     }
 
   }
 
-  #dock-menu {
-      background-color: #00c97b;;
-      overflow: auto;
-      white-space: nowrap;
-ul {
-  margin:0;
-  padding:0;
+        #dock-menu {
+                background-color: #ffc31f;
+                width: 100%;
+                margin: 0;
+
+          ul {
+            margin:0;
+            padding:0;
+            width:100%;
+
+              li {
+                display: inline-block;
+                animation-name: example;
+                animation-duration: 2s;
+                padding:0;
+                margin: 5px;
+                border-bottom: solid 1px black;
+                height:55px;
+                overflow: hidden;
+
+                button {
+                  border:none;
+                  background: none;
+                  color:white;
+                  font-weight:900;
+                  text-align: center;
+                  line-height: 55px;
+                  vertical-align: middle;
+                  font-size:1.2rem;
+                }
+
+                 #main-search {
+                      padding:0;
+                      margin:0;
+                      background: none;
 
 
-    li {
-      display: inline-block;
-      animation-name: example;
-      animation-duration: 2s;
+                      button {
+                        padding: 0;
+                      }
 
-      button {
-        padding: 14px;
-        border:none;
-        background: none;
-        color:white;
-        font-weight:900;
-        text-align: center;
-      }
+                      #magnifying-glass {
+                        display:inline-block;
+                        z-index: 9;
+                        margin-top: auto;
+                        vertical-align: middle;   
+                      }
+
+                      #search-text {
+                        color:white;
+                        padding-left: 10px;
+                        text-align: center;
+                        height: 55px;
+                        margin:0;
+                        padding:0;
+                        background:none;
+                        line-height:55px;
+                        width: 200px;
+                      }
+
+                }
+            }
+
+
     }
 
     li:hover {
-      background-color: #777;
+      background-color: rgb(255,241,202);
+
+      button {
+      color:black;
+      }
+
+    }
+
+    li.no-hover:hover {
+      background:none;
+    }
+
+    li.no-hover {
+      display:inline-block;
     }
 
   .menu-true {
-    background-color: #777
-  }
+    background-color: rgb(255,241,202);
 
-  }
-
-  }
-
-}
-
-
-@media screen and (min-width: 670px) {
-
-  #dock-section {
-
-    width:50%;
-    margin:auto;
-
-  }
-    #dock-widget
-   {
-    margin: 3rem;
-
-  }
-
-
-    #dock-section {
-    width:50%;
-    margin:auto;
-    margin-bottom:60px;
-
-    > div {
-      flex: 0;
-      margin: 0;
-      flex-basis: 800px;
+    button {
+    color:black;
     }
+  }
 
   }
+
+
 
 }

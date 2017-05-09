@@ -3,8 +3,15 @@ import { Link } from 'react-router';
 import Relay from 'react-relay';
 import NoteTest from './NoteTest';
 
+//PUZZLING:
+
+//WHY DO I HAVE TO DOUBLE JSON PARSE IN RENDER FUNCTION OF THIS COMPONENT
+//AFTER FIRST PARSE IT STILL RETURNS A STRING
+
 class NoteViewer extends React.Component {
+
   render() {
+
     let component = <h1>This note does not exist. Try <Link to={"/notes"}>searching</Link> for something else.</h1>;
 
     let textVerse = null
@@ -14,13 +21,7 @@ class NoteViewer extends React.Component {
         }
 
     if (this.props.note !== null && this.props.note !== undefined && this.props.note !== '') {
-      component = <div>
-
-          {textVerse}
-        <p>'{this.props.note.title}' Noted by {this.props.note.author.name}</p>
-        <hr/>
-        <NoteTest type={this.props.note.output.type} body={this.props.note.output.body}  api_request={this.props.note.output.api_request} note={this.props.note} full={true}/>
-        </div>
+      component = <NoteTest user={this.props.user} type={this.props.note.output.type} body={this.props.note.output.body}  api_request={this.props.note.output.api_request} note={this.props.note} full={true}/>
     }
 
     return (

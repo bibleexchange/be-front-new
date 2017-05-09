@@ -12,18 +12,29 @@ class SearchBox extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps){
+    if(newProps.details.filter !== this.state.filter){
+      let n = this.state
+      n.filter = newProps.details.filter 
+      this.setState(n)
+    }
+  }
+
   render() {
 
-    let nextButtonText = '_ of _';
+    let nextButtonText = 'Next'
+
+    if(this.props.items !== undefined){
+      nextButtonText = 'Page ' + this.props.details.currentPage + ' of ' + this.props.items.totalPagesCount;
+    }
+
     let nextPageDisabled = true;
     let search = <Loading />
     let noItems = null
 
-      if (this.props.items !== undefined && this.props.items.pageInfo.hasNextPage ) {
+    if (this.props.items !== undefined && this.props.items.pageInfo.hasNextPage ) {
       nextPageDisabled = false;
-      nextButtonText = 'Next';
     } else if (this.props.items !== undefined) {
-      nextButtonText = 'Next';
     }
 
       let sentence = ''

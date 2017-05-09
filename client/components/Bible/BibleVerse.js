@@ -4,12 +4,6 @@ import Relay from 'react-relay';
 
 class BibleVerseComponent extends React.Component {
 
-  componentWillMount() {
-    this.state = {
-      noteStatus: true
-    };
-  }
-
   render() {
     return (
 	<div>
@@ -20,9 +14,7 @@ class BibleVerseComponent extends React.Component {
           <sup>{this.props.bibleVerse.order_by}</sup>
         </Link>
 
-        <span onClick={this.clickVerseBody.bind(this)} data-verseid={this.props.bibleVerse.id}>
            &nbsp; {this.props.bibleVerse.body} [{this.props.bibleVerse.notesCount}]
-        </span>
 
       </p>
 
@@ -30,21 +22,10 @@ class BibleVerseComponent extends React.Component {
     );
   }
 
-  clickVerseBody(e) {
-    if (this.props.user.authenticated === 'true') {
-      this.setState({ noteStatus: !this.state.noteStatus });
-    }
-  }
-
-  clearVerseForm(e) {
-    this.setState({ noteStatus: false });
-  }
-
 }
 
 BibleVerseComponent.propTypes = {
-    bibleVerse: React.PropTypes.object.isRequired,
-    user: React.PropTypes.object.isRequired,
+    bibleVerse: React.PropTypes.object.isRequired
 };
 
 export default BibleVerseComponent

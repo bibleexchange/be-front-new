@@ -3,47 +3,53 @@ import Relay from 'react-relay';
 import BibleVerse from './BibleVerse';
 import BibleNavigation from './Navigation';
 import { Link } from 'react-router';
-
-class BibleChapterComponent extends React.Component {
-
-  render() {
-    return (
-      <div>
-      	{this.props.bibleChapter.verses.edges.map(function (verse) {
-        return <BibleVerse bibleVerse={verse.node} key={verse.node.id} />;
-      	})}
-      </div>
-    );
-  }
-
-}
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup' // ES6
 
 class WidgetComponent extends React.Component {
 
   render() {
-    const baseUrl = '';
-    let verses = this.props.bibleChapter.verses.edges;;
-    let user = this.props.user;
+   
     let nextChapterUrl = null;
     let goToNext = null;
 
       if (this.props.bibleChapter !== undefined && this.props.bibleChapter !== null && this.props.bibleChapter.nextChapter !== null) {
           nextChapterUrl = this.props.bibleChapter.nextChapter.url;
-          goToNext = <Link className='nextChapter' to={nextChapterUrl} >next</Link>;
+          goToNext = <Link className='nextChapter' to={nextChapterUrl} >next chapter &#8631;</Link>;
       }
 
-    let clickVerseBody = this.props.clickVerseBody;
+
+
+    const transitionOptions = {
+      transitionName: "bibley",
+      transitionAppear: true,
+      transitionAppearTimeout: 500,
+      transitionEnter: true,
+      transitionEnterTimeout: 500,
+      transitionLeave: true,
+      transitionLeaveTimeout: 500
+    }
 
     return (
       <div>
       	<BibleNavigation bible={this.props.bible} bibleChapter={this.props.bibleChapter} reference={this.props.reference} handleSearchBibleReference={this.props.handleSearchBibleReference} />
-      	  {verses.map(function (verse) {
-      		  return <BibleVerse user={user} clickVerseBody={clickVerseBody} bibleVerse={verse.node} key={verse.node.id} baseUrl={baseUrl} />;
-      	  })}
-
+          <ul className="list-group">
+           <CSSTransitionGroup {...transitionOptions} >
+        	  {this.renderVerses()}
+            </CSSTransitionGroup>
+            </ul>
           {goToNext}
       </div>
     );
+  }
+
+  renderVerses(){
+    let user = this.props.user
+    let clickVerseBody = this.props.clickVerseBody
+    const baseUrl = ''
+
+    return this.props.bibleChapter.verses.edges.map(function (verse) {
+              return <li className="list-group-item" key={verse.node.id} ><BibleVerse user={user} clickVerseBody={clickVerseBody} bibleVerse={verse.node} baseUrl={baseUrl} /></li>;
+            })
   }
 
 }

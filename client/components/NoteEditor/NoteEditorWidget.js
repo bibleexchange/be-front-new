@@ -20,7 +20,7 @@ componentWillMount() {
     status: 'original',
     myNotesStatus: false,
     data: this.setInitialData(this.props.note ),
-      saveable: this.props.user.authenticated
+    saveable: this.props.user.authenticated
   };
 }
 
@@ -69,7 +69,7 @@ componentWillReceiveProps(newProps) {
                   <NotesWidget
                     status={this.props.myNotesWidget}
                     notes={this.props.notes}
-                    selectNote={null}
+                    selectNote={handleEditThis}
                     tags
                     handleUpdateNoteFilter={this.props.handleUpdateMyNoteFilter}
                     handleNextNotePage={this.props.moreNotes}
@@ -81,22 +81,40 @@ componentWillReceiveProps(newProps) {
                   </ol>
                    </section>
               <section>
-              <div id="status-bar">
-                <section>{clearForm}</section>
-                <section>{form}</section>
-                <section> <Status type={this.state.status} /></section>
-                  {viewLink}
-              </div>
+               
+                <div id="note">
+                  <main>
+                    <textarea onChange={this.updateBody.bind(this)} value={this.removeMeta(this.state.data.body)} >{this.state.data.body}</textarea>
+                  </main>
 
-              <h1>Title:{this.state.data.title} noted on {this.state.data.reference}</h1>
+                  <aside>
 
-              <p>Tags:{this.state.data.tags}</p>
-              
-              <textarea onChange={this.updateBody.bind(this)} value={this.state.data.body} >{this.state.data.body}</textarea>
+                   <div id="status-bar">
+                    <section>{clearForm}</section>
+                    <section>{form}</section>
+                    <section> <Status type={this.state.status} /></section>
+                      {viewLink}
+                  </div>
+
+                  <h1>Title: <input type="text" value={this.state.data.title} onChange={this.updateTitle.bind(this)}/> noted on Scripture: <input type="text" value={this.state.data.reference} onChange={this.updateReference.bind(this)}/></h1>
+
+                  <h2>TAGS</h2>
+                  <p>Tags: <input type="text" value={this.state.data.tags} onChange={this.updateTags.bind(this)}/></p>
+
+                  </aside>
+                </div>
 
               </section>
           </div>
       );
+    }
+
+    removeMeta(body){
+
+        let re = /@@[^@@]*@@/;
+        body = body.replace(re, "");
+
+        return body
     }
 
     createBlankNote(e){
@@ -181,7 +199,7 @@ componentWillReceiveProps(newProps) {
               id: note.id,
               reference: note.verse.reference,
               tags: note.tags_string,
-              body: note.body
+              body: this.removeMeta(note.body)
           }
 
       }
@@ -212,7 +230,10 @@ componentWillReceiveProps(newProps) {
     handleUpdateNote(e){
 
       let data = this.state.data
+      let newMeta = '@@ \ntitle: '+ data.title +' \ntags: '+ data.tags +' \nreference: '+ data.reference +' \n@@\n';
 
+      var body = newMeta + data.body;
+      data.body = body
       this.props.handleUpdateNote(data);
     }
 

@@ -1,7 +1,14 @@
 @import "../variables.scss";
 
 #bible {
+	background-color:white;
+	width:100%;
 
+	ul {
+	list-style:none;
+	margin:0;
+	padding:0;
+	}
 
 	.active-verse + span {
 		background-color: rgba(128,128,128,0.3);
@@ -23,33 +30,47 @@
 		color:white;
 	}
 
+/* starting state of animation */
+.bibley-enter {
+  opacity: 0.01;
+}
 
-	.WidgetContainer {
+.bibley-enter.bibley-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
 
-			padding-bottom:25px;
+.bibley-leave {
+  opacity: 1;
+}
 
-			> div {
-				margin: 0;
-			}
+.bibley-leave.bibley-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
 
-			h3 {
-				background-color:#00C97B;
-				color:black;
-				padding:10px;
-				margin:0;
-			}
+.bibley-appear {
+  opacity: 0.01;
+}
 
-	}
+.bibley-appear.bibley-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
 
 .nextChapter{
 	text-decoration: none;
 	background-color:$BLUE;
 	color:white;
 	margin-top:15px;
-	margin-bottom: 15px;
 	display:block;
 	text-align: center;
+	height:55px;
+	line-height:55px;
+	font-size: 1.7rem;
 }
+
+.nextChapter:active {background-color:gray;}
 
 .selectedVerse {background-color:$BLUE_TRANS;}
 
@@ -89,23 +110,6 @@
 
 	#toggle-bible {
 		display:none;
-	}
-
-	.WidgetContainer {
-	  display: flex;
-	  flex-wrap: wrap;
-	  width:100%;
-
-	  .Widget{
-	    width:100%;
-	  }
-
-	  > div {
-	    flex: 1;
-	    margin: 1rem;
-	    flex-basis: 500px;
-	  }
-
 	}
 
 }

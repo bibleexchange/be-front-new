@@ -1,8 +1,36 @@
-#bible {
+
+#notes-widget.loading-true {
+  
+  #note {
+  display:none;
+  }
+
+}
+
 #notes-widget {
   width:100%;
   margin:0;
   padding:0;
   white-space: normal;
+
+.clearFilter {
+  color:white;
 }
+
+
+
+  #note {
+  	overflow:hidden;
+
+  	main {
+  		max-height: 200px;
+  		overflow:hidden;
+  		font-size: 2rem;
+  	}
+
+  	aside {
+  		.bibleverse {display:none;}
+  		p {max-height: 65px; text-overflow: ellipsis; overflow:hidden;}
+  	}
+  }
 }

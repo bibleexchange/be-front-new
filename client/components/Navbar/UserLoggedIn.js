@@ -11,8 +11,7 @@ class UserLoggedIn extends React.Component {
   		</li>
   		<li><button id='bookmark-it' onClick={this.props.handleBookmark} />
   		</li>
-      <li><button id="open-close" onClick={this.props.handleOpenCloseDock}></button>
-      </li>
+      <li>{this.props.openClose}</li>
 	  </ul>
     );
   }

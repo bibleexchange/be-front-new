@@ -78,28 +78,40 @@ class NoteThumbnail extends React.Component {
     }
 
     if(this.props.user.authenticated && note.author.id === this.props.user.id){
-      editButton = <li><button  onClick={this.props.handleEditThis} data-id={note.id} className={'select-note'}>edit</button></li>;
+      editButton = <li><button  onClick={this.props.selectNote} data-id={note.id} className={'select-note'}>edit</button></li>;
     }
 return (
-  		<div id={note.id} className='note-thumbnail'>
-        <div className='output'>{component}</div>
+
+ <div id="note">
+        <main>
+          <div className='output'>{component}</div>
+        </main>
+
+        <aside>
 
         <ul>
-          <li><Link to={'/notes/' + note.id} className={'view-it'}>view</Link></li>
+          <Link to={'/notes/' + note.id} className={'view-it'}>view</Link>
           {editButton}
-          <li><button onClick={this.toggleTags.bind(this)} className='tags'>tags</button></li>
+          {/*<li><button onClick={this.toggleTags.bind(this)} className='tags'>tags</button></li>*/}
         </ul>
 
-        <p style={tagsStyle}>{tags.map(function (t, key) {
-          if (t !== '') {
-            return <Link key={key} style={{ marginRight: '10px' }} to={'/notes/tag/' + t.trim()} >#{t}</Link>;
-          }
-        }
-        )}</p>
+        <h1>'{this.props.note.title}' Noted by {this.props.note.author.name}</h1>
 
+        <h2>TEXT: <Link to={this.props.note.verse.url}>{this.props.note.verse.reference}</Link></h2>
+        <BibleVerse bibleVerse={this.props.note.verse} request={this.props.note.api_request} />
+
+        <h2>TAGS</h2>
+        <p>{this.props.note.tags.map(function (t, key) {
+          let x = null;
+          if (t !== '') { x = <Link key={key} style={{ marginRight: '10px' }} to={'/notes/tag/' + t.trim()} >#{t}</Link>; }
+          return x;
+        })}</p>
+
+        </aside>
       </div>
+
   		);
-	                                                                                                    }
+	}
 
   toggleTags() {
     this.setState({ tags: !this.state.tags });

@@ -23,9 +23,9 @@ class NoteOptions extends React.Component {
         <ul className="note-options">
           {printNote}
           <li><SocialShareButton site='facebook' url={shareURL} /></li>
-          <li><SocialShareButton site='twitter' message='Discover this and more on Bible.exchange' url={shareURL} /></li>
+          <li><SocialShareButton site='twitter' message={'Discover https://bible.exchange/'+shareURL+' and more on Bible.exchange.'} url={shareURL} /></li>
           <li><SocialShareButton site='googleplus' url={shareURL} /></li>
-          <li><SocialShareButton site='pinterest' media='' message='Discover this and more on Bible.exchange' url={shareURL} /></li>
+          <li><SocialShareButton site='pinterest' media='https://bible.exchange/be_logo.png' message={'Discover https://bible.exchange/'+shareURL+' and more on Bible.exchange.'} url={shareURL} /></li>
         </ul>
 
   		</nav>

@@ -8,14 +8,38 @@ import SearchBox from '../ListWidget/SearchBox'
 
 class NotesWidget extends React.Component {
 
+  componentWillMount (){
+    this.state = {
+      loading: true
+    }
+  }
+
+  componentDidMount(){
+    this.setState ({loading: false})
+  }
+
+  componentWillReceiveProps(newProps){
+
+    if(newProps.notes !== this.props.notes){
+          let s = this.state
+    s.loading = false
+
+    this.setState(s)
+    }
+
+  }
+
+
+
   render() {
 
-      let notes = this.props.notes.edges;
+      let notes = [];
       let totalCount = 0
       let user = this.props.user
-      
+
       if (this.props.notes !== undefined){
           totalCount = this.props.notes.totalCount
+          notes = this.props.notes.edges
       }
 
     let details = {
@@ -25,29 +49,60 @@ class NotesWidget extends React.Component {
       },
       totalCount: totalCount,
       filter: this.props.status.filter,
-        noResultsMessage: "No notes match your search!"
+        noResultsMessage: "No notes match your search!",
+        currentPage: this.props.status.notesCurrentPage
     }
 
-    let handleEditThis = this.props.handleEditThis
+    let selectNote = this.props.selectNote
 
     return (
-    		<div id='notes-widget'>
+    		<div id='notes-widget' className={"loading-"+this.state.loading}>
 
             <SearchBox
               items={this.props.notes}
               details = {details}
               status={this.props.status.status}
-              handleClearFilter={this.props.handleClearNoteFilter}
-              handleUpdateFilter={this.props.handleUpdateNoteFilter}
-              handleNextPage={this.props.handleNextNotePage}
+              handleClearFilter={this.clear}
+              handleUpdateFilter={this.handleUpdateNoteFilter.bind(this)}
+              handleNextPage={this.handleNextPage.bind(this)}
             />
 
           {notes.map((n) => {
-            return <NoteThumbnail user={user} tags={n.node.tags} key={n.node.id} note={n.node} selectNote={handleEditThis} />;
-          })};
+            return <NoteThumbnail user={user} tags={n.node.tags} key={n.node.id} note={n.node} selectNote={selectNote} />;
+          })}
 
     		</div>
     );
+  }
+
+  handleNextPage(e){
+    let s = this.state
+    s.loading = true
+
+    this.setState(s)
+
+    setTimeout(function() { this.props.handleNextNotePage(e); }.bind(this), 1);
+    
+  }
+
+  handleUpdateNoteFilter(e){
+    let s = this.state
+    s.loading = true
+
+    this.setState(s)
+
+    setTimeout(function() { this.props.handleUpdateNoteFilter(e); }.bind(this), 1);
+    
+  }
+
+  clear(e){
+    let s = this.state
+    s.loading = true
+
+    this.setState(s)
+
+    //setTimeout(function() { this.props.handleClearNoteFilter(e); }.bind(this), 1);
+    
   }
 
 }

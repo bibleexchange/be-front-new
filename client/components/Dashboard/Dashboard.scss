@@ -1,113 +1,56 @@
 @import "../variables.scss";
 
-#dashboard {
+ul#dashboard {
 
   width: 100%;
 
-  #main-search {
-		height:100%;
-		padding:0;
-		width:100%;
-		border:none;
-		height: 50px;
-		margin:0;
-		clear:both;
-		display:block;
-		background-color: white;
-		box-shadow: $boxShadow;
+  column-count: 3;
+  column-gap: 20px;
 
-		input{
-			border:none;
-			height:100%;
-			margin:0;
-			padding:0;
-		}
+  list-style:none;
+  margin:0;
+  padding:0;
+  color: black;
+  display:block;
 
-    #magnifying-glass {
-      height:100%;
-      margin:auto auto;
-      display:inline-block;
+  li {
+    background-color:white;
+    text-align:center;
+    vertiacle-align:middle;
+    display:block;
+    min-height:100px;
+    margin-bottom:15px;
+    padding:10px;
+
+    .delete-it {
+      width:25px;
+      height:25px;
+      float:right;
+      color:red;
+      background:none;
+      border:solid 1px red;
+      z-index:10;
     }
 
-		#search-text {
-			color:#777;
-			width:250px;
-			padding-left: 10px;
-			text-align: center;
-			width:75%;
-			padding: 0;
-      float:left;
-		}
-
-		#search {
-			background-color: transparent;
-			color:#777;
-		}
-
-	}
-
-  .WidgetContainer {
-      display: flex;
-      background: transparent;
-      margin:0;
-      padding:0;
-      padding-bottom:30px;
-
-    > div {
-      margin: 2rem;
-    }
-
-    h2 {
+    a {
+      text-decoration:none;
+      color:inherit;
       display:block;
-      color:white;
-      padding:0;
-      margin:0;
-      width:100%;
-
-      a {
-        display:block;
-        height:100%;
-        text-align: center;
-        text-decoration: none;
-        margin:0;
-        padding:1.4rem;
-        line-height: 70px;
-
-        img {
- 	  position:relative;
-	  float:left;
-	  width:135px;
-        }
-
-      }
-
+      min-height:100px;
+      height:100%;
+      line-height:100px;
+      text-align: center;
+      vertical-align:middle;
     }
 
   }
-}
 
-@media screen and (min-width: 670px) {
-  #dashboard {
-
-  .WidgetContainer > div {
-    background-color: rgba(255,255,255, .95);
-    margin: 3rem;
+  li:active {
+    background-color:gray;
   }
 
-
-  .WidgetContainer {
-    width:50%;
-    margin:auto;
-
-    .Widget{
-      width:100%;
-    }
-
-    > div {
-      flex: 0;
-      flex-basis: 1000px;
-    }
-
+  li:hover{
+    background-color:rgba(127,127,127,0.3);
   }
-}
+
 }

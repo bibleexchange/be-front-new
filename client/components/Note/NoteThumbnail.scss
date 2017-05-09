@@ -4,25 +4,21 @@
   border:solid 1px gray;
   border-bottom: 3px solid #317FB6;
   box-shadow: 10px 10px 5px #888888;
-
   padding:15px;
-  width:90%;
+  width:auto;
   display:block;
   background: none;
   position:relative;
   overflow: hidden;
-  height:100%;
-  margin-top:5%;
-  margin-left:5%;
+  margin:20px;
   background-color:rgba(255,255,255,0.7);
 
   .output {
-    height:140px;
-    overflow: hidden;
     h1, h2, h3, h4, h5, h6, p, blockquote {font-size: 1em;}
+    max-height: 140px;
+    overflow:hidden;
 
     div {
-      height:140px;
       overflow: hidden;
       margin:0;
       padding:0;

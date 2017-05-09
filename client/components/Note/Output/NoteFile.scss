@@ -1,10 +1,22 @@
-#note-file {
+#note{
+
+  background-color:white;
+  display:flex;
+  margin: 15px;
+
+   background-image:
+    linear-gradient(180deg, white 3rem, #F0A4A4 calc(3rem), #F0A4A4 calc(3rem + 2px), transparent 1px),
+    repeating-linear-gradient(0deg, transparent, transparent 1.5rem, #DDD 1px, #DDD calc(1.5rem + 1px));
+  box-shadow: 1px 1px 3px rgba(0,0,0,.25);
+  padding:0;
 
   main {
-    width:65%;
-    float:left;
+    width:75%;
+
     margin:0;
     padding:15px;
+    background:none;
+    padding-top:30px;
 
     h1, div {display:block; float:none; clear:both;}
 
@@ -12,10 +24,29 @@
   }
 
   aside {
-    width:26%;
-    float:right;
+    width:25%;
+
     border-left:solid 1px gray;
     margin:0;
     padding:2%;
+    background-color:white;
+    overflow:hidden;
+    word-wrap: break-word;
   }
+
+#note{
+  background: none;
+  box-shadow: none;
+
+  main {
+    width:100%;
+    background: inherit;
+  }
+
+  aside {
+    display:none;
+    background: inherit;
+  }
+}
+
 }
