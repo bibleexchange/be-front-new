@@ -14,7 +14,7 @@ modalStyle.display = 'none';
     return (<div id='modal' style={modalStyle} >
 		  <div id='dialog' >
 
-			<button onClick={this.props.close}>
+			<button onClick={this.props.close} className="dismiss">
 			  <span>&times;</span>
 			</button>
 

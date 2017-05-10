@@ -18,7 +18,6 @@ componentWillMount() {
     inputs: {},
     noteTypes: Object.keys(N),
     status: 'original',
-    myNotesStatus: false,
     data: this.setInitialData(this.props.note ),
     saveable: this.props.user.authenticated
   };
@@ -41,6 +40,7 @@ componentWillReceiveProps(newProps) {
       let noteType = this.state.data.type
       let optionsStyle = { display: 'block' }
       let viewLink = null
+      let createNew = null
 
       if (this.state.status !== 'done' && this.state.status !== 'original') {
         clearForm = <button style={{ color: 'red' }} onClick={this.clearForm.bind(this)}>X Undo All Changes</button>;
@@ -55,31 +55,12 @@ componentWillReceiveProps(newProps) {
 
       if(this.props.note !== null && this.props.note !== undefined ){
         viewLink = <section><Link to={"/notes/"+this.props.note.id}>View</Link></section>
+        createNew = <button onClick={this.createBlankNote.bind(this)} data-id={undefined}> <em>create new note</em></button>
       }
 
       let selectedType = this.state.type;
-      let handleEditThis = this.props.handleEditThis
 
       return (<div id='note-creator'>
-                <section>
-              <button onClick={this.toggleMyNotes.bind(this)}>MyNotes</button>
-              <ol id="my-notes" className={"my-notes-"+this.state.myNotesStatus}>
-                  <li onClick={this.createBlankNote.bind(this)} data-id={undefined}> <em>create new note</em></li>
-                  <li>
-                  <NotesWidget
-                    status={this.props.myNotesWidget}
-                    notes={this.props.notes}
-                    selectNote={handleEditThis}
-                    tags
-                    handleUpdateNoteFilter={this.props.handleUpdateMyNoteFilter}
-                    handleNextNotePage={this.props.moreNotes}
-                    handleNotesAreReady={this.props.handleNotesAreReady}
-                    handleEditThis={handleEditThis}
-                    user={this.props.user}
-                  />
-                  </li>
-                  </ol>
-                   </section>
               <section>
                
                 <div id="note">
@@ -94,12 +75,12 @@ componentWillReceiveProps(newProps) {
                     <section>{form}</section>
                     <section> <Status type={this.state.status} /></section>
                       {viewLink}
+                      {createNew}
                   </div>
 
-                  <h1>Title: <input type="text" value={this.state.data.title} onChange={this.updateTitle.bind(this)}/> noted on Scripture: <input type="text" value={this.state.data.reference} onChange={this.updateReference.bind(this)}/></h1>
-
-                  <h2>TAGS</h2>
-                  <p>Tags: <input type="text" value={this.state.data.tags} onChange={this.updateTags.bind(this)}/></p>
+                  <p><strong>Title:</strong> <input type="text" value={this.state.data.title} onChange={this.updateTitle.bind(this)}/></p>
+                  <p><strong>Scripture Reference:</strong> <input type="text" value={this.state.data.reference} onChange={this.updateReference.bind(this)}/></p>
+                  <p><strong>Tags:</strong> <input type="text" value={this.state.data.tags} onChange={this.updateTags.bind(this)}/></p>
 
                   </aside>
                 </div>
@@ -131,16 +112,6 @@ componentWillReceiveProps(newProps) {
        this.setState({data: n, status: "original"})
     }
 
-    handleInputChanges(e) {
-      e.preventDefault();
-      let newInputs = this.state.inputs;
-      newInputs[e.target.name] = e.target.value;
-      this.setState({
-        inputs: newInputs,
-        status: 'changes-not-saved'
-      });
-    }
-
     updateTitle(e){
       e.preventDefault()
       let data = this.state.data
@@ -151,7 +122,6 @@ componentWillReceiveProps(newProps) {
         status: 'changes-not-saved',
       })
     }
-
 
       updateReference(e){
         e.preventDefault()
@@ -178,10 +148,9 @@ componentWillReceiveProps(newProps) {
     setInitialData(note){
       let n = {
               id:"newNoteEdge",
-              title:"",
+              title:"NEW NOTE",
               tags: "",
               type: "",
-              id: "",
               body: "",
               reference: ""
           }
@@ -214,17 +183,10 @@ componentWillReceiveProps(newProps) {
 
       data.body = e.target.value
 
-    this.setState({
-        data: data,
-        status: <Status type='changes-not-saved' />,
+      this.setState({
+          data: data,
+          status: <Status type='changes-not-saved' />,
       })
-    }
-
-    toggleMyNotes(e){
-        let s = this.state
-        s.myNotesStatus = !this.state.myNotesStatus
-
-        this.setState(s)
     }
 
     handleUpdateNote(e){
@@ -268,19 +230,6 @@ componentWillReceiveProps(newProps) {
             name
             email
             authenticated
-        }`,
-        notes: () => Relay.QL`fragment on NoteConnection {
-           ${NotesWidget.getFragment('notes')}
-                pageInfo{hasNextPage}
-                edges{
-                    node {
-                        id
-                        title
-                        verse {id, reference}
-
-                    }
-                }
-
         }`
     }
   });

@@ -8,7 +8,6 @@ import BibleVerse from '../Note/Thumbnail/BibleVerse';
 import FileNoteThumbnail from '../Note/Thumbnail/FileNoteThumbnail'
 
 import marked from 'marked';
-import './NoteThumbnail.scss';
 
 class NoteThumbnail extends React.Component {
 

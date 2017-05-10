@@ -16,6 +16,8 @@ import Dashboard from './components/Dashboard/DashboardComponent';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import NotePrintPage from './components/Note/NotePrintPageComponent';
+//import UserFeed from './components/User/Feed'
+// <Route path=':user' component={UserFeed} />
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
@@ -35,6 +37,7 @@ export default (
 
     <Route path='bible/:reference' component={Bible} />
     <Route path='audio(/:filterBy)' component={AudioComponent} />
+
     <Redirect from='*' to='/bible/john_3_16' />
   </Route>
 );

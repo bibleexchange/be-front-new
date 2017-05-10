@@ -3,6 +3,8 @@
   background-color:white;
   display:flex;
   margin: 15px;
+  flex: 1;
+  flex-flow:row wrap;
 
    background-image:
     linear-gradient(180deg, white 3rem, #F0A4A4 calc(3rem), #F0A4A4 calc(3rem + 2px), transparent 1px),
@@ -11,8 +13,7 @@
   padding:0;
 
   main {
-    width:75%;
-
+    flex: 3;
     margin:0;
     padding:15px;
     background:none;
@@ -24,8 +25,7 @@
   }
 
   aside {
-    width:25%;
-
+  flex: 2;
     border-left:solid 1px gray;
     margin:0;
     padding:2%;
@@ -46,6 +46,24 @@
   aside {
     display:none;
     background: inherit;
+  }
+}
+
+}
+
+@media screen and (max-width: 650px)  {
+
+#note{
+display:block;
+margin:0;
+
+  main {
+    display:block;
+  }
+
+  aside {
+    display:block;
+    border-top:solid 1px gray;
   }
 }
 

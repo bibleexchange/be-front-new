@@ -4,7 +4,6 @@ import BibleBook from './BibleBook';
 export default class BibleBooksList extends React.Component {
   render() {
     const closeAll = this.props.closeAll;
-    const getChapter = this.props.getChapter;
     let filterBy = this.props.filterBy.toLowerCase();
     let books = [];
 
@@ -12,12 +11,14 @@ export default class BibleBooksList extends React.Component {
       books = this.props.bible.books.edges;
     }
 
+    let handleChapter = this.props.handleChapter
+
     return (
 		<div>
-			{books.filter(function (el) { return el.node.title.toLowerCase().includes(filterBy); }).map(function (book) {
-			                                                                                                      return <BibleBook book={book.node} key={Math.random()} closeAll={closeAll} />;
-			 })}
-		</div>
+{books.filter(function (el) { return el.node.title.toLowerCase().includes(filterBy); }).map(function (book, index) {
+return <BibleBook book={book.node} key={index} closeAll={closeAll} index={index} handleChapter={handleChapter}/>;
+})}
+</div>
 
     );
   }

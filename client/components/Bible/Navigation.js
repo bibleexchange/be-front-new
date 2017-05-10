@@ -25,8 +25,7 @@ class Navigation extends React.Component {
 
     render() {
 
-        return (<div id='biblenav'>
-                <div className='blueBG'>
+        return (<div id='biblenav' className='blueBG'>
                     <Link className='previous' to={this.props.bibleChapter.previousChapter.url}>&lt;</Link>
 
                     <Search term={this.state.search} submitHandler={this.props.handleSearchBibleReference}/>
@@ -38,7 +37,7 @@ class Navigation extends React.Component {
                     <button className='menu' onClick={this.toggleModal.bind(this)}>
                         &#x2637;
                     </button>
-                </div>
+
                 <VerseSelector
                     bible={this.props.bible}
                     handleBooksFilter={this.handleBooksFilter.bind(this)}

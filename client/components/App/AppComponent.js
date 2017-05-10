@@ -51,16 +51,22 @@ class App extends React.Component {
         soundcloud: false,
         bookmarks: false,
         notepad: false,
-        share: true,
+        share: false,
         verse: false,
-        notes: false
+        notes: false,
+        myNotes: false
       }
 
       let notesfilter = '';
-      let currentPage = 1;
+      let myNotesCurrentPage = 1;
+      let notesCurrentPage = 1;
 
-      if (this.props.viewer.notes !== undefined) {
-          currentPage = this.props.viewer.notes.currentPage;
+      if (this.props.viewer.notes !== undefined && this.props.viewer.notes.currentPage !== undefined) {
+          notesCurrentPage = this.props.viewer.notes.currentPage;
+      }
+
+      if (this.props.viewer.myNotes !== undefined && this.props.viewer.myNotes.currentPage !== undefined) {
+          myNotesCurrentPage = this.props.viewer.myNotes.currentPage;
       }
 
       let lang = "eng"
@@ -69,7 +75,13 @@ class App extends React.Component {
         lang = localStorage.getItem('language')
       }
 
-      let navs = this.uniques(JSON.parse(localStorage.getItem('navs')))
+      let navs = []
+
+      if(localStorage.getItem('navs') !== null && localStorage.getItem('navs') !== ""){
+        console.log(localStorage.getItem('navs'))
+        navs = this.uniques(JSON.parse(localStorage.getItem('navs')))
+      }
+
       localStorage.setItem('navs', navs)
 
     this.state = {
@@ -92,14 +104,14 @@ class App extends React.Component {
     myNotesWidget: {
         showModal: false,
         filter: this.props.relay.variables.myNotesFilter,
-        notesCurrentPage: currentPage,
+        notesCurrentPage: myNotesCurrentPage,
         status: null
     },
 
     notesWidget: {
         showModal: false,
         filter: this.props.relay.variables.noteFilter,
-        notesCurrentPage: currentPage,
+        notesCurrentPage: notesCurrentPage,
         status: null
     },
         coursesWidget: {
@@ -125,6 +137,10 @@ class App extends React.Component {
 
       if(this.props.params.noteId !== undefined && this.props.params.noteId !== null ){
           this.handleLoadThisNote(this.props.params.noteId);
+      }
+
+      if(this.props.params.courseId !== undefined && this.props.params.courseId !== null){
+          this.handleUpdateCourse(this.props.params.courseId)
       }
 
   }
@@ -160,6 +176,10 @@ class App extends React.Component {
           this.setState(newState)
       }
 
+      if(newProps.params.courseId !== this.props.params.courseId && newProps.params.courseId !== undefined){
+          this.handleUpdateCourse(newProps.params.courseId)
+      }
+
   }
 
   render() {
@@ -183,7 +203,7 @@ class App extends React.Component {
               display: "block"
           }
       }
-
+console.log(this.props.viewer.course)
 	  return (
     	<div className='container'>
 
@@ -249,7 +269,7 @@ class App extends React.Component {
                  viewer: this.props.viewer,
                  bibles: this.props.viewer.bibles,
                  courses: this.props.viewer.courses,
-                 course: this.props.viewer.course? this.props.viewer.course: null,
+                 course: this.props.viewer.course,
                  note: this.props.viewer.note,
                  notes: this.props.viewer.notes,
                  user: user,

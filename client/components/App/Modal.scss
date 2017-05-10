@@ -14,15 +14,23 @@
 
   #dialog {
     position: relative;
-    border: 1px solid #e5e5e5;
-    background-color: white;
+    border: none;
+    background: none;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    padding: 20px;
+    padding: 0;
     z-index:1055;
     margin-left: auto;
     margin-right: auto;
     margin-top:100px;
     width:70%;
+
+    .dismiss {
+      font-size: 80px;
+      background:none;
+      color:black;
+      border:none;
+    }
+
 
     input{
       width:100%;

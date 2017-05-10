@@ -1,22 +1,24 @@
 @import "../variables.scss";
 
 #biblenav{
+  height: 70px;
 
-  #bibleSearch {width:50%;}
-  a.previous {width:15%;}
-  a.next {width:15%;}
+  #bibleSearch {width:50%; height: 100%;}
+
   .menu {width:15%;}
+  font-size: 2rem;
 
   a.previous, a.next {
     text-decoration: none;
     font-weight: bold;
     display:inline-block;
+    text-align:center;
+    width:15%;
   }
 
   .previous {
     border:none;
     background:transparent;
-    margin-left:35px;
   }
   .next {
     border:none;
@@ -25,86 +27,140 @@
   .menu {
     border:none;
     background:transparent;
-    float:right;
     height:24px;
+    text-align: center;
+    font-size:2rem;
   }
 
   form#bibleSearch{
       display:inline-block;
+      height:100%;
     input {
       color:white;
       height:100%;
       margin:0;
-      border:1.11px;
-      padding:4.5px;
+      border:none;
       display:inline-block;
       vertical-align:middle;
       text-align:center;
-      max-width:150px;
+      width: 100%;
       background:rgba(255,255,255,.1);
+      font-size: 2rem;
     }
 
   }
+}
 
-.bookselect {
+#verse-selector {
+  display:flex;
+  flex-flow:row wrap;
+  border: solid $BLUE 15px;
+  text-align: center;
+  color:black;
 
-  display:inline-block;
-  margin:0;
-  padding:15px;
-
-  .bookname {
-    padding:5px;
-    border:solid 1px rgba(0,0,0,0.1);
-    width:auto;
+  input::placeholder {
+    color: gray;
+    font-style: italic;
   }
 
-    ul#book-menu {
-      margin:0;
-      list-style:none;
-      padding:0;
-      width:100%;
+  section:first-child {
+    order:1;
+    flex:0 1 100%;
+    margin-right:0px;
+    border-bottom: solid $BLUE 15px;
+  }
 
-      li{
-        margin:0px;
-        list-style:none;
-      }
+  section:nth-child(2) {
+    font-size: 2rem;
+    border-right: solid $BLUE 15px;
+    margin: auto;
+  }
 
-      li.square-list {
-        display:inline-block;
-        border: 1px solid gray;
-        width:60px;
-        height:60px;
-        text-align:center;
-        vertical-align:middle;
-        line-height:60px;
-      }
+  section:nth-child(2),  section:nth-child(3) {
+    height: 400px;
+    overflow-y:scroll;
+    background-color:white;
+  }
 
-    }
+  section {
+    order:2;
+    flex: 1;
+    margin-bottom:0;
+    box-shadow:none;
+  }
+
+ .square-list {
+    display:inline-block;
+    border: 1px solid gray;
+    width:70px;
+    height:70px;
+    text-align:center;
+    vertical-align:middle;
+    line-height:70px;
+
+    a {display:block; height:100%; width:100%; color: black; text-decoration: none;}
+  }
+
+  .square-list:hover {
+    background-color:$ORANGE;
+  }
+
+  .square-list:active {
+    background-color:$BLUE;
+  }
+  
+  ul#book-menu {
+    margin: 0;
   }
 
 }
 
-  @media screen and (min-width: 670px) {
+.bookselect {
 
-    #biblenav {
+  display:block;
+  margin:0;
+  padding:0;
+  width:100%;
 
-      .bookselect.break-here {
-        display:block;
-        clear:left;
-      }
+  button.bookname {
+    width:100%;
+    margin:0;
+    padding:15px;
+    background:none;
+    border:none;
+    border-top: 1px solid gray;
+    color:black;
+    font-size: 32px;
+  }
 
-      .bookselect {
-        width:auto;
-        margin:auto auto;
-        display: inline-block;
+  button.bookname:hover {
+    background-color:$ORANGE;
+  }
 
-        .bookname {
-          margin:0;
-          text-align: center;
-        }
+  button.bookname:active {
+    background-color:$BLUE;
+  }
 
-      }
+}
 
+@media screen and (max-width: 700px){
+  
+  #verse-selector {
+    margin:0;
+    padding:0;
+
+    .square-list {
+      width:99%;
+      margin:0;
+      border-right:none;
+      border-left:none;
+    }
+
+    ul#book-menu {
+      padding:0;
+      margin:0;
     }
 
   }
+
+}

@@ -63,21 +63,16 @@ class SectionsList extends React.Component {
 
 class IndexComponent extends React.Component {
 
-    componentWillMount(){
-        this.props.handleUpdateNoteFilter(this.props.params.filter)
-    }
 viewer
     render() {
     let baseUrl = '/course/';
-    let course = { title: 'Course Could not Be Loaded!' };
     let sections = [];
     let edit = null;
     let data = { sections: [], title: '' };
 
     if (this.props.course !== null && this.props.course !== undefined) {
-      course = this.props.course;
-      let data1 = JSON.parse(course.everything);
-      baseUrl = '/course/' + course.id;
+      let data1 = JSON.parse(this.props.course.everything);
+      baseUrl = '/course/' + this.props.course.id;
       if (data1 !== null) {
         sections = data.sections;
         data = data1;
@@ -90,14 +85,14 @@ viewer
 if(data.image === ""){
   data.image = this.props.course.image
 }
-
+console.log('course index', this.props.course)
     return (
         <div className='WidgetContainer'>
               <div className='Widget'>
                 <h1>{data.title} {edit}</h1>
 
                 <ul id='buttons-nav'>
-                  <li><Link to={'/course/' + course.id + '/print'} target="_blank">PRINT COURSE</Link></li>
+                  <li><Link to={'/course/' + this.props.course.id + '/print'} target="_blank">PRINT COURSE</Link></li>
                 </ul>
 
                 <img src={data.image} id='course-cover' />
@@ -110,7 +105,7 @@ if(data.image === ""){
 }
 
 IndexComponent.propTypes = {
-  viewer: React.PropTypes.object.isRequired,
+  course: React.PropTypes.object.isRequired,
 };
 
 export default Relay.createContainer(IndexComponent, {

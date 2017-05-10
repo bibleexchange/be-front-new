@@ -55,7 +55,8 @@ class Dock extends React.Component {
     let audioButton = null
     let verseButton = null
     let verseMain= null
-
+    let myNotesButton = null
+    let myNotesMain= null
     let audioMain = null
 
     let shareMain = null
@@ -83,10 +84,16 @@ class Dock extends React.Component {
             mainLogin = <li id="login" className={"main-"+ status.login}>EMAIL: {this.props.user.email}</li>
             notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
             notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor myNotesWidget={this.props.myNotesWidget} handleUpdateMyNoteFilter={this.props.handleUpdateMyNoteFilter} handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.myNotes} handleEditThis={this.props.handleEditThisNote}/> </li>
+        
+            myNotesButton = <li className={"menu-"+ status.myNotes}><button onClick={this.props.showInDockMenu} data-name="myNotes">my notes</button></li>
+            myNotesMain = <li id="my-notes"  className={"main-"+ status.myNotes}>{this.renderMyNotes()}</li>
+
         }else{
             name = 'login/register'
             notepadButton = null
             notepadMain = null
+            myNotesButton = null
+            myNotesMain = null
         }
 
     if(this.props.player.playStatus === true){
@@ -131,6 +138,7 @@ class Dock extends React.Component {
                             {shareButton}
                             {verseButton}
                             {notesButton}
+                            {myNotesButton}
 
                             <li className="no-hover"><Search handleUpdateSearch={this.handleUpdateSearch.bind(this)} searchIt={this.searchIt.bind(this)} search={this.state.filterBy} /></li>
 
@@ -144,6 +152,7 @@ class Dock extends React.Component {
                         {notepadMain}
                         {verseMain}
                         {notesMain}
+                        {myNotesMain}
                         
                     </ul>
 
@@ -159,12 +168,25 @@ class Dock extends React.Component {
                 status={this.props.notesWidget}
                 notes={this.props.notes}
                 selectNote={this.props.handleEditThisNote}
-                tags
                 handleUpdateNoteFilter={this.props.handleUpdateNoteFilter}
                 handleNextNotePage={this.props.handleNextNotePage}
                 handleNotesAreReady={this.props.handleNotesAreReady}
                 user={this.props.user}
               />)
+
+    }
+
+        renderMyNotes(){
+
+      return (<NotesWidget
+                    status={this.props.myNotesWidget}
+                    notes={this.props.myNotes}
+                    selectNote={this.props.handleEditThisNote}
+                    handleUpdateNoteFilter={this.props.handleUpdateMyNoteFilter}
+                    handleNextNotePage={this.props.moreMyNotes}
+                    handleNotesAreReady={this.props.handleNotesAreReady}
+                    user={this.props.user}
+                  />)
 
     }
 
@@ -293,7 +315,7 @@ export default Relay.createContainer(Dock, {
 
     myNotes: () => Relay.QL`
       fragment on NoteConnection {
-        ${NoteEditor.getFragment('notes')}
+        ${NotesWidget.getFragment('notes')}
             pageInfo{hasNextPage}
             edges{
                 node {
