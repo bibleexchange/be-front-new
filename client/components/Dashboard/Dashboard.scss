@@ -16,7 +16,7 @@ ul#dashboard {
   li {
     background-color:white;
     text-align:center;
-    vertiacle-align:middle;
+    vertical-align:middle;
     display:block;
     min-height:100px;
     margin-bottom:15px;
@@ -41,6 +41,8 @@ ul#dashboard {
       line-height:100px;
       text-align: center;
       vertical-align:middle;
+      background-image: url('/assets/img/chain.png');
+
     }
 
   }
