@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import './Dashboard.scss';
+import ChainLink from '../Svg/ChainLink'
 
 class Dashboard extends React.Component {
 
@@ -14,7 +15,7 @@ class Dashboard extends React.Component {
             <li><Link className="dashboard" to='/audio'>AUDIO LIBRARY</Link></li>
 
             {this.props.navs.map(function (value, key) {
-              return <li key={key}><button className="delete-it" onClick={deleteBookmark} data-id={key}>X</button><Link to={value} >{value}</Link></li>;
+              return <li key={key}><button className="delete-it" onClick={deleteBookmark} data-id={key}>X</button><Link to={value} >{value} <ChainLink /></Link></li>;
             })}
         </ul>
     );
