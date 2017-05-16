@@ -32,11 +32,9 @@ class Found extends React.Component {
     }
 
     return (
-      	<div className='WidgetContainer'>
-          <div className='Widget'>
+      	<div>
              <Navigation course={course} section={sectionId} step={stepId} baseUrl={baseUrl} nextAndPrevious={nextAndPrevious} />
              <Lesson lesson={currentLesson} language={this.props.language} handleLanguage={this.props.handleLanguage} />
-          </div>
       	</div>
     );
   }

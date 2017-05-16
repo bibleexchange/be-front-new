@@ -33,11 +33,11 @@ componentWillMount() {
         onClick={this.toggleChapter.bind(this)} 
         data-title={this.props.book.title} 
         data-chaptercount={this.props.book.chapterCount}
-        >{this.props.book.title}</button>
+        ><span>{this.props.book.title}</span> <RightArrow fill={"red"}/></button>
 		</div>
 		);
   }
 }
 
 //
-// <RightArrow />
+// 

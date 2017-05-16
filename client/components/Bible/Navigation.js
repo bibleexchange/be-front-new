@@ -16,21 +16,32 @@ class Navigation extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if(newProps.reference !== this.props.reference){
+       
+       if(newProps.reference !== this.props.reference){
             let n = this.state
             n.search = newProps.reference
             this.setState(n)
         }
+        
     }
 
     render() {
 
+        let chapter = {
+            previousChapter: {url:null},
+            nextChapter: {url:null}
+        }
+
+        if(this.props.bibleChapter !== null){
+            chapter = this.props.bibleChapter
+        }
+
         return (<div id='biblenav' className='blueBG'>
-                    <Link className='previous' to={this.props.bibleChapter.previousChapter.url}>&lt;</Link>
+                    <Link className='previous' to={chapter.previousChapter.url}>&lt;</Link>
 
                     <Search term={this.state.search} submitHandler={this.props.handleSearchBibleReference}/>
 
-                    <Link className='next' to={this.props.bibleChapter.nextChapter.url}>
+                    <Link className='next' to={chapter.nextChapter.url}>
                         &gt;
                     </Link>
 

@@ -24,7 +24,6 @@ import NotePrintComponent from '../Note/NotePrintPageComponent'
 import './App.scss'
 import './Print.scss'
 import './Typography.scss'
-import './Widget.scss'
 
 class App extends React.Component {
 
@@ -45,7 +44,7 @@ class App extends React.Component {
     let user = this.props.viewer.user ? this.props.viewer.user : { name: 'Guest' }
 
      let dockStatus = {
-        main: true,
+        main: false,
         login: false,
         signup: false,
         soundcloud: false,
@@ -78,7 +77,6 @@ class App extends React.Component {
       let navs = []
 
       if(localStorage.getItem('navs') !== null && localStorage.getItem('navs') !== ""){
-        console.log(localStorage.getItem('navs'))
         navs = this.uniques(JSON.parse(localStorage.getItem('navs')))
       }
 
@@ -203,7 +201,7 @@ class App extends React.Component {
               display: "block"
           }
       }
-console.log(this.props.viewer.course)
+
 	  return (
     	<div className='container'>
 
@@ -231,8 +229,8 @@ console.log(this.props.viewer.course)
                 handleLogin={this.handleLogin.bind(this)}
                 handleSignUp={this.handleSignUp.bind(this)}
                 user={user}
-                myNotes={this.props.viewer.myNotes}
-                notes={this.props.viewer.notes}
+                myNotes={this.props.viewer.myNotes? this.props.viewer.myNotes:null}
+                notes={this.props.viewer.notes? this.props.viewer.notes:null}
                 handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
                 handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
                 handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
@@ -244,7 +242,7 @@ console.log(this.props.viewer.course)
                 online={this.state.online}
                 signup={this.state.signup}
                 handleEditThisNote={this.handleEditThisNote.bind(this)}
-                note = {this.props.viewer.note}
+                note = {this.props.viewer.note? this.props.viewer.note:null}
                 moreMyNotes={this.handleMoreMyNotes.bind(this)}
                 toggleLogin={this.toggleLogin.bind(this)}
                 showInDockMenu={this.showInDockMenu.bind(this)}
@@ -252,8 +250,8 @@ console.log(this.props.viewer.course)
                 handleUpdateMyNoteFilter={this.handleUpdateMyNoteFilter.bind(this)}
                 notesWidget={this.state.notesWidget}
                 myNotesWidget={this.state.myNotesWidget}
-                bibleVerse={this.props.viewer.bibleVerse}
-                crossReferences={this.props.viewer.crossReferences}
+                bibleVerse={this.props.viewer.bibleVerse? this.props.viewer.bibleVerse:null}
+                crossReferences={this.props.viewer.crossReferences? this.props.viewer.crossReferences:null}
                 handleUpdateNoteFilter = {this.handleUpdateNoteFilter.bind(this)}
                 handleNextNotePage={this.handleNextNotePage.bind(this)}
             />
@@ -276,7 +274,7 @@ console.log(this.props.viewer.course)
                  handleChangeReference: this.handleChangeReference.bind(this),
                  handleUpdateReferenceForAll: this.handleUpdateReferenceForAll.bind(this),
                  handleChangeNoteFilter: this.handleChangeNoteFilter.bind(this),
-                 bibleChapter: this.props.viewer.bibleChapter,
+                 bibleChapter: this.props.viewer.bibleChapter? this.props.viewer.bibleChapter:null,
                  bibleStatus: this.state.bibleStatus,
                  handleToggleBible: this.handleToggleBible.bind(this),
                  language: this.state.languge,

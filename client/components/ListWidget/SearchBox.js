@@ -25,8 +25,12 @@ class SearchBox extends React.Component {
     let nextButtonText = 'Next'
 
     if(this.props.items !== undefined){
-      nextButtonText = 'Page ' + this.props.details.currentPage + ' of ' + this.props.items.totalPagesCount;
-    }
+      if(this.props.items.totalPagesCount !== undefined){
+        nextButtonText = 'Page ' + this.props.details.currentPage + ' of ' + this.props.items.totalPagesCount;
+      }else{
+        nextButtonText = 'Page ' + this.props.details.currentPage;
+      }
+    }  
 
     let nextPageDisabled = true;
     let search = <Loading />
@@ -50,7 +54,7 @@ class SearchBox extends React.Component {
         search = <input type='text' onKeyUp={this.runScriptOnPressEnterNoteSearch.bind(this)} onChange={this.handleEditFilter.bind(this)} onBlur={this.updateFilter.bind(this)} placeholder='  filter' value={this.state.filter} />
       }
 
-      if (this.props.details.totalCount >= 1) {
+      if (this.props.details.totalCount >= 1 || this.props.details.title.singular === "Audio") {
           noItems = null;
       }else{
           noItems =  <div style={{ display: 'inline-block', height: '175px', lineHeight: '175px' }}><h2>{this.props.details.noResultsMessage}</h2></div>

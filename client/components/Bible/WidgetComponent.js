@@ -12,12 +12,10 @@ class WidgetComponent extends React.Component {
     let nextChapterUrl = null;
     let goToNext = null;
 
-      if (this.props.bibleChapter !== undefined && this.props.bibleChapter !== null && this.props.bibleChapter.nextChapter !== null) {
+      if (this.props.bibleChapter !== null && this.props.bibleChapter.nextChapter !== null) {
           nextChapterUrl = this.props.bibleChapter.nextChapter.url;
           goToNext = <Link className='nextChapter' to={nextChapterUrl} >next chapter &#8631;</Link>;
       }
-
-
 
     const transitionOptions = {
       transitionName: "bibley",
@@ -46,8 +44,12 @@ class WidgetComponent extends React.Component {
     let user = this.props.user
     let clickVerseBody = this.props.clickVerseBody
     const baseUrl = ''
+    let verses = []
 
-    return this.props.bibleChapter.verses.edges.map(function (verse) {
+    if(this.props.bibleChapter !== null){
+      verses = this.props.bibleChapter.verses.edges
+    }
+    return verses.map(function (verse) {
               return <li className="list-group-item" key={verse.node.id} ><BibleVerse user={user} clickVerseBody={clickVerseBody} bibleVerse={verse.node} baseUrl={baseUrl} /></li>;
             })
   }
@@ -55,7 +57,7 @@ class WidgetComponent extends React.Component {
 }
 
 WidgetComponent.propTypes = {
-  bibleChapter: React.PropTypes.object.isRequired,
+  bibleChapter: React.PropTypes.object,
   bible: React.PropTypes.object,
 };
 

@@ -45,7 +45,6 @@
       text-align:center;
       width: 100%;
       background:rgba(255,255,255,.1);
-      font-size: 2rem;
     }
 
   }
@@ -57,6 +56,8 @@
   border: solid $BLUE 15px;
   text-align: center;
   color:black;
+  margin:0;
+  padding:0;
 
   input::placeholder {
     color: gray;
@@ -71,7 +72,6 @@
   }
 
   section:nth-child(2) {
-    font-size: 2rem;
     border-right: solid $BLUE 15px;
     margin: auto;
   }
@@ -91,14 +91,20 @@
 
  .square-list {
     display:inline-block;
-    border: 1px solid gray;
-    width:70px;
     height:70px;
     text-align:center;
     vertical-align:middle;
     line-height:70px;
+    width:99%;
+    margin:0;
+    border:none;
+    border-bottom: 1px solid gray;
 
     a {display:block; height:100%; width:100%; color: black; text-decoration: none;}
+  }
+
+  .square-list:first-of-type {
+    border-top: 1px solid gray;
   }
 
   .square-list:hover {
@@ -110,7 +116,12 @@
   }
   
   ul#book-menu {
-    margin: 0;
+    padding:0;
+    margin:0;
+
+    h2 {
+      font-size: 90%;
+    }
   }
 
 }
@@ -125,12 +136,29 @@
   button.bookname {
     width:100%;
     margin:0;
-    padding:15px;
+    padding:0;
+    padding-top:15px;
+    padding-bottom:15px;
     background:none;
     border:none;
     border-top: 1px solid gray;
     color:black;
-    font-size: 32px;
+    font-size: 26px;
+
+    span {
+      width: 70px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:inline-block;
+    }
+
+    .rightArrow {
+      height: 26px;
+      color:black;
+      text-align:right;
+      float:right;
+    }
   }
 
   button.bookname:hover {
@@ -143,23 +171,32 @@
 
 }
 
-@media screen and (max-width: 700px){
+@media screen and (min-width: 700px){
   
   #verse-selector {
-    margin:0;
-    padding:0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 
     .square-list {
-      width:99%;
-      margin:0;
-      border-right:none;
-      border-left:none;
+      border: 1px solid gray;
+      width:70px;
     }
 
-    ul#book-menu {
-      padding:0;
-      margin:0;
+    button.bookname {
+      font-size: 32px;
+
+      span {
+        width: auto;
+        white-space: wrap;
+        overflow: visible;
+        display:inline-block;
+      }
+
+      .rightArrow {
+        height: 32px;
+      }
     }
+
+
 
   }
 

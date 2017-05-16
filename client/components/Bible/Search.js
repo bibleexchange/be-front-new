@@ -4,20 +4,21 @@ export default class Search extends React.Component {
 
   componentWillMount() {
     this.state = {
-      search: this.props.term
+      search: ""
     };
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({ search: newProps.term });
+    //this.setState({ search: newProps.term });
   }
 
   render() {
     return (
 		<form id='bibleSearch' role='search' onSubmit={this.submitSearch.bind(this)}>
 			<input type='text' name='q' id='reference' value={this.state.search}
-  onChange={this.updateSearch.bind(this)}
-  onBlur={this.submitSearch.bind(this)}
+        onChange={this.updateSearch.bind(this)}
+        onBlur={this.submitSearch.bind(this)}
+        placeholder={this.props.term}
 			></input>
 		</form>
     );

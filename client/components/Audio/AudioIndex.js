@@ -13,6 +13,11 @@ class AudioIndex extends React.Component {
                   filter={this.props.params.filter}
                   viewer={this.props.viewer}
                   handlePlayAudio={this.props.handlePlayAudio}
+                  audioWidget={this.props.audioWidget}
+                  handleNextAudioPage={this.props.handleNextAudioPage}
+                  applyAudioFilter={this.props.applyAudioFilter}
+                  user={this.props.user}
+                  updateAudioWidget={this.props.updateAudioWidget}
                 />
               </div>
        	</div>

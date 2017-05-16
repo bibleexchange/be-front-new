@@ -37,7 +37,7 @@ class Section extends React.Component {
   render() {
     return (
               <div>
-                {this.props.section.title}
+                <h2>{this.props.section.title}</h2>
                 <StepsList steps={this.props.section.steps} baseUrl={this.props.baseUrl + '/' + this.props.section.id} />
               </div>
     );
@@ -53,7 +53,7 @@ class SectionsList extends React.Component {
     return (
               <div>
                 {this.props.sections.map(function (section, key) {
-                  return <h2 key={key} ><Section section={section} baseUrl={baseUrl} /></h2>;
+                  return <div key={key} ><Section section={section} baseUrl={baseUrl} /></div>;
                 })}
               </div>
     );
@@ -63,8 +63,7 @@ class SectionsList extends React.Component {
 
 class IndexComponent extends React.Component {
 
-viewer
-    render() {
+render() {
     let baseUrl = '/course/';
     let sections = [];
     let edit = null;
@@ -85,19 +84,15 @@ viewer
 if(data.image === ""){
   data.image = this.props.course.image
 }
-console.log('course index', this.props.course)
+
     return (
-        <div className='WidgetContainer'>
-              <div className='Widget'>
+        <div id='course-index'>
                 <h1>{data.title} {edit}</h1>
 
-                <ul id='buttons-nav'>
-                  <li><Link to={'/course/' + this.props.course.id + '/print'} target="_blank">PRINT COURSE</Link></li>
-                </ul>
+                <Link to={'/course/' + this.props.course.id + '/print'} target="_blank">PRINT COURSE</Link>
 
                 <img src={data.image} id='course-cover' />
                 <SectionsList sections={data.sections} baseUrl={baseUrl} />
-              </div>
         </div>
     );
   }

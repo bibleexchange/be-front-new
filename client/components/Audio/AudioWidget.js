@@ -35,35 +35,24 @@ class AudioWidget extends React.Component {
 
     if (this.props.params !== undefined && this.props.params.filter !== null) {
       filter = this.props.params.filter;
-      this.props.relay.setVariables({ filter: filter });
+      this.props.handleApplyAudioFilter(filter);
     }
 
-	   this.state = {
-      filter: filter,
-      status:null,
-      tracks:[],
-      offset: 0,
-      perPage: 5,
-      playStatus: false,
-      currentSoundId: null
-    	};
-
-    this.handleGetAudio();
-
-  }
-
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      status: null
-    });
-
-    if (newProps.filter !== this.props.filter) {
-      this.props.relay.setVariables({ filter: newProps.filter });
-
-      this.setState({
-        filter: newProps.filter
-      });
+    this.state = {
+        showModal: false,
+        filter: "",
+        currentPage: 1,
+        tracks:[],
+        offset: 0,
+        perPage: 5,
+        playStatus: false,
+        currentSoundId: null,
+        status: null
     }
+    let that = this
+
+    setTimeout(that.handleGetAudio.bind(that),500)
+
   }
 
   render() {
@@ -80,9 +69,10 @@ class AudioWidget extends React.Component {
         singular: "Audio",
         plural: "Audio"
       },
-      totalCount: this.state.tracks.length,
+      totalCount:  'Many :)',
       filter: this.state.filter,
-        noResultsMessage: "No audio match your search!"
+      noResultsMessage: "No audio match your search!",
+      currentPage: this.state.currentPage
     }
 
     return (
@@ -92,11 +82,8 @@ class AudioWidget extends React.Component {
             items={items}
             details = {details}
             status={this.state.status}
-            handleClearFilter={this.handleClearFilter.bind(this)}
-            runScriptOnPressEnter={this.runScriptOnPressEnter.bind(this)}
-            handleEditFilter={this.handleEditFilter.bind(this)}
-            applyFilter={this.applyFilter.bind(this)}
-            handleNextPage={this.handleNextPage.bind(this)}
+            handleUpdateFilter={this.handleApplyAudioFilter.bind(this)}
+            handleNextPage={this.handleNextAudioPage.bind(this)}
           />
 
           <ul id="cards">
@@ -109,65 +96,43 @@ class AudioWidget extends React.Component {
     );
   }
 
-  handleEditFilter(event) {
-    this.setState({ filter: event.target.value });
-  }
-
-  applyFilter(event) {
-
-    this.setState({
-      status: 'loading...',
-    });
-
-    this.handleGetAudio()
-
-  }
-
-  handleClearFilter(event) {
-    event.preventDefault();
-    this.setState({ filter: '' , offset: 0});
-    this.handleGetAudio()
-
-  }
-
-  handleNextPage() {
-
-    let newState = this.state
-    let newOffset = newState.offset + newState.perPage
-    this.setState({offset: newOffset})
-
-    this.handleGetAudio()
-
-  }
-
-  runScriptOnPressEnter(e) {
-
-    if (e.keyCode == 13) {
-      console.log('what key pressed?');
-      this.applyFilter(e);
-    }
-  }
-
   handleGetAudio(){
 
-    let setState = this.setState.bind(this)
-
-    var page_size = this.state.perPage;
-
+    let audio = this.state
     let url = 'tracks'//'/users/130712524/tracks'
-    let offset = this.state.offset
-    let filter = this.state.filter
+    let that = this
+    let data = {}
 
     SC.get(url, {
-      limit: page_size, linked_partitioning: 1, offset: offset, q:"bible_exchange", tags: filter
-    }).then(function(tracks) {
-      setState({
-        tracks: tracks.collection,
-        next: tracks.next_href,
-        status: null
-      })
+      limit: audio.perPage, linked_partitioning: 1, offset: audio.offset, q:"bible_exchange", tags: audio.filter
+    }).then(function(tracks) {      
+      audio.tracks = tracks.collection
+      audio.next = tracks.next_href
+      audio.status = null
+      audio.currentPage = 1
+      that.setState(audio)
     });
 
+  }
+
+  handleNextAudioPage() {
+
+    let newState = this.state
+    newState.offset = newState.offset + newState.perPage
+    newState.currentPage = newState.currentPage+1
+    this.setState(newState)
+
+    this.handleGetAudio()
+  }
+
+  handleApplyAudioFilter(str){
+
+    let newState = this.state
+    newState.filter = str
+    newState.status = 'loading...'
+    this.setState(newState)
+
+    this.handleGetAudio()
   }
 
 }

@@ -2,7 +2,7 @@
 
   background-color: rgba(175,175,175,0.5);
   position: absolute;
-  z-index:1050;
+  z-index:2501;
   width:100%;
   left:0;
   top:0;
@@ -16,13 +16,10 @@
     position: relative;
     border: none;
     background: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     padding: 0;
-    z-index:1055;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:100px;
-    width:70%;
+    z-index:2502;
+    width:100%;
+
 
     .dismiss {
       font-size: 80px;
@@ -39,6 +36,21 @@
       font-size: 1.2rem;
     }
 
+  }
+
+}
+
+@media screen and (min-width: 700px) {
+
+  #modal {
+    
+    #dialog {
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:100px;
+    width:70%;
+    }
   }
 
 }

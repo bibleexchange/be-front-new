@@ -41,6 +41,7 @@ inOrOut = <UserLoggedOut
           user={this.props.user}
           handleOpenCloseDock={this.props.handleOpenCloseDock}
           openClose={OpenClose}
+          handleBookmark={this.props.handleBookmark}
           />;
 }
 

@@ -67,7 +67,6 @@
 	text-align: center;
 	height:55px;
 	line-height:55px;
-	font-size: 1.7rem;
 }
 
 .nextChapter:active {background-color:gray;}
@@ -75,7 +74,7 @@
 .selectedVerse {background-color:$BLUE_TRANS;}
 
 	p {
-		font-weight: 300;
+		font-weight: 400;
 		line-height: 1.7rem;
 		margin-bottom: 0;
 		margin-left: .7rem;
@@ -92,13 +91,6 @@
 		font-family: 'Lato', sans-serif;
 		font-weight:100;
 		}
-}
-
-.verse {
-	margin-top: 3rem;
-	font-size: 1.8rem;
-	line-height: 2.7rem;
-	font-weight: 300;
 }
 
 @media screen and (min-width: 670px) {

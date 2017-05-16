@@ -15,8 +15,7 @@ class Index extends React.Component {
 
   render() {
     return (
-	      <div className='WidgetContainer' >
-          <div className='Widget'>
+	      <div >
 
           <CoursesWidget
             courses={this.props.courses}
@@ -25,7 +24,6 @@ class Index extends React.Component {
             coursesWidget={this.props.coursesWidget}
           />
 
-          </div>
 	      </div>
     );
   }

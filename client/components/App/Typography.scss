@@ -1,8 +1,10 @@
 @import "../variables.scss";
 
 html {
-	font-size: 100%;
+	font-size: 1rem;
 }
+
+input {font-size:100%;}
 
 body {
 	font-family: $font-sans;
@@ -21,9 +23,6 @@ a.btn:hover, .btn-link:hover {
 	text-decoration:underline;
 }
 
-html, body, p, h1, h2, h3, h4, h5 , h6, blockquote, li
-{line-height:125%;}
-
 /*background color styles */
 
 .greenBG {
@@ -40,25 +39,6 @@ html, body, p, h1, h2, h3, h4, h5 , h6, blockquote, li
 	a {color:white;}
 
 	button {color:white;}
-
-	::-webkit-input-placeholder { /* WebKit browsers */
-    color:    white;
-    padding-top:4px;
-	}
-	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-	   color:    white;
-	   opacity:  1;
-	   padding-top:4px;
-	}
-	::-moz-placeholder { /* Mozilla Firefox 19+ */
-	   color:    white;
-	   opacity:  1;
-	   padding-top:4px;
-	}
-	:-ms-input-placeholder { /* Internet Explorer 10+ */
-	   color:    white;
-	   padding-top:4px;
-	}
 
 }
 .orangeBG {
@@ -77,3 +57,21 @@ html, body, p, h1, h2, h3, h4, h5 , h6, blockquote, li
 .orangeBGtrans {
 	background-color:$ORANGE_TRANS;
 }
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: gray;
+  font-style: italic;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: gray;
+  font-style: italic;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: gray;
+  font-style: italic;
+}
+
