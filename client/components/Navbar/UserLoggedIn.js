@@ -9,8 +9,6 @@ class UserLoggedIn extends React.Component {
     <ul>
   		<li><button id="sign-out" onClick={this.props.handleLogout} />
   		</li>
-  		<li><button id='bookmark-it' onClick={this.props.handleBookmark} />
-  		</li>
       <li>{this.props.openClose}</li>
 	  </ul>
     );
@@ -20,7 +18,6 @@ class UserLoggedIn extends React.Component {
 
 UserLoggedIn.propTypes = {
   handleLogout: React.PropTypes.func.isRequired,
-  handleBookmark: React.PropTypes.func.isRequired,
   handleOpenCloseDock: React.PropTypes.func.isRequired
 };
 

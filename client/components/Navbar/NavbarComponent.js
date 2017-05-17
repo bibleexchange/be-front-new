@@ -33,7 +33,6 @@ inOrOut = <UserLoggedIn
           url={url} user={this.props.user}
           online={this.props.online}
           openClose={OpenClose}
-          handleBookmark={this.props.handleBookmark}
           />
 } else {
 inOrOut = <UserLoggedOut
@@ -41,7 +40,6 @@ inOrOut = <UserLoggedOut
           user={this.props.user}
           handleOpenCloseDock={this.props.handleOpenCloseDock}
           openClose={OpenClose}
-          handleBookmark={this.props.handleBookmark}
           />;
 }
 

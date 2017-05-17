@@ -211,7 +211,6 @@ class App extends React.Component {
         route={this.props.route}
         user={user}
         handleLogout={this.handleLogout.bind(this)}
-        handleBookmark={this.handleBookmark.bind(this)}
         online={this.state.online}
         handleOpenCloseDock = {this.handleOpenCloseDock.bind(this)}
         dockStatus={this.state.dockStatus.main}
@@ -231,6 +230,7 @@ class App extends React.Component {
                 user={user}
                 myNotes={this.props.viewer.myNotes? this.props.viewer.myNotes:null}
                 notes={this.props.viewer.notes? this.props.viewer.notes:null}
+                handleBookmark={this.handleBookmark.bind(this)}
                 handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
                 handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
                 handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
@@ -442,9 +442,9 @@ password: this.state.signup.password
 
     if (this.props.location.pathname !== null) {
         console.log("book mark it ...")
-      
+
       let navs = []
-      
+
       if (this.state.navs !== null) {
         navs = this.state.navs;
       }
@@ -456,7 +456,7 @@ password: this.state.signup.password
       newState.error = { message: 'Bookmark saved! ' + this.props.location.pathname, code: 221 }
       newState.navs = navs
       this.setState(newState)
-    } 
+    }
   }
 
 deleteNav(e){
@@ -773,14 +773,14 @@ export default Relay.createContainer(App, {
     viewer: () => Relay.QL`
       fragment on Viewer {
         ${SignUpUserMutation.getFragment('viewer')}
-        ${LoginUserMutation.getFragment('viewer')}        
+        ${LoginUserMutation.getFragment('viewer')}
         token
-        
+
         error{
           message
           code
         }
-        
+
          bibleChapter (filter: $reference){
             ${Bible.getFragment('bibleChapter')}
 	     }
@@ -824,7 +824,7 @@ export default Relay.createContainer(App, {
             nickname
             notesCount
            }
-           
+
            myNotes(filter: $myNotesFilter, first:$myNotesPageSize, after:$myNotesStartCursor){
                 ${Dock.getFragment('myNotes')}
                 ${NoteCreateMutation.getFragment('notes')}
@@ -852,7 +852,7 @@ export default Relay.createContainer(App, {
                   startCursor
                   endCursor
                 }
-	      } 
+	      }
         course(id:$courseId){
           ${Course.getFragment('course')}
           ${CoursePrint.getFragment('course')}

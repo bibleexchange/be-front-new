@@ -12,7 +12,6 @@ import CoursesIndex from './components/Course/CoursesIndex';
 import Course from './components/Course/Course';
 import CourseIndex from './components/Course/CourseIndex';
 import CoursePrint from './components/Course/CoursePrint';
-import Dashboard from './components/Dashboard/DashboardComponent';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import NotePrintPage from './components/Note/NotePrintPageComponent';
@@ -21,7 +20,7 @@ import NotePrintPage from './components/Note/NotePrintPageComponent';
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
-    <IndexRoute component={Dashboard} />
+    <IndexRoute component={Bible} />
 
     <Route path='/courses(/tag/:filter)' component={CoursesIndex} />
 

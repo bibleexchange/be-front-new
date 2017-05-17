@@ -10,6 +10,7 @@ import './Dock.scss';
 import NoteOptions from '../Note/NoteOptions';
 import NotesWidget from '../Note/NotesWidget';
 import MagnifyingGlass from '../Svg/MagnifyingGlass';
+import Dashboard from '../Dashboard/DashboardComponent';
 
 class Search extends React.Component {
 
@@ -59,6 +60,9 @@ class Dock extends React.Component {
     let myNotesMain= null
     let audioMain = null
 
+    let bookmarksButton = <li id="bookmarks" className={"menu-"+ status.bookmarks}><button onClick={this.props.showInDockMenu} data-name="bookmarks"></button></li>
+    let bookmarksMain =  <li id="soundcloud"  className={"main-"+ status.soundcloud}><Dashboard /></li>
+
     let shareMain = null
     let shareButton = null
 
@@ -84,7 +88,7 @@ class Dock extends React.Component {
             mainLogin = <li id="login" className={"main-"+ status.login}>EMAIL: {this.props.user.email}</li>
             notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
             notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor myNotesWidget={this.props.myNotesWidget} handleUpdateMyNoteFilter={this.props.handleUpdateMyNoteFilter} handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.myNotes} handleEditThis={this.props.handleEditThisNote}/> </li>
-        
+
             myNotesButton = <li className={"menu-"+ status.myNotes}><button onClick={this.props.showInDockMenu} data-name="myNotes">my notes</button></li>
             myNotesMain = <li id="my-notes"  className={"main-"+ status.myNotes}>{this.renderMyNotes()}</li>
 
@@ -129,7 +133,7 @@ class Dock extends React.Component {
 
                     <nav id="dock-menu">
                         <ul>
-                          
+
                             <li  className={"menu-"+ status.login + " " + "menu-"+ status.signup}>
                                 <button onClick={this.props.showInDockMenu} data-name="login">{name}</button>
                             </li>
@@ -139,8 +143,7 @@ class Dock extends React.Component {
                             {verseButton}
                             {notesButton}
                             {myNotesButton}
-
-                            <li className="no-hover"><Search handleUpdateSearch={this.handleUpdateSearch.bind(this)} searchIt={this.searchIt.bind(this)} search={this.state.filterBy} /></li>
+                            {bookmarksButton}
 
                         </ul>
                     </nav>
@@ -153,7 +156,7 @@ class Dock extends React.Component {
                         {verseMain}
                         {notesMain}
                         {myNotesMain}
-                        
+                        {bookmarksMain}
                     </ul>
 
                 </div>
@@ -214,17 +217,6 @@ class Dock extends React.Component {
               </span>)
 
     }
-
-  handleUpdateSearch(e) {
-    this.setState({ filterBy: e.target.value.replace(/ /g, '_') });
-  }
-
-  searchIt(e) {
-    e.preventDefault();
-    this.props.handleUpdateNoteFilter(this.state.filterBy);
-    //this.context.router.push('/notes/tag/' + this.state.filterBy);
-  }
-
 
 }
 
@@ -305,7 +297,7 @@ export default Relay.createContainer(Dock, {
             currentPage
             edges{
                 node {
-                    id 
+                    id
                     title
                     verse {id, reference}
                 }
@@ -319,7 +311,7 @@ export default Relay.createContainer(Dock, {
             pageInfo{hasNextPage}
             edges{
                 node {
-                    id 
+                    id
                     title
                     verse {id, reference}
                 }

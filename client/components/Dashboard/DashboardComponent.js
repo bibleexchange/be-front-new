@@ -10,6 +10,8 @@ class Dashboard extends React.Component {
 
     return (
 	      <ul id='dashboard' >
+            <button id='bookmark-it' onClick={this.props.handleBookmark} />
+
             <li><Link className="dashboard" to={'/bible/'+this.props.reference}>HOLY BIBLE</Link></li>
             <li><Link className="dashboard" to='/courses'>COURSES</Link></li>
             <li><Link className="dashboard" to='/audio'>AUDIO LIBRARY</Link></li>

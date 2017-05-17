@@ -17,8 +17,6 @@ class UserLoggedOut extends React.Component {
     		<ul>
           {Login}
           {Signup}
-                <li><button id='bookmark-it' onClick={this.props.handleBookmark} />
-      </li>
           <li>{this.props.openClose}</li>
         </ul>
     );
