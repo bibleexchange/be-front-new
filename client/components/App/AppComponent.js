@@ -53,7 +53,8 @@ class App extends React.Component {
         share: false,
         verse: false,
         notes: false,
-        myNotes: false
+        myNotes: false,
+        bookmark: false
       }
 
       let notesfilter = '';
@@ -210,7 +211,6 @@ class App extends React.Component {
         updateIt={this.state}
         route={this.props.route}
         user={user}
-        handleLogout={this.handleLogout.bind(this)}
         online={this.state.online}
         handleOpenCloseDock = {this.handleOpenCloseDock.bind(this)}
         dockStatus={this.state.dockStatus.main}
@@ -234,6 +234,7 @@ class App extends React.Component {
                 handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
                 handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
                 handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
+                handleLogout={this.handleLogout.bind(this)}
                 UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
                 UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
                 handleLoginStatus={this.handleLoginStatus.bind(this)}
@@ -254,6 +255,8 @@ class App extends React.Component {
                 crossReferences={this.props.viewer.crossReferences? this.props.viewer.crossReferences:null}
                 handleUpdateNoteFilter = {this.handleUpdateNoteFilter.bind(this)}
                 handleNextNotePage={this.handleNextNotePage.bind(this)}
+                deleteBookmark ={this.deleteNav.bind(this)}
+                bookmarks={navs}
             />
           </section>
 
@@ -288,9 +291,7 @@ class App extends React.Component {
                  handleLanguage: this.handleLanguage.bind(this),
                  reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
                  handleSearchBibleReference: this.handleSearchBibleReference.bind(this),
-                notesWidget: this.state.notesWidget,
-                deleteBookmark: this.deleteNav.bind(this),
-                navs: navs
+                notesWidget: this.state.notesWidget
              })}
 
           </main>
@@ -755,7 +756,7 @@ export default Relay.createContainer(App, {
   initialVariables: {
       noteId: undefined,
       noteFilter: undefined,
-      reference: undefined,
+      reference: 'John 1',
       notesStartCursor: undefined,
       pageSize: 5,
       bibleVersion: 'kjv',

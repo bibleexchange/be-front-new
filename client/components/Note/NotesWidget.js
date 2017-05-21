@@ -37,9 +37,9 @@ class NotesWidget extends React.Component {
       let totalCount = 0
       let user = this.props.user
 
-      if (this.props.notes !== undefined){
+      if (this.props.notes !== undefined && this.props.notes !== null){
           totalCount = this.props.notes.totalCount
-          notes = this.props.notes.edges
+          notes = this.props.notes.edges? this.props.notes.edges:[]
       }
 
     let details = {

@@ -1,7 +1,39 @@
 @import "../variables.scss";
 
-ul#dashboard {
+#bookmark-main {
 
+  #bookmark-it {
+
+    text-align: center;
+    margin:40px;
+    border:solid 1px white;;
+    width:100%;
+    background:none;
+    margin-left:0;
+    margin-right:0;
+
+    span {
+    display:block;
+    height:30px;
+    width:100%;
+    margin:0;
+    padding:0;
+    background-image: url("/assets/img/bookmark.png");
+    background-color: transparent;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding-left: 35px;
+    vertical-alignment:middle;
+    line-height:30px;
+    }
+  }
+
+  #bookmark-it:hover {
+    background-color:white;
+  }
+
+ul {
   width: 100%;
 
   column-count: 3;
@@ -60,5 +92,7 @@ ul#dashboard {
   li:hover{
     background-color:rgba(127,127,127,0.3);
   }
+
+}
 
 }

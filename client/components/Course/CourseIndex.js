@@ -9,7 +9,7 @@ class Step extends React.Component {
     const baseUrl = this.props.baseUrl;
 
     return (
-          <h5><Link to={baseUrl + '/' + this.props.id}>LESSON {this.props.id} {this.props.step.title}</Link></h5>
+          <Link to={baseUrl + '/' + this.props.id}>LESSON {this.props.id} {this.props.step.title}</Link>
     );
   }
 
@@ -21,12 +21,13 @@ class StepsList extends React.Component {
     let baseUrl = this.props.baseUrl;
 
     return (
-              <div>
+              <ul>
+              <li/>
                 {this.props.steps.map(function (step, key) {
                   key = key + 1;
-                  return <Step key={key} baseUrl={baseUrl} id={key} step={step} />;
+                  return <li key={key}><Step baseUrl={baseUrl} id={key} step={step} /></li>;
                 })}
-              </div>
+              </ul>
     );
   }
 
@@ -76,18 +77,18 @@ render() {
         sections = data.sections;
         data = data1;
       }
+
+          if(data.image === ""){
+            data.image = this.props.course.image
+          }
+
     }
 
-    if (this.props.user.authenticated == 'true') {
-     // edit = <sup><Link to={"/user/course/"+course.id+"/edit"}> edit</Link></sup>;
-    }
-if(data.image === ""){
-  data.image = this.props.course.image
-}
+
 
     return (
         <div id='course-index'>
-                <h1>{data.title} {edit}</h1>
+                <h1>{data.title}</h1>
 
                 <Link to={'/course/' + this.props.course.id + '/print'} target="_blank">PRINT COURSE</Link>
 
@@ -106,9 +107,8 @@ IndexComponent.propTypes = {
 export default Relay.createContainer(IndexComponent, {
   fragments: {
     user: () => Relay.QL`fragment on User {
-
           authenticated
-
+          email
       }`,
       course: () => Relay.QL`fragment on Course {
                   id

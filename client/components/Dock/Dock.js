@@ -10,7 +10,7 @@ import './Dock.scss';
 import NoteOptions from '../Note/NoteOptions';
 import NotesWidget from '../Note/NotesWidget';
 import MagnifyingGlass from '../Svg/MagnifyingGlass';
-import Dashboard from '../Dashboard/DashboardComponent';
+import Bookmark from '../Bookmark/BookmarkComponent';
 
 class Search extends React.Component {
 
@@ -60,8 +60,8 @@ class Dock extends React.Component {
     let myNotesMain= null
     let audioMain = null
 
-    let bookmarksButton = <li id="bookmarks" className={"menu-"+ status.bookmarks}><button onClick={this.props.showInDockMenu} data-name="bookmarks"></button></li>
-    let bookmarksMain =  <li id="soundcloud"  className={"main-"+ status.soundcloud}><Dashboard /></li>
+    let bookmarkButton = <li id="bookmark" className={"menu-"+ status.bookmark}><button onClick={this.props.showInDockMenu} data-name="bookmark">bookmarks</button></li>
+    let bookmarkMain =  <li id="bookmark"  className={"main-"+ status.bookmark}><Bookmark bookmarks={this.props.bookmarks} deleteBookmark={this.props.deleteBookmark} handleBookmark={this.props.handleBookmark} location={this.props.location}/></li>
 
     let shareMain = null
     let shareButton = null
@@ -84,8 +84,8 @@ class Dock extends React.Component {
             /><input type="button" value="Login instead?" onClick={this.props.toggleLogin}/></li></div>
 
         if (this.props.user.authenticated){
-            name = 'profile'
-            mainLogin = <li id="login" className={"main-"+ status.login}>EMAIL: {this.props.user.email}</li>
+            name = 'account'
+            mainLogin = <li id="login" className={"main-"+ status.login}>{this.renderAccount()}</li>
             notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
             notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor myNotesWidget={this.props.myNotesWidget} handleUpdateMyNoteFilter={this.props.handleUpdateMyNoteFilter} handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.myNotes} handleEditThis={this.props.handleEditThisNote}/> </li>
 
@@ -143,7 +143,7 @@ class Dock extends React.Component {
                             {verseButton}
                             {notesButton}
                             {myNotesButton}
-                            {bookmarksButton}
+                            {bookmarkButton}
 
                         </ul>
                     </nav>
@@ -156,7 +156,7 @@ class Dock extends React.Component {
                         {verseMain}
                         {notesMain}
                         {myNotesMain}
-                        {bookmarksMain}
+                        {bookmarkMain}
                     </ul>
 
                 </div>
@@ -215,6 +215,17 @@ class Dock extends React.Component {
             </p>
 
               </span>)
+
+    }
+
+    renderAccount(){
+
+      return (
+      <div>
+        <button id="sign-out" onClick={this.props.handleLogout} >logout </button>
+        <p>EMAIL: {this.props.user.email}</p>
+      </div>
+      )
 
     }
 
