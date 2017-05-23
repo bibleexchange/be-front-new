@@ -273,6 +273,7 @@ class App extends React.Component {
                  course: this.props.viewer.course,
                  note: this.props.viewer.note,
                  notes: this.props.viewer.notes,
+                 verses: this.props.viewer.search? this.props.viewer.search.verses:null,
                  user: user,
                  handleChangeReference: this.handleChangeReference.bind(this),
                  handleUpdateReferenceForAll: this.handleUpdateReferenceForAll.bind(this),
@@ -291,6 +292,7 @@ class App extends React.Component {
                  handleLanguage: this.handleLanguage.bind(this),
                  reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
                  handleSearchBibleReference: this.handleSearchBibleReference.bind(this),
+                 handleMoreSearch: this.handleMoreSearch.bind(this),
                 notesWidget: this.state.notesWidget
              })}
 
@@ -651,7 +653,6 @@ deleteNav(e){
     }
 
     handleNextNotePage() {
-      console.log(666)
         this.props.relay.setVariables({
             notesStartCursor: this.props.viewer.notes.pageInfo.endCursor
         });
@@ -722,7 +723,8 @@ deleteNav(e){
         this.props.relay.setVariables({
             noteFilter: ref.toLowerCase(),
             notesStartCursor: null,
-            reference: ref
+            reference: ref,
+            searchCursor:undefined
         });
 
         let s = this.state
@@ -731,6 +733,13 @@ deleteNav(e){
         s.notesWidget.notesCurrentPage = 1
         s.notesWidget.filter = ref
         this.setState(s);
+
+    }
+
+    handleMoreSearch(e) {
+        this.props.relay.setVariables({
+            searchCursor: this.props.viewer.search.verses.pageInfo.endCursor
+        });
 
     }
 
@@ -768,8 +777,11 @@ export default Relay.createContainer(App, {
       crPageSize: 20,
       myNotesFilter:undefined,
       myNotesPageSize: 5,
-      myNotesStartCursor: undefined
+      myNotesStartCursor: undefined,
+      searchLimit:10,
+      searchCursor:undefined
   },
+
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
@@ -869,6 +881,17 @@ export default Relay.createContainer(App, {
         }
         ${Library.getFragment('courses')}
         }
+
+
+        search(filter: $reference){
+               verses(first:$searchLimit, after:$searchCursor){
+                 pageInfo{
+                   endCursor
+                 }
+                ${Bible.getFragment('verses')}
+               }
+         }
+
 
       }
     `,

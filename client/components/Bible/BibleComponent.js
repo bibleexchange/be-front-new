@@ -21,7 +21,8 @@ class Bible extends React.Component {
     let reference = this.props.reference
     let user = this.props.user
     let handleSearchBibleReference = this.props.handleSearchBibleReference
-
+    let verses = this.props.verses
+    let handleMoreSearch = this.props.handleMoreSearch
     return (
 		<div id='bible'>
 
@@ -33,6 +34,8 @@ class Bible extends React.Component {
             user={user}
             reference={reference}
             handleSearchBibleReference={handleSearchBibleReference}
+            verses={verses}
+            handleMoreSearch={handleMoreSearch}
           />);
         })}
 
@@ -93,7 +96,12 @@ export default Relay.createContainer(Bible, {
                               }
                             }
                      }
-                }`
+                }`,
+
+      verses: () => Relay.QL`fragment on BibleVerseConnection {
+        ${BibleWidget.getFragment('verses')}
+     }`,
+
 
   },
 });

@@ -5,16 +5,70 @@ import BibleNavigation from './Navigation';
 import { Link } from 'react-router';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup' // ES6
 
+class Search extends React.Component {
+
+  componentWillMount(){
+    this.state = {
+      currentPage : this.props.verses.currentPage
+    }
+  }
+
+  componentWillReceiveProps(newProps){
+    console.log(newProps)
+  }
+
+  render() {
+
+    let next = null
+    let totalPages = Math.ceil(this.props.verses.totalCount/this.props.verses.perPage)
+
+    if(this.props.verses.pageInfo.hasNextPage){
+      next = <button onClick={this.moreSearch.bind(this)} style={{width:"100%", border:"none", backgroundColor:"#00c97c", height:"45px", color:"white", fontWeight:"bold", fontSize:"1.5rem"}}>page {this.state.currentPage} of {totalPages}  &#8631;</button>
+    }
+
+    console.log(atob(this.props.verses.pageInfo.endCursor))
+
+    return (<div>
+          <ul>
+          {this.props.verses.edges.map(function(verse){
+            return <li key={verse.node.id} style={{padding:"15px"}}>
+
+              <Link activeClassName="active-verse" to={!verse.node.url ? '' : verse.node.url} >
+                <sup>{verse.node.reference}</sup>
+              </Link>
+                 &nbsp; {verse.node.body}
+            </li>
+          })}
+          </ul>
+          {next}
+          </div>
+    );
+  }
+
+  moreSearch(e){
+    let s = this.state
+    s.currentPage = s.currentPage+1
+    this.setState(s)
+    this.props.handleMoreSearch(e)
+  }
+
+}
+
 class WidgetComponent extends React.Component {
 
   render() {
-   
-    let nextChapterUrl = null;
-    let goToNext = null;
+
+    let nextChapterUrl = null
+    let goToNext = null
+    let search = null
 
       if (this.props.bibleChapter !== null && this.props.bibleChapter.nextChapter !== null) {
           nextChapterUrl = this.props.bibleChapter.nextChapter.url;
           goToNext = <Link className='nextChapter' to={nextChapterUrl} >next chapter &#8631;</Link>;
+      }else{
+        if(this.props.verses !== null && this.props.verses !== undefined){
+           search = <Search handleMoreSearch={this.props.handleMoreSearch} verses={this.props.verses}/>
+       }
       }
 
     const transitionOptions = {
@@ -36,6 +90,9 @@ class WidgetComponent extends React.Component {
             </CSSTransitionGroup>
             </ul>
           {goToNext}
+
+          {search}
+
       </div>
     );
   }
@@ -72,14 +129,14 @@ export default Relay.createContainer(WidgetComponent, {
 		    cursor
 		    node{
 		      id
-               order_by
-               body
-               url
-               notesCount
+           order_by
+           body
+           url
+           notesCount
 		     }
 		  }
 		}
-	  
+
       }`,
     bible: () => Relay.QL`fragment on Bible {
      ${BibleNavigation.getFragment('bible')}
@@ -87,6 +144,26 @@ export default Relay.createContainer(WidgetComponent, {
 
     user: () => Relay.QL`fragment on User {
         authenticated
-   }`
+   }`,
+
+   verses: () => Relay.QL`fragment on BibleVerseConnection {
+         pageInfo{
+           hasNextPage
+           endCursor
+         }
+         totalCount
+         perPage
+         currentPage
+         edges{
+           node {
+             id
+             body
+             url
+             reference
+           }
+         }
+  }`,
+
+
   },
 });
