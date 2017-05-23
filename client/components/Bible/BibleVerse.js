@@ -11,10 +11,10 @@ class BibleVerseComponent extends React.Component {
 	    <p id={this.props.bibleVerse.id} >
 
 	      <Link activeClassName="active-verse" to={!this.props.bibleVerse.url ? '' : this.props.bibleVerse.url} >
-          <sup>{this.props.bibleVerse.order_by}</sup>
+          <sup>{this.props.bibleVerse.order_by}&nbsp;</sup>
         </Link>
 
-           &nbsp; {this.props.bibleVerse.body} [{this.props.bibleVerse.notesCount}]
+           <span>{this.props.bibleVerse.body} [{this.props.bibleVerse.notesCount}]</span>
 
       </p>
 
