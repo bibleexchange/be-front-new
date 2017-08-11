@@ -16,7 +16,6 @@ class LoginComponent extends React.Component {
 
                 <input type='password' onChange={this.props.UpdateLoginPassword} placeholder='password' ref='password' />
 
-                <input type='checkbox' label='Remember me' />
                 <hr />
 
                 <input type='button' value='Login' onClick={this.props.handleLogin} />

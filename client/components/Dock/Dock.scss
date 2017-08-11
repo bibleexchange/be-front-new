@@ -97,7 +97,7 @@ h1 {
                 height:55px;
                 overflow: hidden;
 
-                button {
+                button, a {
                   border:none;
                   background: none;
                   color:white;
@@ -146,7 +146,7 @@ h1 {
     li:hover {
       background-color: rgb(255,241,202);
 
-      button {
+      button, a {
       color:black;
       }
 

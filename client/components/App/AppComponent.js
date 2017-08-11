@@ -17,6 +17,7 @@ import Bible from '../Bible/BibleComponent'
 import Course from '../Course/Course'
 import CoursePrint from '../Course/CoursePrint'
 import CourseIndex from '../Course/CourseIndex'
+import Dashboard from '../Dashboard/Dashboard'
 import NotesIndex from '../Note/NotesIndex'
 import Library from '../Course/CoursesIndex'
 import NotePageComponent from '../Note/NotePageComponent'
@@ -45,7 +46,7 @@ class App extends React.Component {
 
      let dockStatus = {
         main: false,
-        login: false,
+        login: true,
         signup: false,
         soundcloud: false,
         bookmarks: false,
@@ -207,7 +208,7 @@ class App extends React.Component {
     	<div className='container'>
 
         <MainNavigation
-            location={this.props.location}
+        location={this.props.location}
         updateIt={this.state}
         route={this.props.route}
         user={user}
@@ -225,38 +226,20 @@ class App extends React.Component {
                 status={this.state.dockStatus}
                 player={this.state.player}
                 handleCloseAudio={this.handleCloseAudio.bind(this)}
-                handleLogin={this.handleLogin.bind(this)}
-                handleSignUp={this.handleSignUp.bind(this)}
                 user={user}
-                myNotes={this.props.viewer.myNotes? this.props.viewer.myNotes:null}
                 notes={this.props.viewer.notes? this.props.viewer.notes:null}
-                handleBookmark={this.handleBookmark.bind(this)}
-                handleEditSignUpEmail={this.handleEditSignUpEmail.bind(this)}
-                handleEditSignUpPassword={this.handleEditSignUpPassword.bind(this)}
-                handleEditSignUpPasswordConfirm={this.handleEditSignUpPasswordConfirm.bind(this)}
-                handleLogout={this.handleLogout.bind(this)}
-                UpdateLoginEmail={this.UpdateLoginEmail.bind(this)}
-                UpdateLoginPassword={this.UpdateLoginPassword.bind(this)}
-                handleLoginStatus={this.handleLoginStatus.bind(this)}
-                handleSignUpStatus={this.handleSignUpStatus.bind(this)}
                 handleUpdateNote={this.handleUpdateNote.bind(this)}
                 online={this.state.online}
-                signup={this.state.signup}
                 handleEditThisNote={this.handleEditThisNote.bind(this)}
                 note = {this.props.viewer.note? this.props.viewer.note:null}
                 moreMyNotes={this.handleMoreMyNotes.bind(this)}
-                toggleLogin={this.toggleLogin.bind(this)}
                 showInDockMenu={this.showInDockMenu.bind(this)}
                 location={this.props.location}
-                handleUpdateMyNoteFilter={this.handleUpdateMyNoteFilter.bind(this)}
                 notesWidget={this.state.notesWidget}
-                myNotesWidget={this.state.myNotesWidget}
                 bibleVerse={this.props.viewer.bibleVerse? this.props.viewer.bibleVerse:null}
                 crossReferences={this.props.viewer.crossReferences? this.props.viewer.crossReferences:null}
                 handleUpdateNoteFilter = {this.handleUpdateNoteFilter.bind(this)}
                 handleNextNotePage={this.handleNextNotePage.bind(this)}
-                deleteBookmark ={this.deleteNav.bind(this)}
-                bookmarks={navs}
             />
           </section>
 
@@ -282,6 +265,22 @@ class App extends React.Component {
                  bibleStatus: this.state.bibleStatus,
                  handleToggleBible: this.handleToggleBible.bind(this),
                  language: this.state.languge,
+
+                  handleLogout: this.handleLogout.bind(this),
+                  handleLogin: this.handleLogin.bind(this),
+                  UpdateLoginEmail: this.UpdateLoginEmail.bind(this),
+                  UpdateLoginPassword: this.UpdateLoginPassword.bind(this),
+                  handleLoginStatus: this.handleLoginStatus.bind(this),
+                  handleSignUp: this.handleSignUp.bind(this),
+                  handleEditSignUpEmail: this.handleEditSignUpEmail.bind(this),
+                  handleEditSignUpPassword: this.handleEditSignUpPassword.bind(this),
+                  handleEditSignUpPasswordConfirm: this.handleEditSignUpPasswordConfirm.bind(this),
+                  handleLogout: this.handleLogout.bind(this),
+                  handleSignUpStatus: this.handleSignUpStatus.bind(this),   
+                  signup: this.state.signup,
+                  toggleLogin: this.toggleLogin.bind(this),
+                  status: this.state.dockStatus,
+
                  handleUpdateNoteFilter: this.handleUpdateNoteFilter.bind(this),
                  handleNextNotePage: this.handleNextNotePage.bind(this),
                  handleApplyNoteFilter: this.handleApplyNoteFilter.bind(this),
@@ -293,7 +292,15 @@ class App extends React.Component {
                  reference: this.props.relay.variables.reference? this.props.relay.variables.reference:"",
                  handleSearchBibleReference: this.handleSearchBibleReference.bind(this),
                  handleMoreSearch: this.handleMoreSearch.bind(this),
-                notesWidget: this.state.notesWidget
+                notesWidget: this.state.notesWidget,
+                  myNotesWidget: this.state.myNotesWidget,
+                  myNotes: this.props.viewer.myNotes? this.props.viewer.myNotes:null,
+                  handleUpdateMyNoteFilter: this.handleUpdateMyNoteFilter.bind(this),
+
+                  handleBookmark: this.handleBookmark.bind(this),
+                  deleteBookmark: this.deleteNav.bind(this),
+                  bookmarks: navs
+
              })}
 
           </main>
@@ -839,7 +846,7 @@ export default Relay.createContainer(App, {
            }
 
            myNotes(filter: $myNotesFilter, first:$myNotesPageSize, after:$myNotesStartCursor){
-                ${Dock.getFragment('myNotes')}
+                ${Dashboard.getFragment('myNotes')}
                 ${NoteCreateMutation.getFragment('notes')}
                 pageInfo{
                     hasNextPage

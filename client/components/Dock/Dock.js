@@ -4,8 +4,6 @@ import { Link } from 'react-router';
 import Loading from '../ListWidget/Loading'
 import SoundCloudPlayer from './SoundCloudPlayer'
 import NoteEditor from '../NoteEditor/NoteEditorWidget'
-import LoginComponent from '../Login/LoginComponent';
-import SignUpComponent from '../Login/SignUpComponent';
 import './Dock.scss';
 import NoteOptions from '../Note/NoteOptions';
 import NotesWidget from '../Note/NotesWidget';
@@ -29,17 +27,6 @@ class Search extends React.Component {
 }
 
 class Dock extends React.Component {
-/*
-      componentWillReceiveProps(newProps) {
-        if(newProps.bibleVerse === null || newProps.bibleVerse === undefined){
-          newProps.bibleVerse = this.props.bibleVerse
-        }
-      }
-
-       shouldComponentUpdate: function(nextProps, nextState
-
-       instead of wilReceive but will have to create a separe versesCompnent to use this
-      */
 
   componentWillMount() {
     this.state = {
@@ -49,55 +36,22 @@ class Dock extends React.Component {
 
     render() {
     let status = this.props.status
-    let name = 'login/register'
     let playStatus = null
     let notepadButton = null
     let notepadMain = null
     let audioButton = null
     let verseButton = null
     let verseMain= null
-    let myNotesButton = null
-    let myNotesMain= null
     let audioMain = null
-
-    let bookmarkButton = <li id="bookmark" className={"menu-"+ status.bookmark}><button onClick={this.props.showInDockMenu} data-name="bookmark">bookmarks</button></li>
-    let bookmarkMain =  <li id="bookmark"  className={"main-"+ status.bookmark}><Bookmark bookmarks={this.props.bookmarks} deleteBookmark={this.props.deleteBookmark} handleBookmark={this.props.handleBookmark} location={this.props.location}/></li>
-
     let shareMain = null
     let shareButton = null
 
-        let mainLogin = <div><li id="login" className={"main-"+ status.login}><LoginComponent
-            handleLogin={this.props.handleLogin}
-            handleStatus={this.props.handleLoginStatus}
-            user={this.props.user}
-            UpdateLoginEmail={this.props.UpdateLoginEmail}
-            UpdateLoginPassword={this.props.UpdateLoginPassword}
-        /><input type="button" value="Register instead?" onClick={this.props.toggleLogin}/></li>
-            <li id="signup"  className={"main-"+ status.signup}><SignUpComponent
-                handleEditSignUpEmail={this.props.handleEditSignUpEmail}
-                handleEditSignUpPassword={this.props.handleEditSignUpPassword}
-                handleEditSignUpPasswordConfirm={this.props.handleEditSignUpPasswordConfirm}
-                handleStatus={this.props.handleSignUpStatus}
-                user={this.props.user}
-                handleSignUp={this.props.handleSignUp}
-                signup={this.props.signup}
-            /><input type="button" value="Login instead?" onClick={this.props.toggleLogin}/></li></div>
-
         if (this.props.user.authenticated){
-            name = 'account'
-            mainLogin = <li id="login" className={"main-"+ status.login}>{this.renderAccount()}</li>
             notepadButton = <li className={"menu-"+ status.notepad}><button onClick={this.props.showInDockMenu} data-name="notepad">notepad</button></li>
             notepadMain =  <li id="notepad"  className={"main-"+ status.notepad}> <NoteEditor myNotesWidget={this.props.myNotesWidget} handleUpdateMyNoteFilter={this.props.handleUpdateMyNoteFilter} handleUpdateNote={this.props.handleUpdateNote} moreNotes={this.props.moreMyNotes} user={this.props.user} note={this.props.note} notes={this.props.myNotes} handleEditThis={this.props.handleEditThisNote}/> </li>
-
-            myNotesButton = <li className={"menu-"+ status.myNotes}><button onClick={this.props.showInDockMenu} data-name="myNotes">my notes</button></li>
-            myNotesMain = <li id="my-notes"  className={"main-"+ status.myNotes}>{this.renderMyNotes()}</li>
-
         }else{
-            name = 'login/register'
-            notepadButton = null
+             notepadButton = null
             notepadMain = null
-            myNotesButton = null
-            myNotesMain = null
         }
 
     if(this.props.player.playStatus === true){
@@ -133,30 +87,20 @@ class Dock extends React.Component {
 
                     <nav id="dock-menu">
                         <ul>
-
-                            <li  className={"menu-"+ status.login + " " + "menu-"+ status.signup}>
-                                <button onClick={this.props.showInDockMenu} data-name="login">{name}</button>
-                            </li>
                             {audioButton}
                             {notepadButton}
                             {shareButton}
                             {verseButton}
                             {notesButton}
-                            {myNotesButton}
-                            {bookmarkButton}
-
                         </ul>
                     </nav>
 
                     <ul className="main">
                         {shareMain}
-                        {mainLogin}
                         {audioMain}
                         {notepadMain}
                         {verseMain}
                         {notesMain}
-                        {myNotesMain}
-                        {bookmarkMain}
                     </ul>
 
                 </div>
@@ -176,20 +120,6 @@ class Dock extends React.Component {
                 handleNotesAreReady={this.props.handleNotesAreReady}
                 user={this.props.user}
               />)
-
-    }
-
-        renderMyNotes(){
-
-      return (<NotesWidget
-                    status={this.props.myNotesWidget}
-                    notes={this.props.myNotes}
-                    selectNote={this.props.handleEditThisNote}
-                    handleUpdateNoteFilter={this.props.handleUpdateMyNoteFilter}
-                    handleNextNotePage={this.props.moreMyNotes}
-                    handleNotesAreReady={this.props.handleNotesAreReady}
-                    user={this.props.user}
-                  />)
 
     }
 
@@ -215,17 +145,6 @@ class Dock extends React.Component {
             </p>
 
               </span>)
-
-    }
-
-    renderAccount(){
-
-      return (
-      <div>
-        <button id="sign-out" onClick={this.props.handleLogout} >logout </button>
-        <p>EMAIL: {this.props.user.email}</p>
-      </div>
-      )
 
     }
 
@@ -267,8 +186,6 @@ export default Relay.createContainer(Dock, {
         name
         email
         ${NoteEditor.getFragment('user')}
-        ${LoginComponent.getFragment('user')}
-        ${SignUpComponent.getFragment('user')}
       }
     `,
 
@@ -306,20 +223,6 @@ export default Relay.createContainer(Dock, {
             totalCount
             totalPagesCount
             currentPage
-            edges{
-                node {
-                    id
-                    title
-                    verse {id, reference}
-                }
-      }
-      }`,
-
-
-    myNotes: () => Relay.QL`
-      fragment on NoteConnection {
-        ${NotesWidget.getFragment('notes')}
-            pageInfo{hasNextPage}
             edges{
                 node {
                     id

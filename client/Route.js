@@ -12,11 +12,16 @@ import CoursesIndex from './components/Course/CoursesIndex';
 import Course from './components/Course/Course';
 import CourseIndex from './components/Course/CourseIndex';
 import CoursePrint from './components/Course/CoursePrint';
+import Dashboard from './components/Dashboard/Dashboard';
 import NotesIndex from './components/Note/NotesIndex';
 import NotePage from './components/Note/NotePageComponent';
 import NotePrintPage from './components/Note/NotePrintPageComponent';
-//import UserFeed from './components/User/Feed'
-// <Route path=':user' component={UserFeed} />
+
+import Feed from './components/Dashboard/Feed'
+import Menu from './components/Dashboard/Menu'
+import MyNotes from './components/Dashboard/MyNotes'
+import MyBookmarks from './components/Dashboard/MyBookmarks'
+import MyAccount from './components/Dashboard/MyAccount'
 
 export default (
   <Route path='/' component={App} queries={ViewerQueries} >
@@ -36,6 +41,14 @@ export default (
 
     <Route path='bible/:reference' component={Bible} />
     <Route path='audio(/:filterBy)' component={AudioComponent} />
+
+    <Route path='/me' component={Dashboard}>
+       <IndexRoute component={Menu} />
+       <Route path='feed' component={Feed} />
+       <Route path='notes' component={MyNotes} />
+       <Route path='bookmarks' component={MyBookmarks} />
+       <Route path='account' component={MyAccount} />
+    </Route>
 
     <Redirect from='*' to='/bible/john_3_16' />
   </Route>

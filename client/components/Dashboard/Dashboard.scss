@@ -1,0 +1,17 @@
+@import "../variables.scss";
+
+#login-form {
+	background-color:white;
+}
+
+#dashboard {
+
+	.main-true {
+	    display:block;
+	  }
+
+	.main-false  {
+	    display:none;
+	  }
+
+}
