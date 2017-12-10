@@ -11,18 +11,38 @@ module.exports = {
   title:"this is a test",
   entry: {
     app: [
-      path.join(__dirname, 'client/index.js'),
+      path.join(__dirname, 'src/index.js'),
       'webpack-dev-server/client?http://127.0.0.1:3000',
       'webpack/hot/only-dev-server'
     ],
     vendor: [
-        'react-transform-hmr','react-transform-catch-errors','graphql','marked','react', 'react-dom', 'react-relay', 'react-router', 'react-router-relay','redbox-react','soundcloud','lodash','react-proxy','global','url','strip-ansi','ansi-regex','url-parse','sockjs-client','es6-promise'
+      'react-transform-hmr', 
+      'react-transform-catch-errors', 
+      'graphql', 
+      'marked', 
+      'react', 
+      'react-dom', 
+      'react-relay', 
+      'react-router', 
+      'react-router-relay', 
+      'redbox-react', 
+      'lodash', 
+      'react-proxy', 
+      'global', 
+      'url', 
+      'strip-ansi', 
+      'ansi-regex', 
+      'url-parse', 
+      'sockjs-client', 
+      'es6-promise',
+      'soundcloud'
   ]
-},
+}, 
+
   output: {
     publicPath: 'http://127.0.0.1:3000/',
     path: path.join(__dirname, 'build'),
-    filename: '[name].js'
+    filename: '[name].[hash].js'
   },
   devtool: 'eval',
 
@@ -75,10 +95,11 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: 'Bible exchange | Your Place for Bible Sharing and Discovery',
-      template: './client/index.html',
+      template: './src/index.html',
       mobile: true,
       inject: false
     }),
+
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('development'),
@@ -87,7 +108,7 @@ module.exports = {
       }
     }),
   new CopyWebpackPlugin([
-    {from : 'client/assets', to: __dirname + '/build'}
+    {from : 'src/assets', to: __dirname + '/build'}
   ]),
   new webpack.DefinePlugin({
       // A common mistake is not stringifying the "production" string.

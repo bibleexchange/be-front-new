@@ -12,7 +12,7 @@
 
     "development": {
       "plugins": [
-	"./server/utils/babelRelayPlugin",
+	     ["relay", {"compat": true, "schema": "./schema.json"}],
         ["react-transform", {
           "transforms": [{
             "transform": "react-transform-hmr",
